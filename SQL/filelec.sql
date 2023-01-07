@@ -2,104 +2,130 @@ DROP DATABASE IF EXISTS dsa;
 CREATE DATABASE dsa;
 use dsa;
 
+----- Utilisateurs
+
 create table users (
-iduser int(3) not null  auto_increment ,
-email varchar (150),
-nom varchar(50),
-mdp varchar (50),
-roles enum ('admin', 'technicien', 'client'),
-constraint pk_user primary key (iduser)
-);
-
-create table technicien(
-iduser int(3) not null  auto_increment ,
-email varchar (150),
-nom varchar(50),
-mdp varchar (50),
-roles enum ('admin', 'technicien', 'client'),
-prenom varchar(50),
-dateEmb date, 
-dateDept date, 
-diplome varchar(50),
-constraint pk_user primary key (iduser)
-);
-
-create  table admin(
 iduser int(3) not null  auto_increment,
 email varchar (150),
-nom varchar(50),
 mdp varchar (50),
+nom varchar (50),
 roles enum ('admin', 'technicien', 'client'),
-prenom varchar(50),
 constraint pk_user primary key (iduser)
+);
+
+
+create table admin(
+    iduser int(3) not null  auto_increment ,
+    email varchar (150),
+    mdp varchar (50),
+    nom varchar (50),
+    roles enum ('admin', 'technicien', 'client'),
+    constraint pk_user primary key (iduser)
+);
+
+create table technicien (
+    iduser int(3) not null  auto_increment ,
+    email varchar (150),
+    mdp varchar (50),
+    nom varchar (50),
+    roles enum ('admin', 'technicien', 'client'),
+    prenom varchar(50),
+    diplome varchar(50),
+    dateEmb date,
+    dateDept date,
+    constraint pk_user primary key (iduser)
 );
 
 create table client (
-iduser int(3) not null  auto_increment,
+iduser int(3) not null  auto_increment ,
 email varchar (150),
-nom varchar(50),
 mdp varchar (50),
-roles enum ('admin', 'technicien', 'client'),
+nom varchar (50),
+roles enum ('admin', 'technicien', 'client') default 'client',
 adresse varchar(50),
 ville varchar (50),
 cp varchar (50), 
-telephone int, 
-constraint pk_user primary key (iduser)
-);
-
-create table professionnel(
-iduser int(3) not null  auto_increment,
-email varchar (150),
-nom varchar(50),
-mdp varchar (50),
-roles enum ('admin', 'technicien', 'client'),
-adresse varchar(50),
-ville varchar (50),
-cp varchar (50), 
-telephone int, 
-numeroSiret int,
-statut varchar(50),
+telephone int,
 constraint pk_user primary key (iduser)
 );
 
 
-create table particulier(
-iduser int(3) not null  auto_increment,
+create table particulier (
+iduser int(3) not null  auto_increment ,
 email varchar (150),
-nom varchar(50),
 mdp varchar (50),
-roles enum ('admin', 'technicien', 'client'),
+nom varchar (50),
+roles enum ('admin', 'technicien', 'client') default 'client',
 adresse varchar(50),
 ville varchar (50),
 cp varchar (50), 
-telephone int, 
+telephone int,
 prenom varchar(50),
 constraint pk_user primary key (iduser)
 );
 
----- TRIGGER HERITAGE 
-drop trigger if exists ajout_particulier;
+create table professionnel (
+iduser int(3) not null  auto_increment ,
+email varchar (150),
+mdp varchar (50),
+nom varchar (50),
+roles enum ('admin', 'technicien', 'client') default 'client',
+adresse varchar(50),
+ville varchar (50),
+cp varchar (50), 
+telephone int,
+numeroSiret int,
+constraint pk_user primary key (iduser)
+);
+
+
+insert into users (email, mdp, roles, nom) values ('admin@gmail.com', sha1('admin'), 'admin', 'admin');
+insert into users (email, mdp, roles, nom) values ('client@gmail.com', sha1('client'), 'client', 'Jean');
+insert into users (email, mdp, roles, nom) values ('tech@gmail.com', sha1('tech'), 'technicien', 'Mathieu');
+
+-------- Triggers Utilisateurs 
+
+drop trigger if exists ajout_client;
 delimiter // 
-create trigger ajout_particulier
-  before insert on particulier 
-  for each row 
-  begin 
-    declare user  int ; 
-    select count(*) into user from users where email = new.email; 
-    if user = 0 then 
-        insert into users (email, nom, mdp, roles) values (new.email, new.nom, new.mdp, 'client');
-        insert into client (email, nom, mdp, roles, adresse, ville, cp, telephone) values (null, new.email, new.nom, new.mdp, 'client', new.adresse, new.ville, new.cp);
-        insert into client (email, nom, mdp, roles, adresse, ville, cp, telephone, prenom) values (null, new.email, new.nom, new.mdp, 'client', new.adresse, new.ville, new.cp, new.prenom);
-   else 
-        signal sqlstate '45000'
-       set message_text='il est déja client';
-    end if; 
-  end // 
+create trigger ajout_client
+before insert on particulier -- or professionnel
+for each row 
+begin 
+declare user int;
+select count(*) into user from users where email = new.email;
+if user = 0 then 
+    insert into users (email, mdp, roles, nom) values (new.email, new.mdp, 'client', new.nom);
+    insert into client (email, mdp, roles, nom, adresse, ville, cp, telephone) values (new.email, new.mdp, 'client', new.nom, new.adresse, new.ville, new.cp, new.telephone);
+else 
+    signal sqlstate '45000'
+    set message_text = 'Données déja existentes';
+end if;
+end // 
 delimiter ; 
 
-insert into particulier values (null, 'client@gmail.com', 'kevin', sha1('jean'), 'client', 'jean');
 
-----------------
+insert into particulier (email, mdp, nom) values ('jeanne@gmail.com', sha1('jean'),'jean'); 
+insert into particulier (email, mdp, nom, adresse, ville, cp, telephone, prenom) values ('adrien@gmail.com', sha1('adrien'),'adrien', '126 rue charles floquet', 'Paris', '75014', 0123456789, 'Adrien'); 
+
+
+
+drop trigger if exists modifier_client ;
+delimiter // 
+create trigger modifier_client 
+after update on particulier
+for each row 
+begin 
+if (new.nom != old.nom or new.ville != old.ville or new.) then ------------------a completer 
+update users set nom = new.nom, mdp = new.mdp where email = old.email;
+update client set email = new.email, nom = new.nom, mdp = new.mdp, adresse = new.adresse, ville = new.ville, cp = new.cp, telephone = new.telephone  where email = old.email;
+end if;
+end // 
+delimiter ; 
+
+update particulier set ville = 'poitier' where iduser = 2;
+
+
+
 /*
 create table panier(
 Id commande 
@@ -110,13 +136,12 @@ Quantité produit );
 
 Créer l'héritage'
 ajouter les triggers
+
+----------------
 */
----------------
 
 
-insert into users (email, mdp, roles) values ('admin@gmail.com', sha1('admin'), 'admin');
-insert into users (email, mdp, roles) values ('client@gmail.com', sha1('client'), 'client');
-insert into users (email, mdp, roles) values ('tech@gmail.com', sha1('tech'), 'technicien');
+
 
 
 
@@ -180,6 +205,6 @@ insert into produit (nomProduit, prixProduit, description ) values ('essuie-glac
 Les essuies-glaces BOSCH Clearview sont particulierement facile et rapide à monter. Pour faciliter le montage, le balai est vendu avec 1 adaptateur prémonté");
 
 
-create or replace view vue_intervention_and_users as(
+create view vue_intervention_and_users as(
     select i.*, u.email from intervention i inner join users u on i.iduser = u.iduser
 );
