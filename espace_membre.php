@@ -3,7 +3,7 @@
 		require_once("vue/connexion_inscription.php");
 	}else{
 		echo
-		"<br><h1> Bienvenue " .$_SESSION['email']. " sur votre espace membre</h1><br>";
+		"<br><h1> Bienvenue " .$_SESSION['nom']. " sur votre espace membre</h1><br>";
 		?>
 		<div class="container">
 		<form method="POST">
@@ -44,6 +44,7 @@
 				$_SESSION['email'] = $unUser['email'];
 				$_SESSION['roles'] = $unUser['roles'];
 				$_SESSION['mdp'] = $unUser['mdp'];
+				$_SESSION['nom'] = $unUser['nom'];
 				$_SESSION['iduser'] = $unUser['iduser'];
 				echo '<script language="Javascript">
 				<!--
