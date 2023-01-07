@@ -3,27 +3,112 @@ CREATE DATABASE dsa;
 use dsa;
 
 create table users (
+iduser int(3) not null  auto_increment,
+email varchar (150),
+mdp varchar (50),
+nom varchar (50),
+roles enum ('admin', 'technicien', 'client'),
+constraint pk_user primary key (iduser)
+);
+
+
+create table admin(
+    iduser int(3) not null  auto_increment ,
+    email varchar (150),
+    mdp varchar (50),
+    nom varchar (50),
+    roles enum ('admin', 'technicien', 'client'),
+    constraint pk_user primary key (iduser)
+);
+
+create table technicien (
+    iduser int(3) not null  auto_increment ,
+    email varchar (150),
+    mdp varchar (50),
+    nom varchar (50),
+    roles enum ('admin', 'technicien', 'client'),
+    prenom varchar(50),
+    diplome varchar(50),
+    dateEmb date,
+    dateDept date,
+    constraint pk_user primary key (iduser)
+);
+
+create table client (
 iduser int(3) not null  auto_increment ,
 email varchar (150),
 mdp varchar (50),
-roles enum ('admin', 'technicien', 'client'),
-primary key (iduser)
-);
-
-
-/*
-----------------
-
-
-create table client (
-nom varchar(50),
+nom varchar (50),
+roles enum ('admin', 'technicien', 'client') default 'client',
 adresse varchar(50),
 ville varchar (50),
 cp varchar (50), 
-primary key (iduser)
+telephone int,
+constraint pk_user primary key (iduser)
 );
 
-create table panier()
+
+create table particulier (
+iduser int(3) not null  auto_increment ,
+email varchar (150),
+mdp varchar (50),
+nom varchar (50),
+roles enum ('admin', 'technicien', 'client') default 'client',
+adresse varchar(50),
+ville varchar (50),
+cp varchar (50), 
+telephone int,
+prenom varchar(50),
+constraint pk_user primary key (iduser)
+);
+
+create table professionnel (
+iduser int(3) not null  auto_increment ,
+email varchar (150),
+mdp varchar (50),
+nom varchar (50),
+roles enum ('admin', 'technicien', 'client') default 'client',
+
+adresse varchar(50),
+ville varchar (50),
+cp varchar (50), 
+telephone int,
+numeroSiret int,
+constraint pk_user primary key (iduser)
+);
+
+
+
+insert into users (email, mdp, roles, nom) values ('admin@gmail.com', sha1('admin'), 'admin', 'admin');
+insert into users (email, mdp, roles) values ('client@gmail.com', sha1('client'), 'client');
+insert into users (email, mdp, roles) values ('tech@gmail.com', sha1('tech'), 'technicien');
+
+drop trigger if exists ajout_particulier;
+delimiter // 
+create trigger ajout_particulier
+before insert on particulier
+for each row 
+begin 
+declare user int;
+select count(*) into user from users where email = new.email;
+if user = 0 then 
+    insert into users (email, mdp, roles, nom) values (new.email, new.mdp, 'client', new.nom);
+    insert into client (email, mdp, roles, nom, adresse, ville, cp, telephone) values (new.email, new.mdp, 'client', new.nom, new.adresse, new.ville, new.cp, new.telephone);
+else 
+    signal sqlstate '45000'
+    set message_text = 'Données déja existentes';
+end if;
+end // 
+delimiter ; 
+
+
+insert into particulier (email, mdp, nom) values ('jeanne@gmail.com', sha1('jean'),'jean'); 
+
+
+
+
+/*
+create table panier(
 Id commande 
 Id user 
 Nom produit 
@@ -38,9 +123,6 @@ ajouter les triggers
 
 
 
-insert into users (email, mdp, roles) values ('admin@gmail.com', sha1('admin'), 'admin');
-insert into users (email, mdp, roles) values ('client@gmail.com', sha1('client'), 'client');
-insert into users (email, mdp, roles) values ('tech@gmail.com', sha1('tech'), 'technicien');
 
 
 
@@ -79,7 +161,7 @@ create table produit (
     nomProduit varchar(25) not null,
     prixProduit float (5,2) not null,
     description varchar(8000),
-    quantite int
+    quantite int,
     constraint pk_produit primary key (idProduit)
 );
 
