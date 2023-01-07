@@ -2,6 +2,11 @@ DROP DATABASE IF EXISTS dsa;
 CREATE DATABASE dsa;
 use dsa;
 
+
+
+
+----- Utilisateurs
+
 create table users (
 iduser int(3) not null  auto_increment,
 email varchar (150),
@@ -68,7 +73,6 @@ email varchar (150),
 mdp varchar (50),
 nom varchar (50),
 roles enum ('admin', 'technicien', 'client') default 'client',
-
 adresse varchar(50),
 ville varchar (50),
 cp varchar (50), 
@@ -78,15 +82,16 @@ constraint pk_user primary key (iduser)
 );
 
 
-
 insert into users (email, mdp, roles, nom) values ('admin@gmail.com', sha1('admin'), 'admin', 'admin');
 insert into users (email, mdp, roles) values ('client@gmail.com', sha1('client'), 'client');
 insert into users (email, mdp, roles) values ('tech@gmail.com', sha1('tech'), 'technicien');
 
-drop trigger if exists ajout_particulier;
+-------- Triggers Utilisateurs 
+
+drop trigger if exists ajout_client;
 delimiter // 
-create trigger ajout_particulier
-before insert on particulier
+create trigger ajout_client
+before insert on particulier -- or professionnel
 for each row 
 begin 
 declare user int;
@@ -103,7 +108,24 @@ delimiter ;
 
 
 insert into particulier (email, mdp, nom) values ('jeanne@gmail.com', sha1('jean'),'jean'); 
+insert into particulier (email, mdp, nom, adresse, ville, cp, telephone, prenom) values ('adrien@gmail.com', sha1('adrien'),'adrien', '126 rue charles floquet', 'Paris', '75014', 0123456789, 'Adrien'); 
 
+
+
+drop trigger if exists modifier_client ;
+delimiter // 
+create trigger modifier_client 
+after update on particulier
+for each row 
+begin 
+if (new.nom != old.nom or new.ville != old.ville or new.) then ------------------a completer 
+update users set nom = new.nom, mdp = new.mdp where email = old.email;
+update client set email = new.email, nom = new.nom, mdp = new.mdp, adresse = new.adresse, ville = new.ville, cp = new.cp, telephone = new.telephone  where email = old.email;
+end if;
+end // 
+delimiter ; 
+
+update particulier set ville = 'poitier' where iduser = 2;
 
 
 
