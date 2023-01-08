@@ -6,7 +6,7 @@ use dsa;
 
 create table users (
 iduser int(3) not null  auto_increment,
-email varchar (150),
+email varchar (150) unique,
 mdp varchar (50),
 nom varchar (50),
 roles enum ('admin', 'technicien', 'client'),
@@ -83,6 +83,9 @@ constraint pk_user primary key (iduser)
 
 /*-----------------Triggers Utilisateurs    */
 
+
+/* AJOUT USERS */ 
+
 drop trigger if exists ajout_particulier;
 delimiter // 
 create trigger ajout_particulier
@@ -138,10 +141,26 @@ end //
 delimiter ;  
 
 
--- ajouter un technicien
+drop trigger if exists ajouter_tech;
+delimiter // 
+create trigger ajouter_tech
+before insert on technicien 
+for each row 
+begin 
+declare user int; 
+select count(*) into user from users where email = new.email; 
+if user = 0 then 
+    insert into users (email, mdp, nom, roles) values (new.email, new.mdp, new.nom, 'technicien');
+else 
+    signal sqlstate '45000'
+    set message_text = "L'utilisateur existe déja !";
+end if; 
+end //
+delimiter ; 
 
 
 
+/* MODIFIER USERS */
 
 drop trigger if exists modifier_particulier;
 delimiter // 
@@ -149,30 +168,54 @@ create trigger modifier_particulier
 before update on particulier
 for each row 
 begin 
-update users set email = new.email, nom = new.nom, mdp = new.mdp where email = old.email;
-update client set email = new.email, nom = new.nom, mdp = new.mdp, adresse = new.adresse, ville = new.ville, cp = new.cp, telephone = new.telephone  where email = old.email;
-/*end if;*/
+        update users set email = new.email, nom = new.nom, mdp = new.mdp where email = old.email;
+        update client set email = new.email, nom = new.nom, mdp = new.mdp, adresse = new.adresse, ville = new.ville, cp = new.cp, telephone = new.telephone  where email = old.email;
 end // 
 delimiter ; 
 
+update particulier set  email = 'adrien@gmail.com' , nom = 'toto' where iduser= 2;
 
 drop trigger if exists modifier_professionnel;
 delimiter // 
 CREATE TRIGGER modifier_professionnel
-AFTER UPDATE ON professionnel
+BEFORE UPDATE ON professionnel
 FOR EACH ROW
 BEGIN
     UPDATE users SET email = new.email, nom = NEW.nom, mdp = NEW.mdp WHERE email = OLD.email;
     UPDATE client SET email = NEW.email, nom = NEW.nom, mdp = NEW.mdp, adresse = NEW.adresse, ville = NEW.ville, cp = NEW.cp, telephone = NEW.telephone WHERE email = OLD.email;
-  END IF;
 END //
 delimiter ; 
+
+
+drop trigger if exists modifier_admin;
+delimiter // 
+create trigger modifier_admin
+before update on admin
+for each row 
+begin 
+UPDATE users SET email = new.email, nom = NEW.nom, mdp = NEW.mdp WHERE email = OLD.email;
+end // 
+delimiter ;
+
+drop trigger if exists modifier_tech;
+delimiter // 
+create trigger modifier_tech
+before update on technicien
+for each row 
+begin 
+UPDATE users SET email = new.email, nom = NEW.nom, mdp = NEW.mdp WHERE email = OLD.email;
+end // 
+delimiter ;
+
+
+
+/* SUPPRIMER USERS */
 
 
 drop trigger if exists supprimer_particulier; 
 delimiter // 
 create trigger supprimer_particulier 
-after delete on particulier 
+before delete on particulier 
 for each row 
 begin 
     delete from client where email = old.email; 
@@ -183,7 +226,7 @@ delimiter ;
 drop trigger if exists supprimer_professionnel; 
 delimiter // 
 create trigger supprimer_professionnel 
-after delete on professionnel 
+before delete on professionnel 
 for each row 
 begin 
     delete from client where email = old.email; 
@@ -191,13 +234,26 @@ begin
 end //
 delimiter ;
 
-drop trigger if exists modifier_admin 
+drop trigger if exists supprimer_admin; 
 delimiter // 
-create trigger modifier_admin
-after update on admin
+create trigger supprimer_admin 
+before delete on admin 
 for each row 
 begin 
-update user set 
+    delete from users where email = old.email; 
+end //
+delimiter ;
+
+drop trigger if exists supprimer_tech; 
+delimiter // 
+create trigger supprimer_tech 
+before delete on technicien 
+for each row 
+begin 
+    delete from users where email = old.email; 
+end //
+delimiter ;
+
 
 /*
 
