@@ -82,13 +82,25 @@ constraint pk_user primary key (iduser)
 insert into users (email, mdp, roles, nom) values ('admin@gmail.com', sha1('admin'), 'admin', 'admin');
 insert into users (email, mdp, roles, nom) values ('client@gmail.com', sha1('client'), 'client', 'Jean');
 insert into users (email, mdp, roles, nom) values ('tech@gmail.com', sha1('tech'), 'technicien', 'Mathieu');
+INSERT INTO users (email, mdp, roles, nom) VALUES ('Alice@gmail.com', SHA1('password1'), 'client', 'Alice');
+INSERT INTO users (email, mdp, roles, nom) VALUES ('Bob@gmail.com', SHA1('password2'), 'technicien', 'Bob');
+INSERT INTO users (email, mdp, roles, nom) VALUES ('Charlie@gmail.com', SHA1('password3'), 'admin', 'Charlie');
+INSERT INTO users (email, mdp, roles, nom) VALUES ('David@gmail.com', SHA1('password4'), 'client', 'David');
+INSERT INTO users (email, mdp, roles, nom) VALUES ('Emily@gmail.com', SHA1('password5'), 'technicien', 'Emily');
+INSERT INTO users (email, mdp, roles, nom) VALUES ('Frank@gmail.com', SHA1('password1'), 'client', 'Frank');
+INSERT INTO users (email, mdp, roles, nom) VALUES ('George@gmail.com', SHA1('password2'), 'technicien', 'George');
+INSERT INTO users (email, mdp, roles, nom) VALUES ('Hannah@gmail.com', SHA1('password3'), 'admin', 'Hannah');
+INSERT INTO users (email, mdp, roles, nom) VALUES ('Isabelle@gmail.com', SHA1('password4'), 'client', 'Isabelle');
+INSERT INTO users (email, mdp, roles, nom) VALUES ('Jack@gmail.com', SHA1('password5'), 'technicien', 'Jack');
 
--------- Triggers Utilisateurs 
 
-drop trigger if exists ajout_client;
+
+/*-----------------Triggers Utilisateurs    */
+
+drop trigger if exists ajout_particulier;
 delimiter // 
-create trigger ajout_client
-before insert on particulier -- or professionnel
+create trigger ajout_particulier
+before insert on particulier 
 for each row 
 begin 
 declare user int;
@@ -104,29 +116,119 @@ end //
 delimiter ; 
 
 
+drop trigger if exists ajout_professionnel;
+delimiter // 
+create trigger ajout_professionnel
+before insert on professionnel 
+for each row 
+begin 
+declare user int;
+select count(*) into user from users where email = new.email;
+if user = 0 then 
+    insert into users (email, mdp, roles, nom) values (new.email, new.mdp, 'client', new.nom);
+    insert into client (email, mdp, roles, nom, adresse, ville, cp, telephone) values (new.email, new.mdp, 'client', new.nom, new.adresse, new.ville, new.cp, new.telephone);
+else 
+    signal sqlstate '45000'
+    set message_text = 'Données déja existentes';
+end if;
+end // 
+delimiter ; 
+
+
+/*
 insert into particulier (email, mdp, nom) values ('jeanne@gmail.com', sha1('jean'),'jean'); 
 insert into particulier (email, mdp, nom, adresse, ville, cp, telephone, prenom) values ('adrien@gmail.com', sha1('adrien'),'adrien', '126 rue charles floquet', 'Paris', '75014', 0123456789, 'Adrien'); 
-
-
-
-drop trigger if exists modifier_client ;
+*/
+drop trigger if exists modifier_particulier;
 delimiter // 
-create trigger modifier_client 
+create trigger modifier_particulier 
 after update on particulier
 for each row 
 begin 
-if (new.nom != old.nom or new.ville != old.ville or new.) then ------------------a completer 
+if (new.email != old.email or new.mdp != old.mdp or new.nom != old.nom or new.adresse != old.adresse or new.ville != old.ville  or new.cp != old.cp  or new.telephone != old.telephone) then 
 update users set nom = new.nom, mdp = new.mdp where email = old.email;
 update client set email = new.email, nom = new.nom, mdp = new.mdp, adresse = new.adresse, ville = new.ville, cp = new.cp, telephone = new.telephone  where email = old.email;
 end if;
 end // 
 delimiter ; 
 
-update particulier set ville = 'poitier' where iduser = 2;
+
+drop trigger if exists modifier_professionnel;
+delimiter // 
+CREATE TRIGGER modifier_professionnel
+AFTER UPDATE ON professionnel
+FOR EACH ROW
+BEGIN
+  IF (NEW.email != OLD.email OR NEW.mdp != OLD.mdp OR NEW.nom != OLD.nom OR NEW.adresse != OLD.adresse OR NEW.ville != OLD.ville OR NEW.cp != OLD.cp OR NEW.telephone != OLD.telephone) THEN
+    UPDATE users SET nom = NEW.nom, mdp = NEW.mdp WHERE email = OLD.email;
+    UPDATE client SET email = NEW.email, nom = NEW.nom, mdp = NEW.mdp, adresse = NEW.adresse, ville = NEW.ville, cp = NEW.cp, telephone = NEW.telephone WHERE email = OLD.email;
+  END IF;
+END //
+delimiter ; 
+
+/*  update particulier set ville = 'poitier' where iduser = 2;*/
+
+drop trigger if exists supprimer_particulier; 
+delimiter // 
+create trigger supprimer_particulier 
+after delete on particulier 
+for each row 
+begin 
+    delete from client where email = old.email; 
+    delete from users where email = old.email; 
+end //
+delimiter ;
+
+drop trigger if exists supprimer_professionnel; 
+delimiter // 
+create trigger supprimer_professionnel 
+after delete on professionnel 
+for each row 
+begin 
+    delete from client where email = old.email; 
+    delete from users where email = old.email; 
+end //
+delimiter ;
 
 
 
 /*
+
+INSERT INTO particulier (email, mdp, nom, roles, adresse, ville, cp, telephone, prenom)
+VALUES ('user1@gmail.com', 'password1', 'User 1', 'client', '1 Main St', 'New York', '12345', 123456789, 'John');
+
+INSERT INTO particulier (email, mdp, nom, roles, adresse, ville, cp, telephone, prenom)
+VALUES ('user2@gmail.com', 'password2', 'User 2', 'client', '2 Main St', 'Chicago', '23456', 234567891, 'Jane');
+
+INSERT INTO particulier (email, mdp, nom, roles, adresse, ville, cp, telephone, prenom)
+VALUES ('user3@gmail.com', 'password3', 'User 3', 'client', '3 Main St', 'Los Angeles', '34567', 345678912, 'Mark');
+
+INSERT INTO particulier (email, mdp, nom, roles, adresse, ville, cp, telephone, prenom)
+VALUES ('user4@gmail.com', 'password4', 'User 4', 'client', '4 Main St', 'Houston', '45678', 456789123, 'Kate');
+
+INSERT INTO particulier (email, mdp, nom, roles, adresse, ville, cp, telephone, prenom)
+VALUES ('user5@gmail.com', 'password5', 'User 5', 'client', '5 Main St', 'Philadelphia', '56789', 567891234, 'David');
+
+INSERT INTO professionnel (email, mdp, nom, roles, adresse, ville, cp, telephone, numeroSiret)
+VALUES ('company1@gmail.com', 'password1', 'Company 1', 'client', '1 Main St', 'New York', '12345', 123456789, 1234567890);
+
+INSERT INTO professionnel (email, mdp, nom, roles, adresse, ville, cp, telephone, numeroSiret)
+VALUES ('company2@gmail.com', SHA1('password2'), 'Company 2', 'client', '2 Main St', 'Chicago', '23456', 234567891, 234567901);
+
+INSERT INTO professionnel (email, mdp, nom, roles, adresse, ville, cp, telephone, numeroSiret)
+VALUES ('company3@gmail.com', SHA1('password3'), 'Company 3', 'client', '3 Main St', 'Los Angeles', '34567', 345678912, 345789012);
+
+INSERT INTO professionnel (email, mdp, nom, roles, adresse, ville, cp, telephone, numeroSiret)
+VALUES ('company4@gmail.com', SHA1('password4'), 'Company 4', 'client', '4 Main St', 'Houston', '45678', 456789123, 456780123);
+
+INSERT INTO professionnel (email, mdp, nom, roles, adresse, ville, cp, telephone, numeroSiret)
+VALUES ('company5@gmail.com', SHA1('password5'), 'Company 5', 'client', '5 Main St', 'Philadelphia', '56789', 567891234, 567801234);
+
+INSERT INTO professionnel (email, mdp, nom, roles, adresse, ville, cp, telephone, numeroSiret)
+VALUES ('company6@gmail.com', SHA1('password6'), 'Company 6', 'client', '6 Main St', 'Seattle', '67890', 678910123, 678101235);
+
+
+
 create table panier(
 Id commande 
 Id user 
@@ -137,12 +239,8 @@ Quantité produit );
 Créer l'héritage'
 ajouter les triggers
 
-----------------
+
 */
-
-
-
-
 
 
 create table intervention (
@@ -184,7 +282,7 @@ create table produit (
     constraint pk_produit primary key (idProduit)
 );
 
----- insertion produit 
+/*insertion produit  */
 insert into produit (nomProduit, prixProduit, description) values ('pneu', 250, '- Neuf comme usé, ce pneu offre un freinage remarquable sur routes mouillées..
 - Adhérence exceptionnelle sur sol mouillé.
 - Une consommation moindre et un kilométrage supérieur de 20 % par rapport à son prédécesseur.');
@@ -205,6 +303,7 @@ insert into produit (nomProduit, prixProduit, description ) values ('essuie-glac
 Les essuies-glaces BOSCH Clearview sont particulierement facile et rapide à monter. Pour faciliter le montage, le balai est vendu avec 1 adaptateur prémonté");
 
 
+/* VUE */ 
 create view vue_intervention_and_users as(
     select i.*, u.email from intervention i inner join users u on i.iduser = u.iduser
 );
