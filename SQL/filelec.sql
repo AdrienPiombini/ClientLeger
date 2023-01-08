@@ -20,6 +20,7 @@ create table admin(
     mdp varchar (50),
     nom varchar (50),
     roles enum ('admin', 'technicien', 'client'),
+    prenom varchar(50),
     constraint pk_user primary key (iduser)
 );
 
@@ -79,21 +80,6 @@ constraint pk_user primary key (iduser)
 );
 
 
-insert into users (email, mdp, roles, nom) values ('admin@gmail.com', sha1('admin'), 'admin', 'admin');
-insert into users (email, mdp, roles, nom) values ('client@gmail.com', sha1('client'), 'client', 'Jean');
-insert into users (email, mdp, roles, nom) values ('tech@gmail.com', sha1('tech'), 'technicien', 'Mathieu');
-INSERT INTO users (email, mdp, roles, nom) VALUES ('Alice@gmail.com', SHA1('password1'), 'client', 'Alice');
-INSERT INTO users (email, mdp, roles, nom) VALUES ('Bob@gmail.com', SHA1('password2'), 'technicien', 'Bob');
-INSERT INTO users (email, mdp, roles, nom) VALUES ('Charlie@gmail.com', SHA1('password3'), 'admin', 'Charlie');
-INSERT INTO users (email, mdp, roles, nom) VALUES ('David@gmail.com', SHA1('password4'), 'client', 'David');
-INSERT INTO users (email, mdp, roles, nom) VALUES ('Emily@gmail.com', SHA1('password5'), 'technicien', 'Emily');
-INSERT INTO users (email, mdp, roles, nom) VALUES ('Frank@gmail.com', SHA1('password1'), 'client', 'Frank');
-INSERT INTO users (email, mdp, roles, nom) VALUES ('George@gmail.com', SHA1('password2'), 'technicien', 'George');
-INSERT INTO users (email, mdp, roles, nom) VALUES ('Hannah@gmail.com', SHA1('password3'), 'admin', 'Hannah');
-INSERT INTO users (email, mdp, roles, nom) VALUES ('Isabelle@gmail.com', SHA1('password4'), 'client', 'Isabelle');
-INSERT INTO users (email, mdp, roles, nom) VALUES ('Jack@gmail.com', SHA1('password5'), 'technicien', 'Jack');
-
-
 
 /*-----------------Triggers Utilisateurs    */
 
@@ -134,21 +120,38 @@ end if;
 end // 
 delimiter ; 
 
+drop trigger if exists ajouter_admin;
+delimiter // 
+create trigger ajouter_admin
+before insert on admin 
+for each row 
+begin 
+declare user int; 
+select count(*) into user from users where email = new.email; 
+if user = 0 then 
+    insert into users (email, mdp, nom, roles) values (new.email, new.mdp, new.nom, 'admin');
+else 
+    signal sqlstate '45000'
+    set message_text = "L'utilisateur existe déja !";
+end if; 
+end //
+delimiter ;  
 
-/*
-insert into particulier (email, mdp, nom) values ('jeanne@gmail.com', sha1('jean'),'jean'); 
-insert into particulier (email, mdp, nom, adresse, ville, cp, telephone, prenom) values ('adrien@gmail.com', sha1('adrien'),'adrien', '126 rue charles floquet', 'Paris', '75014', 0123456789, 'Adrien'); 
-*/
+
+-- ajouter un technicien
+
+
+
+
 drop trigger if exists modifier_particulier;
 delimiter // 
 create trigger modifier_particulier 
-after update on particulier
+before update on particulier
 for each row 
 begin 
-if (new.email != old.email or new.mdp != old.mdp or new.nom != old.nom or new.adresse != old.adresse or new.ville != old.ville  or new.cp != old.cp  or new.telephone != old.telephone) then 
-update users set nom = new.nom, mdp = new.mdp where email = old.email;
+update users set email = new.email, nom = new.nom, mdp = new.mdp where email = old.email;
 update client set email = new.email, nom = new.nom, mdp = new.mdp, adresse = new.adresse, ville = new.ville, cp = new.cp, telephone = new.telephone  where email = old.email;
-end if;
+/*end if;*/
 end // 
 delimiter ; 
 
@@ -159,14 +162,12 @@ CREATE TRIGGER modifier_professionnel
 AFTER UPDATE ON professionnel
 FOR EACH ROW
 BEGIN
-  IF (NEW.email != OLD.email OR NEW.mdp != OLD.mdp OR NEW.nom != OLD.nom OR NEW.adresse != OLD.adresse OR NEW.ville != OLD.ville OR NEW.cp != OLD.cp OR NEW.telephone != OLD.telephone) THEN
-    UPDATE users SET nom = NEW.nom, mdp = NEW.mdp WHERE email = OLD.email;
+    UPDATE users SET email = new.email, nom = NEW.nom, mdp = NEW.mdp WHERE email = OLD.email;
     UPDATE client SET email = NEW.email, nom = NEW.nom, mdp = NEW.mdp, adresse = NEW.adresse, ville = NEW.ville, cp = NEW.cp, telephone = NEW.telephone WHERE email = OLD.email;
   END IF;
 END //
 delimiter ; 
 
-/*  update particulier set ville = 'poitier' where iduser = 2;*/
 
 drop trigger if exists supprimer_particulier; 
 delimiter // 
@@ -190,7 +191,13 @@ begin
 end //
 delimiter ;
 
-
+drop trigger if exists modifier_admin 
+delimiter // 
+create trigger modifier_admin
+after update on admin
+for each row 
+begin 
+update user set 
 
 /*
 
@@ -226,6 +233,29 @@ VALUES ('company5@gmail.com', SHA1('password5'), 'Company 5', 'client', '5 Main 
 
 INSERT INTO professionnel (email, mdp, nom, roles, adresse, ville, cp, telephone, numeroSiret)
 VALUES ('company6@gmail.com', SHA1('password6'), 'Company 6', 'client', '6 Main St', 'Seattle', '67890', 678910123, 678101235);
+
+
+INSERT INTO admin (email, mdp, roles, nom) VALUES ('Hannah@gmail.com', SHA1('password3'), 'admin', 'Hannah'); 
+  update particulier set ville = 'poitier' where iduser = 3;
+insert into particulier (email, mdp, nom) values ('jeanne@gmail.com', sha1('jean'),'jean'); 
+insert into particulier (email, mdp, nom, adresse, ville, cp, telephone, prenom) values ('adrien@gmail.com', sha1('adrien'),'adrien', '126 rue charles floquet', 'Paris', '75014', 0123456789, 'Adrien'); 
+insert into particulier (email, mdp, nom, adresse, ville, cp, telephone, prenom) values ('kevin@gmail.com', sha1('kevin'),'kevin', '126 rue charles floquet', 'Paris', '75014', 0123456789, 'Kevin'); 
+
+
+
+insert into users (email, mdp, roles, nom) values ('admin@gmail.com', sha1('admin'), 'admin', 'admin');
+insert into users (email, mdp, roles, nom) values ('client@gmail.com', sha1('client'), 'client', 'Jean');
+insert into users (email, mdp, roles, nom) values ('tech@gmail.com', sha1('tech'), 'technicien', 'Mathieu');
+INSERT INTO users (email, mdp, roles, nom) VALUES ('Alice@gmail.com', SHA1('password1'), 'client', 'Alice');
+INSERT INTO users (email, mdp, roles, nom) VALUES ('Bob@gmail.com', SHA1('password2'), 'technicien', 'Bob');
+INSERT INTO users (email, mdp, roles, nom) VALUES ('Charlie@gmail.com', SHA1('password3'), 'admin', 'Charlie');
+INSERT INTO users (email, mdp, roles, nom) VALUES ('David@gmail.com', SHA1('password4'), 'client', 'David');
+INSERT INTO users (email, mdp, roles, nom) VALUES ('Emily@gmail.com', SHA1('password5'), 'technicien', 'Emily');
+INSERT INTO users (email, mdp, roles, nom) VALUES ('Frank@gmail.com', SHA1('password1'), 'client', 'Frank');
+INSERT INTO users (email, mdp, roles, nom) VALUES ('George@gmail.com', SHA1('password2'), 'technicien', 'George');
+INSERT INTO users (email, mdp, roles, nom) VALUES ('Isabelle@gmail.com', SHA1('password4'), 'client', 'Isabelle');
+INSERT INTO users (email, mdp, roles, nom) VALUES ('Jack@gmail.com', SHA1('password5'), 'technicien', 'Jack');
+
 
 
 
