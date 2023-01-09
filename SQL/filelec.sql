@@ -316,23 +316,27 @@ INSERT INTO users (email, mdp, roles, nom) VALUES ('Jack@gmail.com', SHA1('passw
 
 
 create table produit (
-    idProduit int auto_increment not null,
-    nomProduit varchar(25) not null,
-    prixProduit float (5,2) not null,
+    idproduit int auto_increment not null,
+    nomproduit varchar(25) not null,
+    prixproduit float (5,2) not null,
     description varchar(8000),
     quantite int,
-    constraint pk_produit primary key (idProduit)
+    constraint pk_produit primary key (idproduit)
 );
 
 
 create table panier(
-IdPanier 
-IdUser 
-IdProduit
-QuantiteProduit
-constraint pk_panier primary key (idPanier, idUser, idProduit)
+idpanier int auto_increment not null,
+iduser int,
+idproduit int,
+quantiteProduit int, 
+constraint pk_panier primary key (idpanier, iduser, idproduit),
+constraint fk_user foreign key (iduser) references users(iduser),
+constraint fk_produit foreign key (idproduit) references produit(idproduit)
 );
 
+
+/*insert into panier values(1, 3, 2, 1); */
 
 create table commande 
 (   idCommande int not null auto_increment,
@@ -345,7 +349,6 @@ create table commande
     idpanier int, 
     constraint pk_commande primary key (idCommande),
     constraint fk_panier foreign key (idpanier) references panier(idpanier)
-
 );
 
 insert into commande (dateCommande, nbProduit, montantHT,montantTTC, dateLivraison, iduser) values (curdate(), 1, 100, 120, curdate(), 2);
