@@ -312,22 +312,43 @@ INSERT INTO users (email, mdp, roles, nom) VALUES ('George@gmail.com', SHA1('pas
 INSERT INTO users (email, mdp, roles, nom) VALUES ('Isabelle@gmail.com', SHA1('password4'), 'client', 'Isabelle');
 INSERT INTO users (email, mdp, roles, nom) VALUES ('Jack@gmail.com', SHA1('password5'), 'technicien', 'Jack');
 
+*/
 
+
+create table produit (
+    idProduit int auto_increment not null,
+    nomProduit varchar(25) not null,
+    prixProduit float (5,2) not null,
+    description varchar(8000),
+    quantite int,
+    constraint pk_produit primary key (idProduit)
+);
 
 
 create table panier(
-Id commande 
-Id user 
-Nom produit 
-Prix produit 
-Quantité produit );
-
-Créer l'héritage'
-ajouter les triggers
+IdPanier 
+IdUser 
+IdProduit
+QuantiteProduit
+constraint pk_panier primary key (idPanier, idUser, idProduit)
+);
 
 
-*/
+create table commande 
+(   idCommande int not null auto_increment,
+    dateCommande date ,
+    nbProduit int(5)  ,
+    montantHT float(5,2) ,
+    tvaCommande float(5,2)  ,
+    montantTTC float (9,2) ,
+    dateLivraison date,
+    idpanier int, 
+    constraint pk_commande primary key (idCommande),
+    constraint fk_panier foreign key (idpanier) references panier(idpanier)
 
+);
+
+insert into commande (dateCommande, nbProduit, montantHT,montantTTC, dateLivraison, iduser) values (curdate(), 1, 100, 120, curdate(), 2);
 
 create table intervention (
     idintervention int(3) not null auto_increment,
@@ -344,29 +365,6 @@ insert into intervention (libelle, dateintervention, iduser) values ('reparation
 
 
 
-create table commande 
-(   idCommande int not null auto_increment,
-    dateCommande date ,
-    nbProduit int(5)  ,
-    montantHT float(5,2) ,
-    tvaCommande float(5,2)  ,
-    montantTTC float (9,2) ,
-    dateLivraison date,
-    iduser int  ,
-    constraint pk_commande primary key (idCommande),
-    constraint fk_client foreign key (iduser) references users(iduser)
-);
-
-insert into commande (dateCommande, nbProduit, montantHT,montantTTC, dateLivraison, iduser) values (curdate(), 1, 100, 120, curdate(), 2);
-
-create table produit (
-    idProduit int auto_increment not null,
-    nomProduit varchar(25) not null,
-    prixProduit float (5,2) not null,
-    description varchar(8000),
-    quantite int,
-    constraint pk_produit primary key (idProduit)
-);
 
 /*insertion produit  */
 insert into produit (nomProduit, prixProduit, description) values ('pneu', 250, '- Neuf comme usé, ce pneu offre un freinage remarquable sur routes mouillées..
