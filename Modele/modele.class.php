@@ -199,7 +199,7 @@ class Modele {
 			if(empty($idproduit)){
 			  $produits = array();
 			}else{
-			$requete = 'select idProduit, prixProduit from produit where idproduit in ('.implode(',',$idProduit).')';
+			$requete = 'select idProduit, prixProduit from produit where idproduit in ('.implode(',',$idproduit).')';
 			$select = $this->unPDO->prepare($requete);
 			$select->execute();
 			$produits = $select->fetchAll(PDO::FETCH_OBJ);
@@ -217,7 +217,7 @@ class Modele {
 				//$requete ="select * from produit where idproduit in  (:".$tab.");";
 				//$donnees = (":".$tab=>implode(',',$tab));
 				//$select->execute($donnees);
-				$requete = "select * from produit where idProduit in (".implode(',',$tab).");";
+				$requete = "select * from produit where idproduit in (".implode(',',$tab).");";
 				$select = $this->unPDO->prepare($requete);
 				$select->execute();
 				$produits = $select->fetchAll(PDO::FETCH_OBJ);
