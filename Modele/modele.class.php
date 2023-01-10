@@ -227,6 +227,17 @@ class Modele {
 			}
 		}
 
+		public function valider_panier(){
+			if($this->unPDO != null){
+				$requete = "select max(idpanier) + 1 from ".$this->table.";";
+				$select = $this->unPDO->prepare($requete);
+				$select->execute();
+				$lesResultats = $select->fetch();
+				return $lesResultats;
+			}else{
+				return null; 
+			}
+		}
 
 }
 

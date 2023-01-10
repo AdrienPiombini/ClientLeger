@@ -70,7 +70,7 @@
       <?php
     }else{
       ?> 
-      <form>
+      <form method='post'>
 	    <input type="submit" name="valider_panier" value="Valider le panier">
       </form>
       <?php
