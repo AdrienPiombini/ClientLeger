@@ -12,15 +12,15 @@
     <div class="products">
         <div class="product">
             <div class="image">
-                <img src="img/<?= $produit['nomproduit']; ?>.jpeg" alt="idproduit">
+                <img src="img/<?= $produit['nomProduit']; ?>.jpeg" alt="idproduit">
             </div>
             <div class="namePrice">
-                <h3><?= $produit['nomproduit'];?></h3>
-                <span><?= $produit['prixproduit'];?>€</span>
+                <h3><?= $produit['nomProduit'];?></h3>
+                <span><?= $produit['prixProduit'];?>€</span>
             </div>
             <p><?= $produit['description'];?></p>
             <div class="bay">
-            <button><a  class='add addpanier' href="addpanier.php?id=<?= $produit['idproduit']; ?>">Ajouter au panier</a></button>
+            <button><a  class='add addpanier' href="addpanier.php?id=<?= $produit['idProduit']; ?>">Ajouter au panier</a></button>
             </div>
         </div>
     </div>

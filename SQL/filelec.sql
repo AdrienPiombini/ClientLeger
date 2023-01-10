@@ -316,12 +316,12 @@ INSERT INTO users (email, mdp, roles, nom) VALUES ('Jack@gmail.com', SHA1('passw
 
 
 create table produit (
-    idproduit int auto_increment not null,
-    nomproduit varchar(25) not null,
-    prixproduit float (5,2) not null,
+    idProduit int auto_increment not null,
+    nomProduit varchar(25) not null,
+    prixProduit float (5,2) not null,
     description varchar(8000),
     quantite int,
-    constraint pk_produit primary key (idproduit)
+    constraint pk_produit primary key (idProduit)
 );
 
 
@@ -329,27 +329,52 @@ create table panier(
 idpanier int auto_increment not null,
 iduser int,
 idproduit int,
-quantiteProduit int, 
+quantiteproduit int, 
+statut enum('en cours', 'valider', 'annulé'),
 constraint pk_panier primary key (idpanier, iduser, idproduit),
 constraint fk_user foreign key (iduser) references users(iduser),
-constraint fk_produit foreign key (idproduit) references produit(idproduit)
+constraint fk_produit foreign key (idproduit) references produit(idProduit)
 );
 
 
-/*insert into panier values(1, 3, 2, 1); */
 
-create table commande 
-(   idCommande int not null auto_increment,
-    dateCommande date ,
-    nbProduit int(5)  ,
-    montantHT float(5,2) ,
-    tvaCommande float(5,2)  ,
-    montantTTC float (9,2) ,
-    dateLivraison date,
-    idpanier int, 
-    constraint pk_commande primary key (idCommande),
-    constraint fk_panier foreign key (idpanier) references panier(idpanier)
+/*
+
+CREATE PROCEDURE   if not exist p_insert_panier (idpanier, iduser, idrpoduit , qteproduit) 
+
+insert into panier values (1, 1, 2, 4);
+insert into panier (iduser, idproduit, quantiteproduit) values (3, 3, 3);
+
+drop trigger if exists ajouter_panier;
+delimiter // 
+create trigger ajouter_panier
+before insert on panier 
+for each row 
+begin 
+declare panier int;
+select idpanier into panier from panier order by  idpanier desc limit 1 ;
+set panier = panier + 1 ;
+        insert into panier (idpanier, iduser, idproduit, quantiteproduit) values (idpanier, new.iduser, new.idproduit, new.quantiteproduit);
+end //
+delimiter ; 
+/*insert into panier values(1, 3, 2, 1); 
+
+*/
+
+create table commande (   
+idCommande int not null auto_increment,
+dateCommande date ,
+nbProduit int(5)  ,
+montantHT float(5,2) ,
+tvaCommande float(5,2)  ,
+montantTTC float (9,2) ,
+dateLivraison date,
+idpanier int, 
+constraint pk_commande primary key (idCommande),
+constraint fk_panier foreign key (idpanier) references panier(idpanier)
 );
+
+
 
 insert into commande (dateCommande, nbProduit, montantHT,montantTTC, dateLivraison, iduser) values (curdate(), 1, 100, 120, curdate(), 2);
 

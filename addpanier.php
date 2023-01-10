@@ -9,7 +9,7 @@ if (isset($_GET['id'])){
     if(empty($produits)){
     die ("Ce produit n'existe pas");
     }
-    $unControleur->ajouter_panier($produits[0]->idproduit);
+    $unControleur->ajouter_panier($produits[0]->idProduit);
     die('<center>Le produit à bien été ajouté au panier <a href="index.php?page=1">retourner le catalogue</a></ center>');
 }elseif(isset($_GET['del'])){
     $unControleur->del($_GET['del']);
