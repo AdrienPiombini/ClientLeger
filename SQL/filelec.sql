@@ -326,9 +326,9 @@ create table produit (
 
 
 create table panier(
-idpanier int auto_increment not null,
-iduser int,
-idproduit int,
+idpanier int  not null,
+iduser int not null,
+idproduit int not null,
 quantiteproduit int, 
 statut enum('en cours', 'valider', 'annulé'),
 constraint pk_panier primary key (idpanier, iduser, idproduit),
@@ -336,8 +336,25 @@ constraint fk_user foreign key (iduser) references users(iduser),
 constraint fk_produit foreign key (idproduit) references produit(idProduit)
 );
 
+create table numero(
+numero int auto_increment  not null,
+iduser int not null,
+--idproduit int not null,
+constraint pk_numero primary key (numero)
+);
 
 
+drop procedure if exists gestion_panier;
+delimiter  //
+create procedure gestion_panier (iduser int, idproduit varchar(25), quantiteproduit int)
+begin 
+declare num int; 
+insert into numero (iduser, idproduit) values(iduser, idproduit);
+select numero into num from numero where iduser = iduser and idproduit  = idproduit order by numero desc limit 1;
+insert into panier (idpanier, iduser, idproduit, quantiteproduit, statut) values (num, iduser, idproduit, quantiteproduit, 'en cours');
+end ;
+//
+delimiter ;
 /*
 
 CREATE PROCEDURE   if not exist p_insert_panier (idpanier, iduser, idrpoduit , qteproduit) 
