@@ -346,12 +346,10 @@ constraint pk_numero primary key (numero)
 
 drop procedure if exists gestion_panier;
 delimiter  //
-create procedure gestion_panier (iduser int, idproduit varchar(25), quantiteproduit int)
+create procedure gestion_panier (idpanier int, iduser int, idproduit varchar(25), quantiteproduit int)
 begin 
 declare num int; 
-insert into numero (iduser, idproduit) values(iduser, idproduit);
-select numero into num from numero where iduser = iduser and idproduit  = idproduit order by numero desc limit 1;
-insert into panier (idpanier, iduser, idproduit, quantiteproduit, statut) values (num, iduser, idproduit, quantiteproduit, 'en cours');
+insert into panier (idpanier, iduser, idproduit, quantiteproduit, statut) values (idpanier, iduser, idproduit, quantiteproduit, 'en cours');
 end ;
 //
 delimiter ;

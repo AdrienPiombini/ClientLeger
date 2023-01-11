@@ -119,11 +119,14 @@ public function selectAllProduit($tab){
     return $produits;
 }
 
-public function valider_panier(){
-    $idpanier =  $this->unModele->valider_panier();
+public function idpanier(){
+    $idpanier =  $this->unModele->idpanier();
     return $idpanier;
 }
 
+public function insert_panier($idpanier, $iduser, $idproduit, $quantiteproduit){
+    $this->unModele->insert_panier($idpanier, $iduser, $idproduit, $quantiteproduit);
+}
 }
 
 ?>

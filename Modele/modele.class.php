@@ -227,7 +227,7 @@ class Modele {
 			}
 		}
 
-		public function valider_panier(){
+		public function idpanier(){
 			if($this->unPDO != null){
 				$requete = "select max(idpanier) + 1 from ".$this->table.";";
 				$select = $this->unPDO->prepare($requete);
@@ -239,9 +239,15 @@ class Modele {
 			}
 		}
 
+		public function insert_panier($idpanier, $iduser, $idproduit, $quantiteproduit){
+			if($this->unPDO != null){
+				$requete ="call gestion_panier (".$idpanier.",".$iduser.",".$idproduit.",".$quantiteproduit.");"; 
+				$select = $this->unPDO->prepare($requete);
+				$select->execute();
+		}
 }
 
 
-
+}
 
 ?>
