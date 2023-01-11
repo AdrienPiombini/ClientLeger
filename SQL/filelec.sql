@@ -336,13 +336,6 @@ constraint fk_user foreign key (iduser) references users(iduser),
 constraint fk_produit foreign key (idproduit) references produit(idProduit)
 );
 
-create table numero(
-numero int auto_increment  not null,
-iduser int not null,
---idproduit int not null,
-constraint pk_numero primary key (numero)
-);
-
 
 drop procedure if exists gestion_panier;
 delimiter  //

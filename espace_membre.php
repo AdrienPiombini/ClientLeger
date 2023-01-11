@@ -189,7 +189,16 @@ $one_intervention = null;
 	}
 
  /************************  VUE COMMANDES *******************************************/
-
+ $unControleur->setTable('panier');
+ if (isset($_POST['rechercher_commande']))
+ {
+	 $mot = $_POST['mot']; 
+	 $tab = array("idpanier", "iduser", "idproduit", "quantiteproduit", "statut");
+	 $les_commandes = $unControleur->selectLikeAll($mot, $tab); 
+	 require_once("vue/espace_membre/vue_commandes.php");
+ }else{
+	 $les_commandes = $unControleur->selectAll(); 
+	 }
  
 
 /***************************************EN TETE******************************************/
