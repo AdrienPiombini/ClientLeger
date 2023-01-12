@@ -70,6 +70,7 @@
 		}
 /***************************************ESPACE ADMINISTRATION***************************************** */
 	$one_user = null;
+	$unControleur->setTable('users');
 	if (isset($_POST['rechercher_user']))
 	{
 		$mot = $_POST['mot']; 

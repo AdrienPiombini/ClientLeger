@@ -17,7 +17,7 @@
           $produits = array();
         }else{
         //$produits = $unControleur->query('select * from produit where idproduit in ('.implode(',',$idproduit).')');
-        $produits = $unControleur->selectAllProduit($idproduit);
+        $produits = $unControleur->selectAllProduit($idproduit); 
         }
         foreach($produits as $produit):
       ?>

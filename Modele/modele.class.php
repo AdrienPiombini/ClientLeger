@@ -211,13 +211,13 @@ class Modele {
 		}
 
 	
-		public function selectAllProduit($tab)
+		public function selectAllProduit($idproduit)
 		{
 			if($this->unPDO != null){
-				//$requete ="select * from produit where idproduit in  (:".$tab.");";
-				//$donnees = (":".$tab=>implode(',',$tab));
-				//$select->execute($donnees);
-				$requete = "select * from produit where idproduit in (".implode(',',$tab).");";
+				
+				$liste = implode ("," , $idproduit); 
+				$donnees = "(".$liste.")";
+				$requete ="select * from produit where idproduit  in  ".$donnees.";"; 
 				$select = $this->unPDO->prepare($requete);
 				$select->execute();
 				$produits = $select->fetchAll(PDO::FETCH_OBJ);
@@ -234,8 +234,6 @@ class Modele {
 				$select->execute();
 				$lesResultats = $select->fetch();
 				return $lesResultats;
-			}else{
-				return null; 
 			}
 		}
 

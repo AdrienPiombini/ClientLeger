@@ -2,7 +2,7 @@ DROP DATABASE IF EXISTS dsa;
 CREATE DATABASE dsa;
 use dsa;
 
------ Utilisateurs
+/* UTILISATEURS */ 
 
 create table users (
 iduser int(3) not null  auto_increment,
@@ -43,6 +43,7 @@ email varchar (150),
 mdp varchar (50),
 nom varchar (50),
 roles enum ('admin', 'technicien', 'client') default 'client',
+typeclient enum('particulier', 'professionnel'),
 adresse varchar(50),
 ville varchar (50),
 cp varchar (50), 
@@ -57,6 +58,7 @@ email varchar (150),
 mdp varchar (50),
 nom varchar (50),
 roles enum ('admin', 'technicien', 'client') default 'client',
+typeclient enum('particulier', 'professionnel') default 'particulier',
 adresse varchar(50),
 ville varchar (50),
 cp varchar (50), 
@@ -71,6 +73,7 @@ email varchar (150),
 mdp varchar (50),
 nom varchar (50),
 roles enum ('admin', 'technicien', 'client') default 'client',
+typeclient enum('particulier', 'professionnel') default 'professionnel',
 adresse varchar(50),
 ville varchar (50),
 cp varchar (50), 
@@ -96,10 +99,10 @@ declare user int;
 select count(*) into user from users where email = new.email;
 if user = 0 then 
     insert into users (email, mdp, roles, nom) values (new.email, new.mdp, 'client', new.nom);
-    insert into client (email, mdp, roles, nom, adresse, ville, cp, telephone) values (new.email, new.mdp, 'client', new.nom, new.adresse, new.ville, new.cp, new.telephone);
+    insert into client (email, mdp, roles, typeclient, nom, adresse, ville, cp, telephone) values (new.email, new.mdp, 'client', 'particulier', new.nom, new.adresse, new.ville, new.cp, new.telephone);
 else 
     signal sqlstate '45000'
-    set message_text = 'Données déja existentes';
+    set message_text = 'Données déja existantes';
 end if;
 end // 
 delimiter ; 
@@ -115,10 +118,10 @@ declare user int;
 select count(*) into user from users where email = new.email;
 if user = 0 then 
     insert into users (email, mdp, roles, nom) values (new.email, new.mdp, 'client', new.nom);
-    insert into client (email, mdp, roles, nom, adresse, ville, cp, telephone) values (new.email, new.mdp, 'client', new.nom, new.adresse, new.ville, new.cp, new.telephone);
+    insert into client (email, mdp, roles, typeclient, nom, adresse, ville, cp, telephone) values (new.email, new.mdp, 'client', 'professionnel', new.nom, new.adresse, new.ville, new.cp, new.telephone);
 else 
     signal sqlstate '45000'
-    set message_text = 'Données déja existentes';
+    set message_text = 'Données déja existantes';
 end if;
 end // 
 delimiter ; 
@@ -255,7 +258,7 @@ end //
 delimiter ;
 
 
-/*
+
 
 INSERT INTO particulier (email, mdp, nom, roles, adresse, ville, cp, telephone, prenom)
 VALUES ('user1@gmail.com', 'password1', 'User 1', 'client', '1 Main St', 'New York', '12345', 123456789, 'John');
@@ -299,20 +302,20 @@ insert into particulier (email, mdp, nom, adresse, ville, cp, telephone, prenom)
 
 
 
-insert into users (email, mdp, roles, nom) values ('admin@gmail.com', sha1('admin'), 'admin', 'admin');
-insert into users (email, mdp, roles, nom) values ('client@gmail.com', sha1('client'), 'client', 'Jean');
-insert into users (email, mdp, roles, nom) values ('tech@gmail.com', sha1('tech'), 'technicien', 'Mathieu');
-INSERT INTO users (email, mdp, roles, nom) VALUES ('Alice@gmail.com', SHA1('password1'), 'client', 'Alice');
-INSERT INTO users (email, mdp, roles, nom) VALUES ('Bob@gmail.com', SHA1('password2'), 'technicien', 'Bob');
-INSERT INTO users (email, mdp, roles, nom) VALUES ('Charlie@gmail.com', SHA1('password3'), 'admin', 'Charlie');
-INSERT INTO users (email, mdp, roles, nom) VALUES ('David@gmail.com', SHA1('password4'), 'client', 'David');
-INSERT INTO users (email, mdp, roles, nom) VALUES ('Emily@gmail.com', SHA1('password5'), 'technicien', 'Emily');
-INSERT INTO users (email, mdp, roles, nom) VALUES ('Frank@gmail.com', SHA1('password1'), 'client', 'Frank');
-INSERT INTO users (email, mdp, roles, nom) VALUES ('George@gmail.com', SHA1('password2'), 'technicien', 'George');
-INSERT INTO users (email, mdp, roles, nom) VALUES ('Isabelle@gmail.com', SHA1('password4'), 'client', 'Isabelle');
-INSERT INTO users (email, mdp, roles, nom) VALUES ('Jack@gmail.com', SHA1('password5'), 'technicien', 'Jack');
+insert into admin (email, mdp, roles, nom) values ('admin@gmail.com', sha1('admin'), 'admin', 'admin');
+insert into particulier (email, mdp, roles, nom) values ('client@gmail.com', sha1('client'), 'client', 'Jean');
+insert into technicien (email, mdp, roles, nom) values ('tech@gmail.com', sha1('tech'), 'technicien', 'Mathieu');
+INSERT INTO particulier (email, mdp, roles, nom) VALUES ('Alice@gmail.com', SHA1('password1'), 'client', 'Alice');
+INSERT INTO technicien (email, mdp, roles, nom) VALUES ('Bob@gmail.com', SHA1('password2'), 'technicien', 'Bob');
+INSERT INTO admin (email, mdp, roles, nom) VALUES ('Charlie@gmail.com', SHA1('password3'), 'admin', 'Charlie');
+INSERT INTO particulier (email, mdp, roles, nom) VALUES ('David@gmail.com', SHA1('password4'), 'client', 'David');
+INSERT INTO technicien (email, mdp, roles, nom) VALUES ('Emily@gmail.com', SHA1('password5'), 'technicien', 'Emily');
+INSERT INTO particulier (email, mdp, roles, nom) VALUES ('Frank@gmail.com', SHA1('password1'), 'client', 'Frank');
+INSERT INTO technicien (email, mdp, roles, nom) VALUES ('George@gmail.com', SHA1('password2'), 'technicien', 'George');
+INSERT INTO particulier (email, mdp, roles, nom) VALUES ('Isabelle@gmail.com', SHA1('password4'), 'client', 'Isabelle');
+INSERT INTO technicien (email, mdp, roles, nom) VALUES ('Jack@gmail.com', SHA1('password5'), 'technicien', 'Jack');
 
-*/
+
 
 
 create table produit (
@@ -331,60 +334,42 @@ iduser int not null,
 idproduit int not null,
 quantiteproduit int, 
 statut enum('en cours', 'valider', 'annulé'),
+dateCommande date ,
+tvaCommande varchar(4) ,
+totalHT float (9,2),
+totalTTC float (9,2),
 constraint pk_panier primary key (idpanier, iduser, idproduit),
 constraint fk_user foreign key (iduser) references users(iduser),
 constraint fk_produit foreign key (idproduit) references produit(idProduit)
 );
 
 
+
 drop procedure if exists gestion_panier;
 delimiter  //
-create procedure gestion_panier (idpanier int, iduser int, idproduit varchar(25), quantiteproduit int)
+create procedure gestion_panier (idpan int, idu int, idprod varchar(25), qtprod int)
 begin 
-declare num int; 
-insert into panier (idpanier, iduser, idproduit, quantiteproduit, statut) values (idpanier, iduser, idproduit, quantiteproduit, 'en cours');
+declare prixprod float; 
+declare HT float;
+declare  TTC float; 
+insert into panier (idpanier, iduser, idproduit, quantiteproduit, statut, dateCommande, tvaCommande) values (idpan, idu, idprod, qtprod, 'en cours', curdate(), '20%');
+select prixProduit from produit where idproduit = idprod  into prixprod ;
+select  totalHT, totalTTC from panier where idpanier = idpan limit 1  into HT, TTC;
+if HT is null then 
+set HT = 0; 
+end if; 
+if TTC is null then 
+set TTC = 0;
+end if; 
+set HT = HT + (prixprod * qtprod);
+set TTC = TTC + (prixprod * qtprod * 1.2); 
+update panier set totalHT = HT, totalTTC = TTC where idpanier = idpan and iduser =idu ;
 end ;
 //
 delimiter ;
-/*
-
-CREATE PROCEDURE   if not exist p_insert_panier (idpanier, iduser, idrpoduit , qteproduit) 
-
-insert into panier values (1, 1, 2, 4);
-insert into panier (iduser, idproduit, quantiteproduit) values (3, 3, 3);
-
-drop trigger if exists ajouter_panier;
-delimiter // 
-create trigger ajouter_panier
-before insert on panier 
-for each row 
-begin 
-declare panier int;
-select idpanier into panier from panier order by  idpanier desc limit 1 ;
-set panier = panier + 1 ;
-        insert into panier (idpanier, iduser, idproduit, quantiteproduit) values (idpanier, new.iduser, new.idproduit, new.quantiteproduit);
-end //
-delimiter ; 
-/*insert into panier values(1, 3, 2, 1); 
-
-*/
-
-create table commande (   
-idCommande int not null auto_increment,
-dateCommande date ,
-nbProduit int(5)  ,
-montantHT float(5,2) ,
-tvaCommande float(5,2)  ,
-montantTTC float (9,2) ,
-dateLivraison date,
-idpanier int, 
-constraint pk_commande primary key (idCommande),
-constraint fk_panier foreign key (idpanier) references panier(idpanier)
-);
 
 
-
-insert into commande (dateCommande, nbProduit, montantHT,montantTTC, dateLivraison, iduser) values (curdate(), 1, 100, 120, curdate(), 2);
+/*insert into panier (idpanier, iduser, idproduit, quantiteproduit, statut, dateCommande, montantHT, tvaCommande, montantTTC) values (1, 1, 1, 1, 'en cours', curdate(), '12', '20%', '21'); */
 
 create table intervention (
     idintervention int(3) not null auto_increment,
@@ -402,7 +387,7 @@ insert into intervention (libelle, dateintervention, iduser) values ('reparation
 
 
 
-/*insertion produit  */
+
 insert into produit (nomProduit, prixProduit, description) values ('pneu', 250, '- Neuf comme usé, ce pneu offre un freinage remarquable sur routes mouillées..
 - Adhérence exceptionnelle sur sol mouillé.
 - Une consommation moindre et un kilométrage supérieur de 20 % par rapport à son prédécesseur.');
@@ -423,7 +408,127 @@ insert into produit (nomProduit, prixProduit, description ) values ('essuie-glac
 Les essuies-glaces BOSCH Clearview sont particulierement facile et rapide à monter. Pour faciliter le montage, le balai est vendu avec 1 adaptateur prémonté");
 
 
+
+INSERT INTO panier (idpanier, iduser, idproduit, quantiteproduit, statut, dateCommande, tvaCommande ) 
+VALUES (1, 1, 1, 2, 'en cours', '2022-01-01', '19.6');
+
+INSERT INTO panier (idpanier, iduser, idproduit, quantiteproduit, statut, dateCommande, tvaCommande ) 
+VALUES (1, 1, 2, 4, 'en cours', '2022-01-01', '19.6');
+
+INSERT INTO panier (idpanier, iduser, idproduit, quantiteproduit, statut, dateCommande, tvaCommande ) 
+VALUES (1, 1, 3, 1, 'en cours', '2022-01-01', '19.6');
+
+INSERT INTO panier (idpanier, iduser, idproduit, quantiteproduit, statut, dateCommande, tvaCommande ) 
+VALUES (1, 1, 4, 5, 'en cours', '2022-01-01', '19.6');
+
+INSERT INTO panier (idpanier, iduser, idproduit, quantiteproduit, statut, dateCommande, tvaCommande ) 
+VALUES (2, 2, 2, 1, 'valider', '2022-02-01', '19.6');
+
+INSERT INTO panier (idpanier, iduser, idproduit, quantiteproduit, statut, dateCommande, tvaCommande) 
+VALUES (3, 3, 3, 3, 'annulé', '2022-03-01', '19.6');
+
+
+
+
+select idpanier, sum(quantiteproduit), sum(montantHT), nom from panier left join users on panier.iduser= users.iduser where idpanier = 1 group by panier.idpanier, users.nom
+select panier.*, prixProduit, nom from panier, produit, users where panier.iduser = users.iduser and panier.idproduit = produit.idproduit
+
+select idpanier, quantiteproduit, statut, prixProduit, nom from panier, produit, users where panier.iduser = users.iduser and panier.idproduit = produit.idproduit;
+
+
 /* VUE */ 
 create view vue_intervention_and_users as(
     select i.*, u.email from intervention i inner join users u on i.iduser = u.iduser
 );
+
+
+create or replace view vue_panier as (
+select idpanier, quantiteproduit, statut, prixProduit, nom, tvaCommande, totalHT, totalTTC from panier, produit, users  where panier.iduser = users.iduser and panier.idproduit = produit.idproduit
+);
+
+/*
+
+
+
+drop procedure if exists gestion_panier;
+delimiter  //
+create procedure gestion_panier (idpan int, idu int, idprod varchar(25), qtprod int)
+begin 
+declare PrixProduit float; 
+declare totalHT float;
+declare  totalTTC float; 
+select prixProduit from produit where idproduit = idprod  into PrixProduit ;
+set totalHT = PrixProduit * qtprod;
+set totalHT = PrixProduit * qtprod * 1.2; 
+insert into panier (idpanier, iduser, idproduit, quantiteproduit, statut, dateCommande, tvaCommande) values (idpan, idu, idprod, qtprod, 'en cours', curdate(), '20%');
+update panier set totalHT = totalHT, totalTTC = totalTTC where idpanier = idpan and iduser =idu and idproduit = idprod;
+end ;
+//
+delimiter ;
+
+drop trigger if exists maj_panier; 
+delimiter // 
+create trigger maj_panier 
+after insert on panier 
+for each row 
+begin 
+    update vue_panier set totalHT = 1 where idpanier = new.idpanier;
+end //
+delimiter ;
+
+
+drop procedure if exists gestion_panier;
+delimiter  //
+create procedure gestion_panier (idpanier int, iduser int, idproduit varchar(25), quantiteproduit int)
+begin 
+insert into panier (idpanier, iduser, idproduit, quantiteproduit, statut, dateCommande, tvaCommande) values (idpanier, iduser, idproduit, quantiteproduit, 'en cours', curdate(), '20%');
+end ;
+//
+delimiter ;
+
+drop trigger if exists maj_panier; 
+delimiter // 
+create trigger maj_panier 
+after insert on panier 
+for each row 
+begin 
+    update vue_panier set totalHT = 1 where idpanier = new.idpanier;
+end //
+delimiter ;
+
+create view vue_user as ( 
+    select * from users
+);
+
+
+
+
+select idpanier, sum(quantiteproduit) from vue_panier where idpanier = 1 group by idpanier with rollup;
+
+select idpanier, nom, sum(quantiteproduit), montantHT from panier left join users on panier.iduser= users.iduser where idpanier = 1  group by ;  
+
+select count(quantiteproduit), nom, montantHT from panier left join users on panier.iduser= users.iduser where idpanier = 1  group by idpanier, quantiteproduit ; 
+
+
+
+
+
+
+create table commande (   
+idCommande int not null auto_increment,
+dateCommande date ,
+nbProduit int(5)  ,
+montantHT float(5,2) ,
+tvaCommande float(5,2)  ,
+montantTTC float (9,2) ,
+dateLivraison date,
+idpanier int, 
+constraint pk_commande primary key (idCommande),
+constraint fk_panier foreign key (idpanier) references panier(idpanier)
+);
+
+
+
+insert into commande (dateCommande, nbProduit, montantHT,montantTTC, dateLivraison, iduser) values (curdate(), 1, 100, 120, curdate(), 2);
+
+*/
