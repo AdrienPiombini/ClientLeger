@@ -127,6 +127,22 @@ public function idpanier(){
 public function insert_panier($idpanier, $iduser, $idproduit, $quantiteproduit){
     $this->unModele->insert_panier($idpanier, $iduser, $idproduit, $quantiteproduit);
 }
+
+public function valider_commande($idpanier){
+    $this->unModele->valider_commande($idpanier);
+}
+
+public function archive_commande($idpanier){
+    $this->unModele->archive_commande($idpanier);
+}
+
+public function annule_commande($idpanier){
+    $this->unModele->annule_commande($idpanier);
+}
+
+
+public function select_mine_commandes_en_cours($iduser)
+
 }
 
 ?>
