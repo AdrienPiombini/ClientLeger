@@ -184,22 +184,55 @@ $one_intervention = null;
 			$unControleur->setTable('users');
 			$tab = array("mdp"=>htmlspecialchars(sha1($_POST['new_mdp'])));
 			$unControleur->update($tab, "iduser", $_SESSION['iduser']);
-			echo "<br/>Le mot de passe à bien été changé !"; 
+			echo "<br/>Le mot de passe a bien été changé !"; 
 		}
 		
 	}
 
  /************************  VUE COMMANDES *******************************************/
- $unControleur->setTable('panier');
- if (isset($_POST['rechercher_commande']))
+ $unControleur->setTable('vue_commande_en_cours');
+ if (isset($_POST['rechercher_commande_en_cours']))
  {
 	 $mot = $_POST['mot']; 
-	 $tab = array("idpanier", "iduser", "idproduit", "quantiteproduit", "statut");
-	 $les_commandes = $unControleur->selectLikeAll($mot, $tab); 
+	 $tab = array("idpanier", "iduser", "nbArticle", "statut");
+	 $les_commandes_en_cours = $unControleur->selectLikeAll($mot, $tab); 
+	 $mes_commandes_en_cours = $unControleur->selectLikeAll($mot, $tab); 
+
 	 require_once("vue/espace_membre/vue_commandes.php");
  }else{
-	 $les_commandes = $unControleur->selectAll(); 
+	 $les_commandes_en_cours = $unControleur->selectAll(); 
+	 $mes_commandes_en_cours = $unControleur->select_mine_commandes_en_cours($iduser); 
+
 	 }
+
+	 $unControleur->setTable('vue_commande_archive');
+	$les_commandes_archives = $unControleur->selectAll(); 
+	$mes_commandes_archives = $unControleur->select_mine_commandes_archive($iduser); 
+
+		
+if (isset($_POST['valider_commande'])){
+	$idpanier = $_POST['idpanier']; 
+	$unControleur->valider_commande($idpanier);
+	echo "<br/>Commande mis à jour !"; 
+
+
+}
+if (isset($_POST['annule_commande'])){
+	$idpanier = $_POST['idpanier']; 
+	$unControleur->annule_commande($idpanier);
+	echo "<br/>Commande mis à jour !"; 
+
+
+}
+if (isset($_POST['archive_commande'])){
+	$idpanier = $_POST['idpanier']; 
+	$unControleur->archive_commande($idpanier);
+	echo "<br/>Commande mis à jour !"; 
+
+
+}
+
+		
  
 
 /***************************************EN TETE******************************************/

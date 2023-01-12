@@ -333,7 +333,7 @@ idpanier int  not null,
 iduser int not null,
 idproduit int not null,
 quantiteproduit int, 
-statut enum('en cours', 'valider', 'annulé'),
+statut enum('en cours', 'validée', 'annulée', 'archivée' ),
 dateCommande date ,
 tvaCommande varchar(4) ,
 totalHT float (9,2),
@@ -441,11 +441,13 @@ create view vue_intervention_and_users as(
     select i.*, u.email from intervention i inner join users u on i.iduser = u.iduser
 );
 
-
-create or replace view vue_panier as (
-select idpanier, quantiteproduit, statut, prixProduit, nom, tvaCommande, totalHT, totalTTC from panier, produit, users  where panier.iduser = users.iduser and panier.idproduit = produit.idproduit
+create or replace view  vue_commande_en_cours as (
+    select idpanier, iduser, sum(quantiteproduit) as "nbArticle", statut, totalHT, totalTTC, datecommande from panier where statut  in ('en cours', 'validée') group by idpanier, iduser, statut, totalHT, totalTTC, datecommande
 );
 
+create or replace view  vue_commande_archive as (
+    select idpanier, iduser, sum(quantiteproduit) as "nbArticle", statut, totalHT, totalTTC, datecommande from panier where statut in ('archivée', 'annulée')   group by idpanier, iduser, statut, totalHT, totalTTC, datecommande
+);
 /*
 
 
@@ -508,6 +510,7 @@ select idpanier, sum(quantiteproduit) from vue_panier where idpanier = 1 group b
 select idpanier, nom, sum(quantiteproduit), montantHT from panier left join users on panier.iduser= users.iduser where idpanier = 1  group by ;  
 
 select count(quantiteproduit), nom, montantHT from panier left join users on panier.iduser= users.iduser where idpanier = 1  group by idpanier, quantiteproduit ; 
+
 
 
 

@@ -245,6 +245,32 @@ class Modele {
 		}
 }
 
+	public function valider_commande($idpanier){
+		if($this->unPDO != null){
+			$requete = "update panier set statut ='validée' where idpanier =:".$idpanier.";";
+			$donnees = array(":".$idpanier=>$idpanier);
+			$update = $this->unPDO->prepare($requete);
+			$update->execute($donnees);
+		}
+	}
+
+	public function archive_commande($idpanier){
+		if($this->unPDO != null){
+			$requete = "update panier set statut ='archivée' where idpanier =:".$idpanier.";";
+			$donnees = array(":".$idpanier=>$idpanier);
+			$update = $this->unPDO->prepare($requete);
+			$update->execute($donnees);
+		}
+	}
+
+	public function annule_commande($idpanier){
+		if($this->unPDO != null){
+			$requete = "update panier set statut ='annulée' where idpanier =:".$idpanier.";";
+			$donnees = array(":".$idpanier=>$idpanier);
+			$update = $this->unPDO->prepare($requete);
+			$update->execute($donnees);
+		}
+	}
 
 }
 
