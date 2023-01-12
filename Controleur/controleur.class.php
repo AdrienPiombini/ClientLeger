@@ -141,8 +141,22 @@ public function annule_commande($idpanier){
 }
 
 
-public function select_mine_commandes_en_cours($iduser)
+public function select_mine_commandes_en_cours(){
+    $mes_commandes =  $this->unModele->select_mine_commandes_en_cours();
+    return $mes_commandes;
+ }
 
+public function select_like_mine_commande($mot){
+    $mes_commandes=  $this->unModele->select_like_mine_commande($mot);
+    return $mes_commandes;
 }
 
+
+
+public function select_mine_commandes_archive(){
+    $mes_commandes = $this->unModele->select_mine_commandes_archive();
+    return $mes_commandes;
+}
+
+}
 ?>

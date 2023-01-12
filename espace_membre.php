@@ -191,12 +191,13 @@ $one_intervention = null;
 
  /************************  VUE COMMANDES *******************************************/
  $unControleur->setTable('vue_commande_en_cours');
+ $iduser = $_SESSION['iduser'];
  if (isset($_POST['rechercher_commande_en_cours']))
  {
 	 $mot = $_POST['mot']; 
 	 $tab = array("idpanier", "iduser", "nbArticle", "statut");
 	 $les_commandes_en_cours = $unControleur->selectLikeAll($mot, $tab); 
-	 $mes_commandes_en_cours = $unControleur->selectLikeAll($mot, $tab); 
+	 $mes_commandes_en_cours = $unControleur->select_like_mine_commandes_en_cours($mot); 
 
 	 require_once("vue/espace_membre/vue_commandes.php");
  }else{

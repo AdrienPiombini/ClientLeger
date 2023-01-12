@@ -78,7 +78,6 @@
     <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Prix  HT</td>
     <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Prix  TTC</td>
     <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Date  Commande</td>
-    <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Action</td>
 </tr>
 <?php
 foreach($mes_commandes_en_cours as $mes_commande_en_cours){
@@ -89,12 +88,8 @@ foreach($mes_commandes_en_cours as $mes_commande_en_cours){
     echo"<td>".$mes_commande_en_cours["nbArticle"]."</td>";
     echo"<td>".$mes_commande_en_cours["totalHT"]."</td>";
     echo"<td>".$mes_commande_en_cours["totalTTC"]."</td>";
-    echo"<td>".$une_commande_enmes_commande_en_cours_mes_commande_en_courscours["datecommande"]."</td>";
+    echo"<td>".$mes_commande_en_cours["datecommande"]."</td>";
     echo '<input type="hidden" name="idpanier" value="'.$mes_commande_en_cours['idpanier'].'">';
-    echo"<td><input type='submit' name='valider_commande' value='Valider'>
-                <input type='submit' name='annule_commande' value='Annuler'>
-                <input type='submit' name='archive_commande' value='Archiver'></td>";
-
     echo "<tr></form>";
 }
 ?>
@@ -116,7 +111,7 @@ foreach($mes_commandes_en_cours as $mes_commande_en_cours){
 </tr>
 
 <?php
-foreach($mess_commandes_archives as $mes_commande_archive){
+foreach($mes_commandes_archives as $mes_commande_archive){
     echo"<form method='post'><tr>";
     echo"<td>".$mes_commande_archive['idpanier']."</td>";
     echo"<td>".$mes_commande_archive['iduser']."</td>";
