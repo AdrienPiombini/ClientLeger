@@ -18,6 +18,12 @@
             <input type="password" name='new_mdp_verif' placeholder="Confirmer"></label></p>
         
         <p><br><input type="submit" name='edit_mdp' value="Changer le mdp"></p>
+        <br>
+        <br>
+        <br>
+        <?php echo  '<input type="hidden" name="iduser" value="'.$_SESSION['iduser'].'">'; ?>
+        <p><br><input type="submit" name='delete_user' value="Supprime son compte"></p>
+
     </div>
 </form>
 <br>

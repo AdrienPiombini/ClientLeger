@@ -214,48 +214,20 @@ delimiter ;
 
 /* SUPPRIMER USERS */
 
-
-drop trigger if exists supprimer_particulier; 
+drop trigger if exists supprimer_user; 
 delimiter // 
-create trigger supprimer_particulier 
-before delete on particulier 
+create trigger supprimer_user 
+after   delete on users 
 for each row 
 begin 
     delete from client where email = old.email; 
-    delete from users where email = old.email; 
-end //
+    delete from particulier where email = old.email; 
+    delete from professionnel where email = old.email; 
+    delete from  technicien where email = old.email; 
+    delete from admin where email = old.email;
+end // 
 delimiter ;
 
-drop trigger if exists supprimer_professionnel; 
-delimiter // 
-create trigger supprimer_professionnel 
-before delete on professionnel 
-for each row 
-begin 
-    delete from client where email = old.email; 
-    delete from users where email = old.email; 
-end //
-delimiter ;
-
-drop trigger if exists supprimer_admin; 
-delimiter // 
-create trigger supprimer_admin 
-before delete on admin 
-for each row 
-begin 
-    delete from users where email = old.email; 
-end //
-delimiter ;
-
-drop trigger if exists supprimer_tech; 
-delimiter // 
-create trigger supprimer_tech 
-before delete on technicien 
-for each row 
-begin 
-    delete from users where email = old.email; 
-end //
-delimiter ;
 
 
 
@@ -274,26 +246,18 @@ VALUES ('user4@gmail.com', 'password4', 'User 4', 'client', '4 Main St', 'Housto
 
 INSERT INTO particulier (email, mdp, nom, roles, adresse, ville, cp, telephone, prenom)
 VALUES ('user5@gmail.com', 'password5', 'User 5', 'client', '5 Main St', 'Philadelphia', '56789', 567891234, 'David');
-
 INSERT INTO professionnel (email, mdp, nom, roles, adresse, ville, cp, telephone, numeroSiret)
 VALUES ('company1@gmail.com', 'password1', 'Company 1', 'client', '1 Main St', 'New York', '12345', 123456789, 1234567890);
-
 INSERT INTO professionnel (email, mdp, nom, roles, adresse, ville, cp, telephone, numeroSiret)
 VALUES ('company2@gmail.com', SHA1('password2'), 'Company 2', 'client', '2 Main St', 'Chicago', '23456', 234567891, 234567901);
-
 INSERT INTO professionnel (email, mdp, nom, roles, adresse, ville, cp, telephone, numeroSiret)
 VALUES ('company3@gmail.com', SHA1('password3'), 'Company 3', 'client', '3 Main St', 'Los Angeles', '34567', 345678912, 345789012);
-
 INSERT INTO professionnel (email, mdp, nom, roles, adresse, ville, cp, telephone, numeroSiret)
 VALUES ('company4@gmail.com', SHA1('password4'), 'Company 4', 'client', '4 Main St', 'Houston', '45678', 456789123, 456780123);
-
 INSERT INTO professionnel (email, mdp, nom, roles, adresse, ville, cp, telephone, numeroSiret)
 VALUES ('company5@gmail.com', SHA1('password5'), 'Company 5', 'client', '5 Main St', 'Philadelphia', '56789', 567891234, 567801234);
-
 INSERT INTO professionnel (email, mdp, nom, roles, adresse, ville, cp, telephone, numeroSiret)
 VALUES ('company6@gmail.com', SHA1('password6'), 'Company 6', 'client', '6 Main St', 'Seattle', '67890', 678910123, 678101235);
-
-
 INSERT INTO admin (email, mdp, roles, nom) VALUES ('Hannah@gmail.com', SHA1('password3'), 'admin', 'Hannah'); 
   update particulier set ville = 'poitier' where iduser = 3;
 insert into particulier (email, mdp, nom) values ('jeanne@gmail.com', sha1('jean'),'jean'); 
@@ -533,5 +497,51 @@ constraint fk_panier foreign key (idpanier) references panier(idpanier)
 
 
 insert into commande (dateCommande, nbProduit, montantHT,montantTTC, dateLivraison, iduser) values (curdate(), 1, 100, 120, curdate(), 2);
+
+OLD TRIGGER HERITAGE 
+
+drop trigger if exists supprimer_particulier; 
+delimiter // 
+create trigger supprimer_particulier 
+before delete on particulier 
+for each row 
+begin 
+    delete from client where email = old.email; 
+    delete from users where email = old.email; 
+end //
+delimiter ;
+
+drop trigger if exists supprimer_professionnel; 
+delimiter // 
+create trigger supprimer_professionnel 
+before delete on professionnel 
+for each row 
+begin 
+    delete from client where email = old.email; 
+    delete from users where email = old.email; 
+end //
+delimiter ;
+
+drop trigger if exists supprimer_admin; 
+delimiter // 
+create trigger supprimer_admin 
+before delete on admin 
+for each row 
+begin 
+    delete from users where email = old.email; 
+end //
+delimiter ;
+
+drop trigger if exists supprimer_tech; 
+delimiter // 
+create trigger supprimer_tech 
+before delete on technicien 
+for each row 
+begin 
+    delete from users where email = old.email; 
+end //
+delimiter ;
+
+
 
 */

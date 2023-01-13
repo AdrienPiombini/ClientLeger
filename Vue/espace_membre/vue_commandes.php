@@ -44,7 +44,7 @@
 
     <table border="3">
         <tr>
-            <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Reference du panier</td>
+            <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Reference commande</td>
             <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Reference User </td>
             <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Statut de la commande</td>
             <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Quantite d'article</td>
@@ -71,9 +71,9 @@
 
 }else{ ?>
     <tr>
-    <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Reference du panier</td>
+    <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">References commandes</td>
     <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Reference User </td>
-    <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Statut de la commande</td>
+    <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Statut commande</td>
     <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Quantite d'article</td>
     <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Prix  HT</td>
     <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Prix  TTC</td>
@@ -99,7 +99,7 @@ foreach($mes_commandes_en_cours as $mes_commande_en_cours){
 
 <table border="3">
 <tr>
-    <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Reference du panier</td>
+    <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">References commandes</td>
     <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Reference User </td>
     <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Statut de la commande</td>
     <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Quantite d'article</td>

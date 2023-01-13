@@ -59,7 +59,7 @@
 
 	$unControleur->setTable('users');
 	if(isset($_POST['inscription'])){
-		$tab = array("email"=>$_POST['email'],"mdp"=>sha1($_POST['mdp']),"client");
+		$tab = array("email"=>$_POST['email'],"mdp"=>sha1($_POST['mdp']),"nom"=>"","roles"=>"client");
 		$une_inscription = $unControleur->insert($tab);
 		echo '<script language="Javascript">
 		<!--
@@ -87,7 +87,7 @@
 		if(empty(trim($_POST['email'])) || empty(trim($_POST['mdp'])) || $_POST['roles']=='Choisir un rôles utilisateur'){
 			echo "<br/></br>Problème rencontré à la saisie des données, aucun utilisateur n'a été ajouté"; 
 		}else{
-		$tab = array("email"=>$_POST['email'],"mdp"=>$_POST['mdp'],"roles"=>$_POST['roles']);
+		$tab = array("email"=>$_POST['email'],"mdp"=>$_POST['mdp'], "nom"=>"","roles"=>$_POST['roles']);
 		$unControleur->insert($tab); 
 		echo "<br/>L'utilisateur : ".$_POST['email']." à été ajouté"; 
 		}
@@ -191,7 +191,13 @@ $one_intervention = null;
 
  /************************  VUE COMMANDES *******************************************/
  $unControleur->setTable('vue_commande_en_cours');
- $iduser = $_SESSION['iduser'];
+ 
+ if(isset($_SESSION['iduser'])){
+	$iduser = $_SESSION['iduser'];
+ }else {
+	$iduser ='';
+ }
+
  if (isset($_POST['rechercher_commande_en_cours']))
  {
 	 $mot = $_POST['mot']; 
