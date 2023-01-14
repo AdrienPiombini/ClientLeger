@@ -65,9 +65,16 @@
 			/*REGEX MDP ET EMAIL */
 			if (filter_var($_POST['mail'], FILTER_VALIDATE_EMAIL ) AND preg_match("/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[-+!*$@%_])([-+!*$@%_\w]{8,})$/", $_POST['mdp'])){
 				$tab = array("email"=>$_POST['email'],"mdp"=>sha1($_POST['mdp']),"nom"=>"","roles"=>"client");
-				$une_inscription = $unControleur->insert($tab);
-				echo '<script language="Javascript"><!-- document.location.replace("index.php?page=2");// --></script>';
-				echo'<center><h1> <?="Votre inscription à bien été enregistré"; ?></h1></center>';
+				try{
+					$une_inscription = $unControleur->insert($tab);
+					echo '<script language="Javascript"><!-- document.location.replace("index.php?page=2");// --></script>';
+					echo'<center><h1> <?="Votre inscription à bien été enregistré"; ?></h1></center>';
+				}
+				catch( PDOException $erreur){
+						echo'<center><h1> <?="Une erreur est survenue : " .$erreur->getMessage(); ?></h1></center>';
+				}
+				
+				
 					//header("Location: index.php?page=2") ;
 			}
 		}
