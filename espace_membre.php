@@ -58,18 +58,28 @@
 	}
 
 	$unControleur->setTable('users');
+
 	if(isset($_POST['inscription'])){
-		$tab = array("email"=>$_POST['email'],"mdp"=>sha1($_POST['mdp']),"client");
-		$une_inscription = $unControleur->insert($tab);
-		echo '<script language="Javascript">
-		<!--
-		document.location.replace("index.php?page=2");
-		// -->
-		</script>';
-				//header("Location: index.php?page=2") ;
-		}
+		if(!empty($_POST['email']) AND !empty($_POST['mdp'])){
+			/*REGEX MDP ET EMAIL */
+			if (filter_var($_POST['email'], FILTER_VALIDATE_EMAIL ) AND preg_match("/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[-+!*$@%_])([-+!*$@%_\w]{8,})$/", $_POST['mdp'])){
+				$tab = array("email"=>$_POST['email'],"mdp"=>sha1($_POST['mdp']),"nom"=>"","roles"=>"client");
+				try{
+					$une_inscription = $unControleur->insert($tab);
+					echo '<script language="Javascript"><!-- document.location.replace("index.php?page=2");// --></script>';
+					echo"Votre inscription à bien été enregistré";
+				}
+				catch( PDOException $erreur){
+						echo'Une erreur est survenue';
+				}					//header("Location: index.php?page=2") ;
+			}else {
+				echo'Renseigner des données valides !';
+			}
+	    }
+	}
 /***************************************ESPACE ADMINISTRATION***************************************** */
 	$one_user = null;
+	$unControleur->setTable('users');
 	if (isset($_POST['rechercher_user']))
 	{
 		$mot = $_POST['mot']; 
@@ -86,7 +96,7 @@
 		if(empty(trim($_POST['email'])) || empty(trim($_POST['mdp'])) || $_POST['roles']=='Choisir un rôles utilisateur'){
 			echo "<br/></br>Problème rencontré à la saisie des données, aucun utilisateur n'a été ajouté"; 
 		}else{
-		$tab = array("email"=>$_POST['email'],"mdp"=>$_POST['mdp'],"roles"=>$_POST['roles']);
+		$tab = array("email"=>$_POST['email'],"mdp"=>$_POST['mdp'], "nom"=>"","roles"=>$_POST['roles']);
 		$unControleur->insert($tab); 
 		echo "<br/>L'utilisateur : ".$_POST['email']." à été ajouté"; 
 		}
@@ -183,13 +193,62 @@ $one_intervention = null;
 			$unControleur->setTable('users');
 			$tab = array("mdp"=>htmlspecialchars(sha1($_POST['new_mdp'])));
 			$unControleur->update($tab, "iduser", $_SESSION['iduser']);
-			echo "<br/>Le mot de passe à bien été changé !"; 
+			echo "<br/>Le mot de passe a bien été changé !"; 
 		}
 		
 	}
 
  /************************  VUE COMMANDES *******************************************/
+ $unControleur->setTable('vue_commande_en_cours');
+ 
+ if(isset($_SESSION['iduser'])){
+	$iduser = $_SESSION['iduser'];
+ }else {
+	$iduser ='';
+ }
 
+ if (isset($_POST['rechercher_commande_en_cours']))
+ {
+	 $mot = $_POST['mot']; 
+	 $tab = array("idpanier", "iduser", "nbArticle", "statut");
+	 $les_commandes_en_cours = $unControleur->selectLikeAll($mot, $tab); 
+	 $mes_commandes_en_cours = $unControleur->select_like_mine_commandes_en_cours($mot); 
+
+	 require_once("vue/espace_membre/vue_commandes.php");
+ }else{
+	 $les_commandes_en_cours = $unControleur->selectAll(); 
+	 $mes_commandes_en_cours = $unControleur->select_mine_commandes_en_cours($iduser); 
+
+	 }
+
+	 $unControleur->setTable('vue_commande_archive');
+	$les_commandes_archives = $unControleur->selectAll(); 
+	$mes_commandes_archives = $unControleur->select_mine_commandes_archive($iduser); 
+
+		
+if (isset($_POST['valider_commande'])){
+	$idpanier = $_POST['idpanier']; 
+	$unControleur->valider_commande($idpanier);
+	echo "<br/>Commande mis à jour !"; 
+
+
+}
+if (isset($_POST['annule_commande'])){
+	$idpanier = $_POST['idpanier']; 
+	$unControleur->annule_commande($idpanier);
+	echo "<br/>Commande mis à jour !"; 
+
+
+}
+if (isset($_POST['archive_commande'])){
+	$idpanier = $_POST['idpanier']; 
+	$unControleur->archive_commande($idpanier);
+	echo "<br/>Commande mis à jour !"; 
+
+
+}
+
+		
  
 
 /***************************************EN TETE******************************************/

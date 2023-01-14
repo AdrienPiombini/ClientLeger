@@ -2,7 +2,7 @@ DROP DATABASE IF EXISTS dsa;
 CREATE DATABASE dsa;
 use dsa;
 
------ Utilisateurs
+/* UTILISATEURS */ 
 
 create table users (
 iduser int(3) not null  auto_increment,
@@ -43,6 +43,7 @@ email varchar (150),
 mdp varchar (50),
 nom varchar (50),
 roles enum ('admin', 'technicien', 'client') default 'client',
+typeclient enum('particulier', 'professionnel'),
 adresse varchar(50),
 ville varchar (50),
 cp varchar (50), 
@@ -57,6 +58,7 @@ email varchar (150),
 mdp varchar (50),
 nom varchar (50),
 roles enum ('admin', 'technicien', 'client') default 'client',
+typeclient enum('particulier', 'professionnel') default 'particulier',
 adresse varchar(50),
 ville varchar (50),
 cp varchar (50), 
@@ -71,6 +73,7 @@ email varchar (150),
 mdp varchar (50),
 nom varchar (50),
 roles enum ('admin', 'technicien', 'client') default 'client',
+typeclient enum('particulier', 'professionnel') default 'professionnel',
 adresse varchar(50),
 ville varchar (50),
 cp varchar (50), 
@@ -96,10 +99,10 @@ declare user int;
 select count(*) into user from users where email = new.email;
 if user = 0 then 
     insert into users (email, mdp, roles, nom) values (new.email, new.mdp, 'client', new.nom);
-    insert into client (email, mdp, roles, nom, adresse, ville, cp, telephone) values (new.email, new.mdp, 'client', new.nom, new.adresse, new.ville, new.cp, new.telephone);
+    insert into client (email, mdp, roles, typeclient, nom, adresse, ville, cp, telephone) values (new.email, new.mdp, 'client', 'particulier', new.nom, new.adresse, new.ville, new.cp, new.telephone);
 else 
     signal sqlstate '45000'
-    set message_text = 'Données déja existentes';
+    set message_text = 'Données déja existantes';
 end if;
 end // 
 delimiter ; 
@@ -115,10 +118,10 @@ declare user int;
 select count(*) into user from users where email = new.email;
 if user = 0 then 
     insert into users (email, mdp, roles, nom) values (new.email, new.mdp, 'client', new.nom);
-    insert into client (email, mdp, roles, nom, adresse, ville, cp, telephone) values (new.email, new.mdp, 'client', new.nom, new.adresse, new.ville, new.cp, new.telephone);
+    insert into client (email, mdp, roles, typeclient, nom, adresse, ville, cp, telephone) values (new.email, new.mdp, 'client', 'professionnel', new.nom, new.adresse, new.ville, new.cp, new.telephone);
 else 
     signal sqlstate '45000'
-    set message_text = 'Données déja existentes';
+    set message_text = 'Données déja existantes';
 end if;
 end // 
 delimiter ; 
@@ -173,7 +176,6 @@ begin
 end // 
 delimiter ; 
 
-update particulier set  email = 'adrien@gmail.com' , nom = 'toto' where iduser= 2;
 
 drop trigger if exists modifier_professionnel;
 delimiter // 
@@ -211,6 +213,291 @@ delimiter ;
 
 /* SUPPRIMER USERS */
 
+drop trigger if exists supprimer_user; 
+delimiter // 
+create trigger supprimer_user 
+after   delete on users 
+for each row 
+begin 
+    delete from client where email = old.email; 
+    delete from particulier where email = old.email; 
+    delete from professionnel where email = old.email; 
+    delete from  technicien where email = old.email; 
+    delete from admin where email = old.email;
+end // 
+delimiter ;
+
+
+
+
+
+INSERT INTO particulier (email, mdp, nom, roles, adresse, ville, cp, telephone, prenom)
+VALUES ('user1@gmail.com', 'password1', 'User 1', 'client', '1 Main St', 'New York', '12345', 123456789, 'John');
+
+INSERT INTO particulier (email, mdp, nom, roles, adresse, ville, cp, telephone, prenom)
+VALUES ('user2@gmail.com', 'password2', 'User 2', 'client', '2 Main St', 'Chicago', '23456', 234567891, 'Jane');
+
+INSERT INTO particulier (email, mdp, nom, roles, adresse, ville, cp, telephone, prenom)
+VALUES ('user3@gmail.com', 'password3', 'User 3', 'client', '3 Main St', 'Los Angeles', '34567', 345678912, 'Mark');
+
+INSERT INTO particulier (email, mdp, nom, roles, adresse, ville, cp, telephone, prenom)
+VALUES ('user4@gmail.com', 'password4', 'User 4', 'client', '4 Main St', 'Houston', '45678', 456789123, 'Kate');
+
+INSERT INTO particulier (email, mdp, nom, roles, adresse, ville, cp, telephone, prenom)
+VALUES ('user5@gmail.com', 'password5', 'User 5', 'client', '5 Main St', 'Philadelphia', '56789', 567891234, 'David');
+INSERT INTO professionnel (email, mdp, nom, roles, adresse, ville, cp, telephone, numeroSiret)
+VALUES ('company1@gmail.com', 'password1', 'Company 1', 'client', '1 Main St', 'New York', '12345', 123456789, 1234567890);
+INSERT INTO professionnel (email, mdp, nom, roles, adresse, ville, cp, telephone, numeroSiret)
+VALUES ('company2@gmail.com', SHA1('password2'), 'Company 2', 'client', '2 Main St', 'Chicago', '23456', 234567891, 234567901);
+INSERT INTO professionnel (email, mdp, nom, roles, adresse, ville, cp, telephone, numeroSiret)
+VALUES ('company3@gmail.com', SHA1('password3'), 'Company 3', 'client', '3 Main St', 'Los Angeles', '34567', 345678912, 345789012);
+INSERT INTO professionnel (email, mdp, nom, roles, adresse, ville, cp, telephone, numeroSiret)
+VALUES ('company4@gmail.com', SHA1('password4'), 'Company 4', 'client', '4 Main St', 'Houston', '45678', 456789123, 456780123);
+INSERT INTO professionnel (email, mdp, nom, roles, adresse, ville, cp, telephone, numeroSiret)
+VALUES ('company5@gmail.com', SHA1('password5'), 'Company 5', 'client', '5 Main St', 'Philadelphia', '56789', 567891234, 567801234);
+INSERT INTO professionnel (email, mdp, nom, roles, adresse, ville, cp, telephone, numeroSiret)
+VALUES ('company6@gmail.com', SHA1('password6'), 'Company 6', 'client', '6 Main St', 'Seattle', '67890', 678910123, 678101235);
+INSERT INTO admin (email, mdp, roles, nom) VALUES ('Hannah@gmail.com', SHA1('password3'), 'admin', 'Hannah'); 
+  update particulier set ville = 'poitier' where iduser = 3;
+insert into particulier (email, mdp, nom) values ('jeanne@gmail.com', sha1('jean'),'jean'); 
+insert into particulier (email, mdp, nom, adresse, ville, cp, telephone, prenom) values ('adrien@gmail.com', sha1('adrien'),'adrien', '126 rue charles floquet', 'Paris', '75014', 0123456789, 'Adrien'); 
+insert into particulier (email, mdp, nom, adresse, ville, cp, telephone, prenom) values ('kevin@gmail.com', sha1('kevin'),'kevin', '126 rue charles floquet', 'Paris', '75014', 0123456789, 'Kevin'); 
+
+
+
+insert into admin (email, mdp, roles, nom) values ('admin@gmail.com', sha1('admin'), 'admin', 'admin');
+insert into particulier (email, mdp, roles, nom) values ('client@gmail.com', sha1('client'), 'client', 'Jean');
+insert into technicien (email, mdp, roles, nom) values ('tech@gmail.com', sha1('tech'), 'technicien', 'Mathieu');
+INSERT INTO particulier (email, mdp, roles, nom) VALUES ('Alice@gmail.com', SHA1('password1'), 'client', 'Alice');
+INSERT INTO technicien (email, mdp, roles, nom) VALUES ('Bob@gmail.com', SHA1('password2'), 'technicien', 'Bob');
+INSERT INTO admin (email, mdp, roles, nom) VALUES ('Charlie@gmail.com', SHA1('password3'), 'admin', 'Charlie');
+INSERT INTO particulier (email, mdp, roles, nom) VALUES ('David@gmail.com', SHA1('password4'), 'client', 'David');
+INSERT INTO technicien (email, mdp, roles, nom) VALUES ('Emily@gmail.com', SHA1('password5'), 'technicien', 'Emily');
+INSERT INTO particulier (email, mdp, roles, nom) VALUES ('Frank@gmail.com', SHA1('password1'), 'client', 'Frank');
+INSERT INTO technicien (email, mdp, roles, nom) VALUES ('George@gmail.com', SHA1('password2'), 'technicien', 'George');
+INSERT INTO particulier (email, mdp, roles, nom) VALUES ('Isabelle@gmail.com', SHA1('password4'), 'client', 'Isabelle');
+INSERT INTO technicien (email, mdp, roles, nom) VALUES ('Jack@gmail.com', SHA1('password5'), 'technicien', 'Jack');
+
+
+
+
+create table produit (
+    idProduit int auto_increment not null,
+    nomProduit varchar(25) not null,
+    prixProduit float (5,2) not null,
+    description varchar(8000),
+    quantite int,
+    constraint pk_produit primary key (idProduit)
+);
+
+
+create table panier(
+idpanier int  not null,
+iduser int not null,
+idproduit int not null,
+quantiteproduit int, 
+statut enum('en cours', 'validée', 'annulée', 'archivée' ),
+dateCommande date ,
+tvaCommande varchar(4) ,
+totalHT float (9,2),
+totalTTC float (9,2),
+constraint pk_panier primary key (idpanier, iduser, idproduit),
+constraint fk_user foreign key (iduser) references users(iduser),
+constraint fk_produit foreign key (idproduit) references produit(idProduit)
+);
+
+
+
+drop procedure if exists gestion_panier;
+delimiter  //
+create procedure gestion_panier (idpan int, idu int, idprod varchar(25), qtprod int)
+begin 
+declare prixprod float; 
+declare HT float;
+declare  TTC float; 
+insert into panier (idpanier, iduser, idproduit, quantiteproduit, statut, dateCommande, tvaCommande) values (idpan, idu, idprod, qtprod, 'en cours', curdate(), '20%');
+select prixProduit from produit where idproduit = idprod  into prixprod ;
+select  totalHT, totalTTC from panier where idpanier = idpan limit 1  into HT, TTC;
+if HT is null then 
+set HT = 0; 
+end if; 
+if TTC is null then 
+set TTC = 0;
+end if; 
+set HT = HT + (prixprod * qtprod);
+set TTC = TTC + (prixprod * qtprod * 1.2); 
+update panier set totalHT = HT, totalTTC = TTC where idpanier = idpan and iduser =idu ;
+end ;
+//
+delimiter ;
+
+
+/*insert into panier (idpanier, iduser, idproduit, quantiteproduit, statut, dateCommande, montantHT, tvaCommande, montantTTC) values (1, 1, 1, 1, 'en cours', curdate(), '12', '20%', '21'); */
+
+create table intervention (
+    idintervention int(3) not null auto_increment,
+    libelle varchar(50),
+    dateintervention date,
+    iduser int(3),
+    primary key (idintervention),
+    foreign key (iduser) references users(iduser) ON DELETE CASCADE ON UPDATE CASCADE
+   
+) ENGINE=INNODB;
+
+insert into intervention (libelle, dateintervention, iduser) values ('reparation', curdate(), 1);
+
+
+
+
+
+
+insert into produit (nomProduit, prixProduit, description) values ('pneu', 250, '- Neuf comme usé, ce pneu offre un freinage remarquable sur routes mouillées..
+- Adhérence exceptionnelle sur sol mouillé.
+- Une consommation moindre et un kilométrage supérieur de 20 % par rapport à son prédécesseur.');
+insert into produit (nomProduit, prixProduit, description ) values ('phare', 150, "Le projecteur de complément antibrouillard VALEO permet d'apporter un complément d'éclairage. Les projecteurs antibrouillard contribuent à une amélioration de la sécurité en améliorant la visibilité de l'automobiliste. Ceux-ci procurent un éclairage uniforme sur toute la largeur de la route, fournissant ainsi un large faisceau de lumière pour une conduite plus sûre, adaptée aux conditions climatiques extrêmes.");
+insert into produit (nomProduit, prixProduit, description ) values ('siege', 125, "Ce siège-auto rotatif avec système Isofix offre un confort optimal à la fois aux parents et aux enfants, et peut être utilisé dos ou face à la route. Grâce à sa rotation latérale côté portière, l’installation de votre enfant est plus facile. Son design élégant et moderne vous séduira et la sécurité garantira un voyage en toute tranquillité.
+");
+insert into produit (nomProduit, prixProduit, description ) values ('siege2', 130, "Ce siège-auto rotatif avec système Isofix offre un confort optimal à la fois aux parents et aux enfants, et peut être utilisé dos ou face à la route. Grâce à sa rotation latérale côté portière, l’installation de votre enfant est plus facile. Son design élégant et moderne vous séduira et la sécurité garantira un voyage en toute tranquillité.
+");
+insert into produit (nomProduit, prixProduit, description ) values ('parchoc', 65, "Un pare-chocs est un élément de carrosserie en métal ou en plastique situé devant et derrière une voiture. Il permet d'atténuer les dégâts en cas de collision avec un autre véhicule ou objet. Orthographe simplifiée : pare-choc.");
+insert into produit (nomProduit, prixProduit, description ) values ('moteur', 850, "Le moteur Gaposa Rapido LP6090/TMM avec parachute et électrofrein incorporés motorise parfaitement les portes industrielles rapides, il a une force de 60 newtons, une puissance de 950 W et une vitesse de 90 tours minute.
+
+Moteur Rapido Gaposa avec commande de secours manivelle standard possédant des fins de course mécaniques.");
+insert into produit (nomProduit, prixProduit, description ) values ('jante', 175, "La jante Spike est une jante de haute qualité, elle fait partie de la gamme INFINY. Intemporelle, cette jante vous séduira avec ses 10 doubles branches. Son design lui confère une allure élégante et sportive.
+
+Les photos de nos jantes aluminium ne tiennent pas compte de la typologie de votre véhicule. Elles peuvent être présentées en 4 ou 5 trous. Pour vérifier que la jante dispose bien du nombre de trous souhaité, nous vous invitons à consulter dans le tableau ci-dessous les caractéristiques de cette jante.
+");
+insert into produit (nomProduit, prixProduit, description ) values ('essuie-glace', 35, "Les essuie-glaces plats BOSCH Clearview permettent de remplacer les balais d'essuie-glaces métalliques et d’améliorer les performances d’essuyage : une visibilité optimale pour une sécurité maximale. Les 2 raidisseurs de haute technologie en acier Evodium répartissent la pression exercée par le bras d'essuyage de manière uniforme d’un bout à l’autre de l’essuie-glace.
+Les essuies-glaces BOSCH Clearview sont particulierement facile et rapide à monter. Pour faciliter le montage, le balai est vendu avec 1 adaptateur prémonté");
+
+
+
+INSERT INTO panier (idpanier, iduser, idproduit, quantiteproduit, statut, dateCommande, tvaCommande ) 
+VALUES (1, 1, 1, 2, 'en cours', '2022-01-01', '19.6');
+
+INSERT INTO panier (idpanier, iduser, idproduit, quantiteproduit, statut, dateCommande, tvaCommande ) 
+VALUES (1, 1, 2, 4, 'en cours', '2022-01-01', '19.6');
+
+INSERT INTO panier (idpanier, iduser, idproduit, quantiteproduit, statut, dateCommande, tvaCommande ) 
+VALUES (1, 1, 3, 1, 'en cours', '2022-01-01', '19.6');
+
+INSERT INTO panier (idpanier, iduser, idproduit, quantiteproduit, statut, dateCommande, tvaCommande ) 
+VALUES (1, 1, 4, 5, 'en cours', '2022-01-01', '19.6');
+
+INSERT INTO panier (idpanier, iduser, idproduit, quantiteproduit, statut, dateCommande, tvaCommande ) 
+VALUES (2, 2, 2, 1, 'valider', '2022-02-01', '19.6');
+
+INSERT INTO panier (idpanier, iduser, idproduit, quantiteproduit, statut, dateCommande, tvaCommande) 
+VALUES (3, 3, 3, 3, 'annulé', '2022-03-01', '19.6');
+
+
+
+
+select idpanier, sum(quantiteproduit), sum(montantHT), nom from panier left join users on panier.iduser= users.iduser where idpanier = 1 group by panier.idpanier, users.nom
+select panier.*, prixProduit, nom from panier, produit, users where panier.iduser = users.iduser and panier.idproduit = produit.idproduit
+
+select idpanier, quantiteproduit, statut, prixProduit, nom from panier, produit, users where panier.iduser = users.iduser and panier.idproduit = produit.idproduit;
+
+
+/* VUE */ 
+create view vue_intervention_and_users as(
+    select i.*, u.email from intervention i inner join users u on i.iduser = u.iduser
+);
+
+create or replace view  vue_commande_en_cours as (
+    select idpanier, iduser, sum(quantiteproduit) as "nbArticle", statut, totalHT, totalTTC, datecommande from panier where statut  in ('en cours', 'validée') group by idpanier, iduser, statut, totalHT, totalTTC, datecommande
+);
+
+create or replace view  vue_commande_archive as (
+    select idpanier, iduser, sum(quantiteproduit) as "nbArticle", statut, totalHT, totalTTC, datecommande from panier where statut in ('archivée', 'annulée')   group by idpanier, iduser, statut, totalHT, totalTTC, datecommande
+);
+/*
+
+
+
+drop procedure if exists gestion_panier;
+delimiter  //
+create procedure gestion_panier (idpan int, idu int, idprod varchar(25), qtprod int)
+begin 
+declare PrixProduit float; 
+declare totalHT float;
+declare  totalTTC float; 
+select prixProduit from produit where idproduit = idprod  into PrixProduit ;
+set totalHT = PrixProduit * qtprod;
+set totalHT = PrixProduit * qtprod * 1.2; 
+insert into panier (idpanier, iduser, idproduit, quantiteproduit, statut, dateCommande, tvaCommande) values (idpan, idu, idprod, qtprod, 'en cours', curdate(), '20%');
+update panier set totalHT = totalHT, totalTTC = totalTTC where idpanier = idpan and iduser =idu and idproduit = idprod;
+end ;
+//
+delimiter ;
+
+drop trigger if exists maj_panier; 
+delimiter // 
+create trigger maj_panier 
+after insert on panier 
+for each row 
+begin 
+    update vue_panier set totalHT = 1 where idpanier = new.idpanier;
+end //
+delimiter ;
+
+
+drop procedure if exists gestion_panier;
+delimiter  //
+create procedure gestion_panier (idpanier int, iduser int, idproduit varchar(25), quantiteproduit int)
+begin 
+insert into panier (idpanier, iduser, idproduit, quantiteproduit, statut, dateCommande, tvaCommande) values (idpanier, iduser, idproduit, quantiteproduit, 'en cours', curdate(), '20%');
+end ;
+//
+delimiter ;
+
+drop trigger if exists maj_panier; 
+delimiter // 
+create trigger maj_panier 
+after insert on panier 
+for each row 
+begin 
+    update vue_panier set totalHT = 1 where idpanier = new.idpanier;
+end //
+delimiter ;
+
+create view vue_user as ( 
+    select * from users
+);
+
+
+
+
+select idpanier, sum(quantiteproduit) from vue_panier where idpanier = 1 group by idpanier with rollup;
+
+select idpanier, nom, sum(quantiteproduit), montantHT from panier left join users on panier.iduser= users.iduser where idpanier = 1  group by ;  
+
+select count(quantiteproduit), nom, montantHT from panier left join users on panier.iduser= users.iduser where idpanier = 1  group by idpanier, quantiteproduit ; 
+
+
+
+
+
+
+
+create table commande (   
+idCommande int not null auto_increment,
+dateCommande date ,
+nbProduit int(5)  ,
+montantHT float(5,2) ,
+tvaCommande float(5,2)  ,
+montantTTC float (9,2) ,
+dateLivraison date,
+idpanier int, 
+constraint pk_commande primary key (idCommande),
+constraint fk_panier foreign key (idpanier) references panier(idpanier)
+);
+
+
+
+insert into commande (dateCommande, nbProduit, montantHT,montantTTC, dateLivraison, iduser) values (curdate(), 1, 100, 120, curdate(), 2);
+
+OLD TRIGGER HERITAGE 
 
 drop trigger if exists supprimer_particulier; 
 delimiter // 
@@ -255,142 +542,5 @@ end //
 delimiter ;
 
 
-/*
-
-INSERT INTO particulier (email, mdp, nom, roles, adresse, ville, cp, telephone, prenom)
-VALUES ('user1@gmail.com', 'password1', 'User 1', 'client', '1 Main St', 'New York', '12345', 123456789, 'John');
-
-INSERT INTO particulier (email, mdp, nom, roles, adresse, ville, cp, telephone, prenom)
-VALUES ('user2@gmail.com', 'password2', 'User 2', 'client', '2 Main St', 'Chicago', '23456', 234567891, 'Jane');
-
-INSERT INTO particulier (email, mdp, nom, roles, adresse, ville, cp, telephone, prenom)
-VALUES ('user3@gmail.com', 'password3', 'User 3', 'client', '3 Main St', 'Los Angeles', '34567', 345678912, 'Mark');
-
-INSERT INTO particulier (email, mdp, nom, roles, adresse, ville, cp, telephone, prenom)
-VALUES ('user4@gmail.com', 'password4', 'User 4', 'client', '4 Main St', 'Houston', '45678', 456789123, 'Kate');
-
-INSERT INTO particulier (email, mdp, nom, roles, adresse, ville, cp, telephone, prenom)
-VALUES ('user5@gmail.com', 'password5', 'User 5', 'client', '5 Main St', 'Philadelphia', '56789', 567891234, 'David');
-
-INSERT INTO professionnel (email, mdp, nom, roles, adresse, ville, cp, telephone, numeroSiret)
-VALUES ('company1@gmail.com', 'password1', 'Company 1', 'client', '1 Main St', 'New York', '12345', 123456789, 1234567890);
-
-INSERT INTO professionnel (email, mdp, nom, roles, adresse, ville, cp, telephone, numeroSiret)
-VALUES ('company2@gmail.com', SHA1('password2'), 'Company 2', 'client', '2 Main St', 'Chicago', '23456', 234567891, 234567901);
-
-INSERT INTO professionnel (email, mdp, nom, roles, adresse, ville, cp, telephone, numeroSiret)
-VALUES ('company3@gmail.com', SHA1('password3'), 'Company 3', 'client', '3 Main St', 'Los Angeles', '34567', 345678912, 345789012);
-
-INSERT INTO professionnel (email, mdp, nom, roles, adresse, ville, cp, telephone, numeroSiret)
-VALUES ('company4@gmail.com', SHA1('password4'), 'Company 4', 'client', '4 Main St', 'Houston', '45678', 456789123, 456780123);
-
-INSERT INTO professionnel (email, mdp, nom, roles, adresse, ville, cp, telephone, numeroSiret)
-VALUES ('company5@gmail.com', SHA1('password5'), 'Company 5', 'client', '5 Main St', 'Philadelphia', '56789', 567891234, 567801234);
-
-INSERT INTO professionnel (email, mdp, nom, roles, adresse, ville, cp, telephone, numeroSiret)
-VALUES ('company6@gmail.com', SHA1('password6'), 'Company 6', 'client', '6 Main St', 'Seattle', '67890', 678910123, 678101235);
-
-
-INSERT INTO admin (email, mdp, roles, nom) VALUES ('Hannah@gmail.com', SHA1('password3'), 'admin', 'Hannah'); 
-  update particulier set ville = 'poitier' where iduser = 3;
-insert into particulier (email, mdp, nom) values ('jeanne@gmail.com', sha1('jean'),'jean'); 
-insert into particulier (email, mdp, nom, adresse, ville, cp, telephone, prenom) values ('adrien@gmail.com', sha1('adrien'),'adrien', '126 rue charles floquet', 'Paris', '75014', 0123456789, 'Adrien'); 
-insert into particulier (email, mdp, nom, adresse, ville, cp, telephone, prenom) values ('kevin@gmail.com', sha1('kevin'),'kevin', '126 rue charles floquet', 'Paris', '75014', 0123456789, 'Kevin'); 
-
-
-
-insert into users (email, mdp, roles, nom) values ('admin@gmail.com', sha1('admin'), 'admin', 'admin');
-insert into users (email, mdp, roles, nom) values ('client@gmail.com', sha1('client'), 'client', 'Jean');
-insert into users (email, mdp, roles, nom) values ('tech@gmail.com', sha1('tech'), 'technicien', 'Mathieu');
-INSERT INTO users (email, mdp, roles, nom) VALUES ('Alice@gmail.com', SHA1('password1'), 'client', 'Alice');
-INSERT INTO users (email, mdp, roles, nom) VALUES ('Bob@gmail.com', SHA1('password2'), 'technicien', 'Bob');
-INSERT INTO users (email, mdp, roles, nom) VALUES ('Charlie@gmail.com', SHA1('password3'), 'admin', 'Charlie');
-INSERT INTO users (email, mdp, roles, nom) VALUES ('David@gmail.com', SHA1('password4'), 'client', 'David');
-INSERT INTO users (email, mdp, roles, nom) VALUES ('Emily@gmail.com', SHA1('password5'), 'technicien', 'Emily');
-INSERT INTO users (email, mdp, roles, nom) VALUES ('Frank@gmail.com', SHA1('password1'), 'client', 'Frank');
-INSERT INTO users (email, mdp, roles, nom) VALUES ('George@gmail.com', SHA1('password2'), 'technicien', 'George');
-INSERT INTO users (email, mdp, roles, nom) VALUES ('Isabelle@gmail.com', SHA1('password4'), 'client', 'Isabelle');
-INSERT INTO users (email, mdp, roles, nom) VALUES ('Jack@gmail.com', SHA1('password5'), 'technicien', 'Jack');
 
 */
-
-
-create table produit (
-    idproduit int auto_increment not null,
-    nomproduit varchar(25) not null,
-    prixproduit float (5,2) not null,
-    description varchar(8000),
-    quantite int,
-    constraint pk_produit primary key (idproduit)
-);
-
-
-create table panier(
-idpanier int auto_increment not null,
-iduser int,
-idproduit int,
-quantiteProduit int, 
-constraint pk_panier primary key (idpanier, iduser, idproduit),
-constraint fk_user foreign key (iduser) references users(iduser),
-constraint fk_produit foreign key (idproduit) references produit(idproduit)
-);
-
-
-/*insert into panier values(1, 3, 2, 1); */
-
-create table commande 
-(   idCommande int not null auto_increment,
-    dateCommande date ,
-    nbProduit int(5)  ,
-    montantHT float(5,2) ,
-    tvaCommande float(5,2)  ,
-    montantTTC float (9,2) ,
-    dateLivraison date,
-    idpanier int, 
-    constraint pk_commande primary key (idCommande),
-    constraint fk_panier foreign key (idpanier) references panier(idpanier)
-);
-
-insert into commande (dateCommande, nbProduit, montantHT,montantTTC, dateLivraison, iduser) values (curdate(), 1, 100, 120, curdate(), 2);
-
-create table intervention (
-    idintervention int(3) not null auto_increment,
-    libelle varchar(50),
-    dateintervention date,
-    iduser int(3),
-    primary key (idintervention),
-    foreign key (iduser) references users(iduser) ON DELETE CASCADE ON UPDATE CASCADE
-   
-) ENGINE=INNODB;
-
-insert into intervention (libelle, dateintervention, iduser) values ('reparation', curdate(), 1);
-
-
-
-
-
-/*insertion produit  */
-insert into produit (nomProduit, prixProduit, description) values ('pneu', 250, '- Neuf comme usé, ce pneu offre un freinage remarquable sur routes mouillées..
-- Adhérence exceptionnelle sur sol mouillé.
-- Une consommation moindre et un kilométrage supérieur de 20 % par rapport à son prédécesseur.');
-insert into produit (nomProduit, prixProduit, description ) values ('phare', 150, "Le projecteur de complément antibrouillard VALEO permet d'apporter un complément d'éclairage. Les projecteurs antibrouillard contribuent à une amélioration de la sécurité en améliorant la visibilité de l'automobiliste. Ceux-ci procurent un éclairage uniforme sur toute la largeur de la route, fournissant ainsi un large faisceau de lumière pour une conduite plus sûre, adaptée aux conditions climatiques extrêmes.");
-insert into produit (nomProduit, prixProduit, description ) values ('siege', 125, "Ce siège-auto rotatif avec système Isofix offre un confort optimal à la fois aux parents et aux enfants, et peut être utilisé dos ou face à la route. Grâce à sa rotation latérale côté portière, l’installation de votre enfant est plus facile. Son design élégant et moderne vous séduira et la sécurité garantira un voyage en toute tranquillité.
-");
-insert into produit (nomProduit, prixProduit, description ) values ('siege2', 130, "Ce siège-auto rotatif avec système Isofix offre un confort optimal à la fois aux parents et aux enfants, et peut être utilisé dos ou face à la route. Grâce à sa rotation latérale côté portière, l’installation de votre enfant est plus facile. Son design élégant et moderne vous séduira et la sécurité garantira un voyage en toute tranquillité.
-");
-insert into produit (nomProduit, prixProduit, description ) values ('parchoc', 65, "Un pare-chocs est un élément de carrosserie en métal ou en plastique situé devant et derrière une voiture. Il permet d'atténuer les dégâts en cas de collision avec un autre véhicule ou objet. Orthographe simplifiée : pare-choc.");
-insert into produit (nomProduit, prixProduit, description ) values ('moteur', 850, "Le moteur Gaposa Rapido LP6090/TMM avec parachute et électrofrein incorporés motorise parfaitement les portes industrielles rapides, il a une force de 60 newtons, une puissance de 950 W et une vitesse de 90 tours minute.
-
-Moteur Rapido Gaposa avec commande de secours manivelle standard possédant des fins de course mécaniques.");
-insert into produit (nomProduit, prixProduit, description ) values ('jante', 175, "La jante Spike est une jante de haute qualité, elle fait partie de la gamme INFINY. Intemporelle, cette jante vous séduira avec ses 10 doubles branches. Son design lui confère une allure élégante et sportive.
-
-Les photos de nos jantes aluminium ne tiennent pas compte de la typologie de votre véhicule. Elles peuvent être présentées en 4 ou 5 trous. Pour vérifier que la jante dispose bien du nombre de trous souhaité, nous vous invitons à consulter dans le tableau ci-dessous les caractéristiques de cette jante.
-");
-insert into produit (nomProduit, prixProduit, description ) values ('essuie-glace', 35, "Les essuie-glaces plats BOSCH Clearview permettent de remplacer les balais d'essuie-glaces métalliques et d’améliorer les performances d’essuyage : une visibilité optimale pour une sécurité maximale. Les 2 raidisseurs de haute technologie en acier Evodium répartissent la pression exercée par le bras d'essuyage de manière uniforme d’un bout à l’autre de l’essuie-glace.
-Les essuies-glaces BOSCH Clearview sont particulierement facile et rapide à monter. Pour faciliter le montage, le balai est vendu avec 1 adaptateur prémonté");
-
-
-/* VUE */ 
-create view vue_intervention_and_users as(
-    select i.*, u.email from intervention i inner join users u on i.iduser = u.iduser
-);

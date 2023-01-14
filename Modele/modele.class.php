@@ -211,13 +211,13 @@ class Modele {
 		}
 
 	
-		public function selectAllProduit($tab)
+		public function selectAllProduit($idproduit)
 		{
 			if($this->unPDO != null){
-				//$requete ="select * from produit where idproduit in  (:".$tab.");";
-				//$donnees = (":".$tab=>implode(',',$tab));
-				//$select->execute($donnees);
-				$requete = "select * from produit where idproduit in (".implode(',',$tab).");";
+				
+				$liste = implode ("," , $idproduit); 
+				$donnees = "(".$liste.")";
+				$requete ="select * from produit where idproduit  in  ".$donnees.";"; 
 				$select = $this->unPDO->prepare($requete);
 				$select->execute();
 				$produits = $select->fetchAll(PDO::FETCH_OBJ);
@@ -227,10 +227,91 @@ class Modele {
 			}
 		}
 
+		public function idpanier(){
+			if($this->unPDO != null){
+				$requete = "select max(idpanier) + 1 from ".$this->table.";";
+				$select = $this->unPDO->prepare($requete);
+				$select->execute();
+				$lesResultats = $select->fetch();
+				return $lesResultats;
+			}
+		}
 
+		public function insert_panier($idpanier, $iduser, $idproduit, $quantiteproduit){
+			if($this->unPDO != null){
+				$requete ="call gestion_panier (".$idpanier.",".$iduser.",".$idproduit.",".$quantiteproduit.");"; 
+				$select = $this->unPDO->prepare($requete);
+				$select->execute();
+		}
 }
 
+	public function valider_commande($idpanier){
+		if($this->unPDO != null){
+			$requete = "update panier set statut ='validée' where idpanier =:".$idpanier.";";
+			$donnees = array(":".$idpanier=>$idpanier);
+			$update = $this->unPDO->prepare($requete);
+			$update->execute($donnees);
+		}
+	}
+
+	public function archive_commande($idpanier){
+		if($this->unPDO != null){
+			$requete = "update panier set statut ='archivée' where idpanier =:".$idpanier.";";
+			$donnees = array(":".$idpanier=>$idpanier);
+			$update = $this->unPDO->prepare($requete);
+			$update->execute($donnees);
+		}
+	}
+
+	public function annule_commande($idpanier){
+		if($this->unPDO != null){
+			$requete = "update panier set statut ='annulée' where idpanier =:".$idpanier.";";
+			$donnees = array(":".$idpanier=>$idpanier);
+			$update = $this->unPDO->prepare($requete);
+			$update->execute($donnees);
+		}
+	}
 
 
+    public function select_mine_commandes_en_cours(){
+        if($this->unPDO != null && isset($_SESSION['iduser']) != null){
+            $requete = "select * from vue_commande_en_cours where iduser = :iduser;";
+            $donnees =  array(":iduser"=>$_SESSION['iduser']); 
+            $select = $this->unPDO->prepare($requete);
+            $select->execute($donnees);
+            $mes_commandes = $select->fetchAll();
+            return $mes_commandes;
+        }else{
+            return null;
+        }
+    }
+
+    public function select_like_mine_commande($mot){
+        if($this->unPDO != null){
+            $requete = "select * from vue_commande_en_cours where (idpanier like :mot or nbArticle like :mot or statut like :mot or datecommande like :mot or totalTTC like :mot or totalHT like :mot) and i.iduser = :iduser ;";
+            $donnees = array(":mot"=>"%".$mot."%",":iduser"=>$_SESSION['iduser'] );
+            $select = $this->unPDO->prepare($requete);
+            $select->execute($donnees);
+            $mes_commandes = $select->fetchAll();
+            return $mes_commandes;
+        }else{
+            return null; 
+        }
+    }
+
+	public function select_mine_commandes_archive(){
+        if($this->unPDO != null && isset($_SESSION['iduser']) != null){
+            $requete = "select * from vue_commande_archive where iduser = :iduser;";
+            $donnees =  array(":iduser"=>$_SESSION['iduser']); 
+            $select = $this->unPDO->prepare($requete);
+            $select->execute($donnees);
+            $mes_commandes = $select->fetchAll();
+            return $mes_commandes;
+        }else{
+            return null;
+        }
+    }
+
+}
 
 ?>

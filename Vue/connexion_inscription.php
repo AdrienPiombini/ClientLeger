@@ -36,7 +36,7 @@
                                         <form method="post" class="form">
 											<h4 class="mb-4 pb-3">Sign Up</h4>
 											<div class="form-group">
-												<input type="text" name="prenom" class="form-style" placeholder="Your Full Name" id="logname" autocomplete="off" required>
+												<input type="text" name="email" class="form-style" placeholder="Your Full Name" id="logname" autocomplete="off" required>
 												<i class="input-icon uil uil-user"></i>
 											</div>	
 											<div class="form-group mt-2">
@@ -55,7 +55,7 @@
 													Professionnel
 												</label>
 											</div>
-											<input type="submit" value="s'inscrire" name="inscription">
+											<input type="submit" name="inscription" value="s'inscrire" >
                                         </form>
 				      					</div>
 			      					</div>

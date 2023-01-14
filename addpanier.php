@@ -5,7 +5,7 @@ require_once("Controleur/controleur.class.php");
 $unControleur = new Controleur($serveur, $bdd, $user, $mdp);
 
 if (isset($_GET['id'])){
-   $produits = $unControleur->verif_produit('idproduit', $_GET['id']);
+   $produits = $unControleur->verif_produit('idProduit', $_GET['id']);
     if(empty($produits)){
     die ("Ce produit n'existe pas");
     }
