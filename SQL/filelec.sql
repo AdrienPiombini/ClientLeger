@@ -7,9 +7,10 @@ use dsa;
 create table users (
 iduser int(3) not null  auto_increment,
 email varchar (150) unique,
-mdp varchar (50),
+mdp varchar (255),
 nom varchar (50),
 roles enum ('admin', 'technicien', 'client'),
+datemdp date, 
 constraint pk_user primary key (iduser)
 );
 
@@ -17,9 +18,10 @@ constraint pk_user primary key (iduser)
 create table admin(
     iduser int(3) not null  auto_increment ,
     email varchar (150),
-    mdp varchar (50),
+    mdp varchar (255),
     nom varchar (50),
     roles enum ('admin', 'technicien', 'client'),
+    datemdp date, 
     prenom varchar(50),
     constraint pk_user primary key (iduser)
 );
@@ -27,9 +29,10 @@ create table admin(
 create table technicien (
     iduser int(3) not null  auto_increment ,
     email varchar (150),
-    mdp varchar (50),
+    mdp varchar (255),
     nom varchar (50),
     roles enum ('admin', 'technicien', 'client'),
+    datemdp date, 
     prenom varchar(50),
     diplome varchar(50),
     dateEmb date,
@@ -40,9 +43,10 @@ create table technicien (
 create table client (
 iduser int(3) not null  auto_increment ,
 email varchar (150),
-mdp varchar (50),
+mdp varchar (255),
 nom varchar (50),
 roles enum ('admin', 'technicien', 'client') default 'client',
+datemdp date, 
 typeclient enum('particulier', 'professionnel'),
 adresse varchar(50),
 ville varchar (50),
@@ -55,9 +59,10 @@ constraint pk_user primary key (iduser)
 create table particulier (
 iduser int(3) not null  auto_increment ,
 email varchar (150),
-mdp varchar (50),
+mdp varchar (255),
 nom varchar (50),
 roles enum ('admin', 'technicien', 'client') default 'client',
+datemdp date, 
 typeclient enum('particulier', 'professionnel') default 'particulier',
 adresse varchar(50),
 ville varchar (50),
@@ -70,9 +75,10 @@ constraint pk_user primary key (iduser)
 create table professionnel (
 iduser int(3) not null  auto_increment ,
 email varchar (150),
-mdp varchar (50),
+mdp varchar (255),
 nom varchar (50),
 roles enum ('admin', 'technicien', 'client') default 'client',
+datemdp date, 
 typeclient enum('particulier', 'professionnel') default 'professionnel',
 adresse varchar(50),
 ville varchar (50),
