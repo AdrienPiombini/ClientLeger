@@ -68,14 +68,13 @@
 				try{
 					$une_inscription = $unControleur->insert($tab);
 					echo '<script language="Javascript"><!-- document.location.replace("index.php?page=2");// --></script>';
-					echo'<center><h1> <?="Votre inscription à bien été enregistré"; ?></h1></center>';
+					echo"Votre inscription à bien été enregistré";
 				}
 				catch( PDOException $erreur){
-						echo'<center><h1> <?="Une erreur est survenue : " .$erreur->getMessage(); ?></h1></center>';
-				}
-				
-				
-					//header("Location: index.php?page=2") ;
+						echo'Une erreur est survenue';
+				}					//header("Location: index.php?page=2") ;
+			}else {
+				echo'Renseigner des données valides !';
 			}
 		}
 	}
