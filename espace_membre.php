@@ -60,7 +60,6 @@
 	$unControleur->setTable('users');
 
 	if(isset($_POST['inscription'])){
-	
 		if(!empty($_POST['email']) AND !empty($_POST['mdp'])){
 			/*REGEX MDP ET EMAIL */
 			if (filter_var($_POST['email'], FILTER_VALIDATE_EMAIL ) AND preg_match("/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[-+!*$@%_])([-+!*$@%_\w]{8,})$/", $_POST['mdp'])){
@@ -76,7 +75,7 @@
 			}else {
 				echo'Renseigner des données valides !';
 			}
-		}
+	    }
 	}
 /***************************************ESPACE ADMINISTRATION***************************************** */
 	$one_user = null;
