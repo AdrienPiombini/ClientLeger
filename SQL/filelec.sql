@@ -176,7 +176,6 @@ begin
 end // 
 delimiter ; 
 
-update particulier set  email = 'adrien@gmail.com' , nom = 'toto' where iduser= 2;
 
 drop trigger if exists modifier_professionnel;
 delimiter // 
