@@ -30,7 +30,7 @@
             <input type="text" name="libelle" placeholder="Libellé" value="<?= ($one_intervention!= null) ? $one_intervention['libelle']:''?>" ></label></p>
 	
            <p><label>
-            <input type="date" name='dateintervention' value="<?= ($one_intervention!= null) ? $one_intervention['dateintervention']:''?>" ></label></p>
+            <input type="date" name='dateintervention'  min="<?php echo date('Y-m-d'); ?>" value="<?= ($one_intervention!= null) ? $one_intervention['dateintervention']:''?>" ></label></p>
             
             <p><br><input type="hidden" name="idintervention"  value="<?= ($one_intervention != null) ? $one_intervention['idintervention']:''?>"> 
             <input type="submit" <?=($one_intervention!= null) ? 'name="modifier_intervention" value="Modifier"'  : 'name="ajouter_intervention" value="Ajouter"'?>>
