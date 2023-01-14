@@ -55,7 +55,7 @@
 													Professionnel
 												</label>
 											</div>
-											<input type="submit" value="s'inscrire" name="inscription">
+											<input type="submit" name="inscription" value="s'inscrire" >
                                         </form>
 				      					</div>
 			      					</div>
