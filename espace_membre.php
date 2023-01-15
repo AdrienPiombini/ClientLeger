@@ -36,7 +36,12 @@
 /***************************************VERIFIE LES IDENTIFIANTS***************************************** */
 	if(isset($_POST['signin'])){
 		$email = htmlspecialchars($_POST['email']);
-		$mdp = sha1(htmlspecialchars($_POST['mdp']));
+		$mdp = htmlspecialchars($_POST['mdp']);
+		$unControleur->setTable("grainSel");
+		$resultat = $unControleur->selectAll();
+		$grain = $resultat[0]['salt'];
+		$mdp = $mdp.$grain;
+		$mdp = sha1($mdp);
 		$unUser= $unControleur->verif_connexion ($email, $mdp);
 			if($unUser == null){
 				?><br> <center style="color: red; font-weight: bolder; position:absolute; bottom:150px; left:30%;"><?='Les informations renseigné ne permettre pas de vous authentifiez'; ?></center><?php
@@ -63,14 +68,14 @@
 		if(!empty($_POST['email']) AND !empty($_POST['mdp'])){
 			/*REGEX MDP ET EMAIL */
 			if (filter_var($_POST['email'], FILTER_VALIDATE_EMAIL ) AND preg_match("/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[-+!*$@%_])([-+!*$@%_\w]{8,})$/", $_POST['mdp'])){
-				$tab = array("email"=>$_POST['email'],"mdp"=>sha1($_POST['mdp']),"nom"=>"","roles"=>"client");
+				$tab = array("email"=>$_POST['email'],"mdp"=>sha1($_POST['mdp']),"nom"=>"","roles"=>"client","datemdp"=>date("Y-m-d"));
 				try{
 					$une_inscription = $unControleur->insert($tab);
 					echo '<script language="Javascript"><!-- document.location.replace("index.php?page=2");// --></script>';
 					echo"Votre inscription à bien été enregistré";
 				}
 				catch( PDOException $erreur){
-						echo'Une erreur est survenue';
+						echo"Une erreur est survenue".$erreur;
 				}					//header("Location: index.php?page=2") ;
 			}else {
 				echo'Renseigner des données valides !';
@@ -96,7 +101,7 @@
 		if(empty(trim($_POST['email'])) || empty(trim($_POST['mdp'])) || $_POST['roles']=='Choisir un rôles utilisateur'){
 			echo "<br/></br>Problème rencontré à la saisie des données, aucun utilisateur n'a été ajouté"; 
 		}else{
-		$tab = array("email"=>$_POST['email'],"mdp"=>$_POST['mdp'], "nom"=>"","roles"=>$_POST['roles']);
+		$tab = array("email"=>$_POST['email'],"mdp"=>sha1($_POST['mdp']), "nom"=>"","roles"=>$_POST['roles'], "datemdp"=>date("Y-m-d"));
 		$unControleur->insert($tab); 
 		echo "<br/>L'utilisateur : ".$_POST['email']." à été ajouté"; 
 		}
