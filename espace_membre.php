@@ -44,7 +44,7 @@
 		$mdp = sha1($mdp);
 		$unUser= $unControleur->verif_connexion ($email, $mdp);
 			if($unUser == null){
-				?><br> <center style="color: red; font-weight: bolder; position:absolute; bottom:150px; left:30%;"><?='Les informations renseigné ne permettre pas de vous authentifiez'; ?></center><?php
+				?><br> <center style="color: red; font-weight: bolder; position:absolute; bottom:150px; left:30%;"><?='Les informations renseignées ne permettent pas de vous authentifier'; ?></center><?php
 			}else{
 				$_SESSION['email'] = $unUser['email'];
 				$_SESSION['roles'] = $unUser['roles'];
@@ -111,7 +111,14 @@
     {
         $iduser = $_POST['iduser']; 
         $unControleur->delete("iduser", $iduser);  
+		if ($_SESSION['iduser'] ==$iduser){
+			session_destroy();
+			unset($_SESSION['email']);
+			header("Location: index.php?page=2");
+		}
+		else {
 		echo "<br/>L'utilisateur ".$iduser." à été supprimé"; 
+		}
     }
 
 	
@@ -134,22 +141,21 @@
 
 	
 /***************************************VUE INTERVENTION******************************************/
+$unControleur->setTable('technicien');
+$lesTechniciens = $unControleur->selectAll();
 $unControleur->setTable('vue_intervention_and_users');
 $one_intervention = null;
 	if (isset($_POST['rechercher_intervention']))
 	{
 		
 		$mot = $_POST['mot']; 
-		$tab = array("idintervention", "libelle", "dateintervention","iduser", "email");
+		$tab = array("idintervention", "libelle", "dateintervention","iduser", "nomClient", "nomTech", "statut");
 		$les_interventions = $unControleur->selectLikeAll($mot, $tab); 
 		$mes_interventions = $unControleur->select_like_mine_intervention($mot); 
 		require_once("vue/espace_membre/vue_interventions.php");
 	}else{
-
 		$les_interventions = $unControleur->selectAll();
-		//$les_interventions = $unControleur->select_all_interventions ();
 		$mes_interventions = $unControleur->select_mes_interventions ();
-
 	}
 
 	if (isset($_POST['ajouter_intervention'])){
@@ -157,7 +163,7 @@ $one_intervention = null;
 			echo "</br></br>Probleme à la saisie. Aucune intervention n'a été ajouté ";
 		}else{
 		$unControleur->setTable('intervention');
-		$tab = array("libelle"=>htmlspecialchars($_POST['libelle']),"dateintervention"=>htmlspecialchars($_POST['dateintervention']),"iduser"=>$_POST['iduser']);
+		$tab = array("libelle"=>htmlspecialchars($_POST['libelle']),"dateintervention"=>htmlspecialchars($_POST['dateintervention']), "statut"=>'En attente', "iduser"=>$_POST['iduser'], "idtechnicien" =>$_POST['idtechnicien']);
 		$unControleur->insert($tab); 
 		echo "<br/>L'intervention à été ajouté  : ";
 		}
@@ -183,7 +189,7 @@ $one_intervention = null;
 			echo "</br></br>Probleme à la saisie. Aucune intervention n'a été modifié ";
 		}else{
 		$unControleur->setTable('intervention');
-		$tab = array("iduser"=>htmlspecialchars($_POST['iduser']),"libelle"=>htmlspecialchars($_POST['libelle']),"dateintervention"=>htmlspecialchars($_POST['dateintervention']));
+		$tab = array("iduser"=>htmlspecialchars($_POST['iduser']),"libelle"=>htmlspecialchars($_POST['libelle']),"dateintervention"=>htmlspecialchars($_POST['dateintervention']), "idtechnicien" =>$_POST['idtechnicien']);
 		$unControleur->update($tab, "idintervention", $_POST['idintervention']);
 		echo "<br/>L'intervention ".$_POST['idintervention']." à été modifié"; 
 		}

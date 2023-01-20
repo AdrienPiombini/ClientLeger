@@ -22,7 +22,7 @@
         <br>
         <br>
         <?php echo  '<input type="hidden" name="iduser" value="'.$_SESSION['iduser'].'">'; ?>
-        <p><br><input type="submit" name='delete_user' value="Supprime son compte"></p>
+        <p><br><input type="submit" name='delete_user' value="Supprimer son compte"></p>
 
     </div>
 </form>

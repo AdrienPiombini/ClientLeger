@@ -118,9 +118,13 @@ create table intervention (
     idintervention int(3) not null auto_increment,
     libelle varchar(50),
     dateintervention date,
+    statut enum('En attente', 'En cours', 'Finalisée') default 'En attente',
     iduser int(3),
+    idtechnicien int(3),
     primary key (idintervention),
-    foreign key (iduser) references users(iduser) ON DELETE CASCADE ON UPDATE CASCADE
+    foreign key (iduser) references users(iduser),
+    foreign key (idtechnicien) references technicien(iduser)
+
 ) ENGINE=INNODB;
 
 
@@ -128,9 +132,6 @@ create table grainSel(
     salt varchar(100) not null,
     constraint pk_salt primary key (salt)
 );
-insert into grainSel values('9876512347654238743656');
-insert into particulier (email, mdp, nom, roles, datemdp) values ('ad@gmail.com', sha1("adrien"), 'adrien', 'client', curdate());
-insert into particulier (email, mdp, nom, roles, datemdp) values ('ad@gmail.com', sha1("adrien"), 'adrien', 'client', curdate());
 
 
 /*-------------------PROCEDURE --------------------*/
@@ -138,21 +139,21 @@ drop procedure if exists gestion_panier;
 delimiter  //
 create procedure gestion_panier (idpan int, idu int, idprod varchar(25), qtprod int)
 begin 
-declare prixprod float; 
-declare HT float;
-declare  TTC float; 
-insert into panier (idpanier, iduser, idproduit, quantiteproduit, statut, dateCommande, tvaCommande) values (idpan, idu, idprod, qtprod, 'en cours', curdate(), '20%');
-select prixProduit from produit where idproduit = idprod  into prixprod ;
-select  totalHT, totalTTC from panier where idpanier = idpan limit 1  into HT, TTC;
-if HT is null then 
-set HT = 0; 
-end if; 
-if TTC is null then 
-set TTC = 0;
-end if; 
-set HT = HT + (prixprod * qtprod);
-set TTC = TTC + (prixprod * qtprod * 1.2); 
-update panier set totalHT = HT, totalTTC = TTC where idpanier = idpan and iduser =idu ;
+    declare prixprod float; 
+    declare HT float;
+    declare  TTC float; 
+    insert into panier (idpanier, iduser, idproduit, quantiteproduit, statut, dateCommande, tvaCommande) values (idpan, idu, idprod, qtprod, 'en cours', curdate(), '20%');
+    select prixProduit from produit where idproduit = idprod  into prixprod ;
+    select  totalHT, totalTTC from panier where idpanier = idpan limit 1  into HT, TTC;
+    if HT is null then 
+        set HT = 0; 
+    end if; 
+    if TTC is null then 
+        set TTC = 0;
+    end if; 
+    set HT = HT + (prixprod * qtprod);
+    set TTC = TTC + (prixprod * qtprod * 1.2); 
+    update panier set totalHT = HT, totalTTC = TTC where idpanier = idpan and iduser =idu ;
 end ;
 //
 delimiter ;
@@ -294,13 +295,12 @@ end //
 delimiter ;
 
 
-
 /* SUPPRIMER USERS */
 
 drop trigger if exists supprimer_user; 
 delimiter // 
 create trigger supprimer_user 
-after   delete on users 
+before   delete on users 
 for each row 
 begin 
     delete from client where email = old.email; 
@@ -308,30 +308,47 @@ begin
     delete from professionnel where email = old.email; 
     delete from  technicien where email = old.email; 
     delete from admin where email = old.email;
+
+    delete panier from panier inner join users on panier.iduser = users.iduser 
+    left join particulier on users.email = particulier.email 
+    left join professionnel on users.email = professionnel.email 
+    left join admin on admin.email = users.email 
+    left join technicien t on t.email = users.email 
+    where users.iduser = old.iduser;
+
+    delete intervention from intervention inner join users on intervention.iduser = users.iduser 
+    left join particulier on users.email = particulier.email 
+    left join professionnel on users.email = professionnel.email 
+    left join admin on admin.email = users.email 
+    left join technicien t on t.email = users.email 
+    where users.iduser = old.iduser;
+
 end // 
 delimiter ;
 
-
-
-
-
 /* VUE */ 
-create view vue_intervention_and_users as(
-    select i.*, u.email from intervention i inner join users u on i.iduser = u.iduser
+create  or replace view vue_intervention_and_users as(
+    select intervention.* , users.nom as 'nomClient', technicien.nom as 'nomTech' 
+    from intervention 
+    inner join users on intervention.iduser = users.iduser 
+    left join technicien on intervention.idtechnicien = technicien.iduser
 );
 
 create or replace view  vue_commande_en_cours as (
-    select idpanier, iduser, sum(quantiteproduit) as "nbArticle", statut, totalHT, totalTTC, datecommande from panier where statut  in ('en cours', 'validée') group by idpanier, iduser, statut, totalHT, totalTTC, datecommande
+    select idpanier, iduser, sum(quantiteproduit) as "nbArticle", statut, totalHT, totalTTC, datecommande
+    from panier
+    where statut  in ('en cours', 'validée') 
+    group by idpanier, iduser, statut, totalHT, totalTTC, datecommande
 );
 
 create or replace view  vue_commande_archive as (
-    select idpanier, iduser, sum(quantiteproduit) as "nbArticle", statut, totalHT, totalTTC, datecommande from panier where statut in ('archivée', 'annulée')   group by idpanier, iduser, statut, totalHT, totalTTC, datecommande
+    select idpanier, iduser, sum(quantiteproduit) as "nbArticle", statut, totalHT, totalTTC, datecommande
+    from panier where statut in ('archivée', 'annulée')   
+    group by idpanier, iduser, statut, totalHT, totalTTC, datecommande
 );
 
 
 /*-----------------_____________________INSERT______________________----------*/
-insert into intervention (libelle, dateintervention, iduser) values ('reparation', curdate(), 1);
-
 
 /*** PRODUITS ******/
 insert into produit (nomProduit, prixProduit, description) values ('pneu', 250, '- Neuf comme usé, ce pneu offre un freinage remarquable sur routes mouillées..
@@ -354,6 +371,7 @@ insert into produit (nomProduit, prixProduit, description ) values ('essuie-glac
 Les essuies-glaces BOSCH Clearview sont particulierement facile et rapide à monter. Pour faciliter le montage, le balai est vendu avec 1 adaptateur prémonté");
 
 /*** USER ******/
+insert into grainSel values('9876512347654238743656');
 
 insert into admin (email, mdp, roles, nom) values ('admin@gmail.com', 'admin', 'admin', 'admin');
 insert into particulier (email, mdp, roles, nom) values ('client@gmail.com', 'client', 'client', 'Jean');
@@ -384,7 +402,7 @@ INSERT INTO panier (idpanier, iduser, idproduit, quantiteproduit, statut, dateCo
 VALUES (3, 3, 3, 3, 'annulée', '2022-03-01', '19.6');
 
 
-
+insert into intervention (libelle, dateintervention, iduser) values ('reparation', curdate(), 1);
 
 /*
 
