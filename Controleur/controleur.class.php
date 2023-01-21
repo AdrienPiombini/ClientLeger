@@ -110,8 +110,8 @@ public function total(){
     return $total;
 }
 
-public function verif_produit($id, $valeur){
-    return $this->unModele->verif_produit($id, $valeur);
+public function verif_produit($valeur){
+    return $this->unModele->verif_produit($valeur);
 }
 
 public function selectAllProduit($tab){

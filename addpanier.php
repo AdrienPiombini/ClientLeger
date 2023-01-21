@@ -5,9 +5,9 @@ require_once("Controleur/controleur.class.php");
 $unControleur = new Controleur($serveur, $bdd, $user, $mdp);
 
 if (isset($_GET['id'])){
-   $produits = $unControleur->verif_produit('idProduit', $_GET['id']);
+   $produits = $unControleur->verif_produit($_GET['id']);
     if(empty($produits)){
-    die ("Ce produit n'existe pas");
+    die ("Ce produit n'existe pas ou n'est plus disponible actuellement");
     }
     $unControleur->ajouter_panier($produits[0]->idproduit);
     die('<center>Le produit à bien été ajouté au panier <a href="index.php?page=1">retourner le catalogue</a></ center>');

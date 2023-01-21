@@ -181,10 +181,10 @@ class Modele {
 */
 
 
-		public function verif_produit($id, $valeur)
+		public function verif_produit($valeur)
 		{
 			if($this->unPDO != null){
-				$requete ="select idproduit from produit where ".$id." =:".$valeur.";";
+				$requete ="select idproduit from produit where idproduit =:".$valeur." and quantite > 5;";
 				$donnees = array(":".$valeur=>$valeur);
 				$select = $this->unPDO->prepare($requete);
 				$select->execute($donnees);
