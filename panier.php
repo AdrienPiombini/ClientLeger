@@ -4,7 +4,7 @@ require_once("vue/vue_panier.php");
 if (isset($_POST['valider_panier']))
 {
     if (isset($_SESSION['email'])){
-    $unControleur->setTable('panier');
+    $unControleur->setTable('commande');
     $idpanier = $unControleur->idpanier();
     if ($idpanier[0] == NULL){
         $idpanier[0] = 1 ;

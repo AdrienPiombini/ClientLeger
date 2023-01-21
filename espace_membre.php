@@ -221,7 +221,7 @@ $one_intervention = null;
  if (isset($_POST['rechercher_commande_en_cours']))
  {
 	 $mot = $_POST['mot']; 
-	 $tab = array("idpanier", "iduser", "nbArticle", "statut");
+	 $tab = array("idcommande", "iduser", "nbArticle", "statut");
 	 $les_commandes_en_cours = $unControleur->selectLikeAll($mot, $tab); 
 	 $mes_commandes_en_cours = $unControleur->select_like_mine_commandes_en_cours($mot); 
 

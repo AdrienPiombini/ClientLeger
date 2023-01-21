@@ -98,8 +98,8 @@ create table produit (
 );
 
 
-create table panier(
-idpanier int  not null,
+create table commande(
+idcommande int  not null,
 iduser int not null,
 idproduit int not null,
 quantiteproduit int, 
@@ -108,7 +108,7 @@ dateCommande date ,
 tvaCommande varchar(4) ,
 totalHT float (9,2),
 totalTTC float (9,2),
-constraint pk_panier primary key (idpanier, iduser, idproduit),
+constraint pk_panier primary key (idcommande, iduser, idproduit),
 constraint fk_user foreign key (iduser) references users(iduser),
 constraint fk_produit foreign key (idproduit) references produit(idProduit)
 );
@@ -142,9 +142,9 @@ begin
     declare prixprod float; 
     declare HT float;
     declare  TTC float; 
-    insert into panier (idpanier, iduser, idproduit, quantiteproduit, statut, dateCommande, tvaCommande) values (idpan, idu, idprod, qtprod, 'en cours', curdate(), '20%');
+    insert into commande (idcommande, iduser, idproduit, quantiteproduit, statut, dateCommande, tvaCommande) values (idpan, idu, idprod, qtprod, 'en cours', curdate(), '20%');
     select prixProduit from produit where idproduit = idprod  into prixprod ;
-    select  totalHT, totalTTC from panier where idpanier = idpan limit 1  into HT, TTC;
+    select  totalHT, totalTTC from commande where idcommande = idpan limit 1  into HT, TTC;
     if HT is null then 
         set HT = 0; 
     end if; 
@@ -153,7 +153,7 @@ begin
     end if; 
     set HT = HT + (prixprod * qtprod);
     set TTC = TTC + (prixprod * qtprod * 1.2); 
-    update panier set totalHT = HT, totalTTC = TTC where idpanier = idpan and iduser =idu ;
+    update commande set totalHT = HT, totalTTC = TTC where idcommande = idpan and iduser =idu ;
 end ;
 //
 delimiter ;
@@ -309,7 +309,7 @@ begin
     delete from  technicien where email = old.email; 
     delete from admin where email = old.email;
 
-    delete panier from panier inner join users on panier.iduser = users.iduser 
+    delete commande from commande inner join users on commande.iduser = users.iduser 
     left join particulier on users.email = particulier.email 
     left join professionnel on users.email = professionnel.email 
     left join admin on admin.email = users.email 
@@ -335,16 +335,16 @@ create  or replace view vue_intervention_and_users as(
 );
 
 create or replace view  vue_commande_en_cours as (
-    select idpanier, iduser, sum(quantiteproduit) as "nbArticle", statut, totalHT, totalTTC, datecommande
-    from panier
+    select idcommande, iduser, sum(quantiteproduit) as "nbArticle", statut, totalHT, totalTTC, datecommande
+    from commande
     where statut  in ('en cours', 'validée') 
-    group by idpanier, iduser, statut, totalHT, totalTTC, datecommande
+    group by idcommande, iduser, statut, totalHT, totalTTC, datecommande
 );
 
 create or replace view  vue_commande_archive as (
-    select idpanier, iduser, sum(quantiteproduit) as "nbArticle", statut, totalHT, totalTTC, datecommande
-    from panier where statut in ('archivée', 'annulée')   
-    group by idpanier, iduser, statut, totalHT, totalTTC, datecommande
+    select idcommande, iduser, sum(quantiteproduit) as "nbArticle", statut, totalHT, totalTTC, datecommande
+    from commande where statut in ('archivée', 'annulée')   
+    group by idcommande, iduser, statut, totalHT, totalTTC, datecommande
 );
 
 
@@ -388,17 +388,17 @@ INSERT INTO technicien (email, mdp, roles, nom) VALUES ('Jack@gmail.com', 'passw
 
 
 /*** PANIER ******/
-INSERT INTO panier (idpanier, iduser, idproduit, quantiteproduit, statut, dateCommande, tvaCommande ) 
+INSERT INTO commande (idcommande, iduser, idproduit, quantiteproduit, statut, dateCommande, tvaCommande ) 
 VALUES (1, 1, 1, 2, 'en cours', '2022-01-01', '19.6');
-INSERT INTO panier (idpanier, iduser, idproduit, quantiteproduit, statut, dateCommande, tvaCommande ) 
+INSERT INTO commande (idcommande, iduser, idproduit, quantiteproduit, statut, dateCommande, tvaCommande ) 
 VALUES (1, 1, 2, 4, 'en cours', '2022-01-01', '19.6');
-INSERT INTO panier (idpanier, iduser, idproduit, quantiteproduit, statut, dateCommande, tvaCommande ) 
+INSERT INTO commande (idcommande, iduser, idproduit, quantiteproduit, statut, dateCommande, tvaCommande ) 
 VALUES (1, 1, 3, 1, 'en cours', '2022-01-01', '19.6');
-INSERT INTO panier (idpanier, iduser, idproduit, quantiteproduit, statut, dateCommande, tvaCommande ) 
+INSERT INTO commande (idcommande, iduser, idproduit, quantiteproduit, statut, dateCommande, tvaCommande ) 
 VALUES (1, 1, 4, 5, 'en cours', '2022-01-01', '19.6');
-INSERT INTO panier (idpanier, iduser, idproduit, quantiteproduit, statut, dateCommande, tvaCommande ) 
+INSERT INTO commande (idcommande, iduser, idproduit, quantiteproduit, statut, dateCommande, tvaCommande ) 
 VALUES (2, 2, 2, 1, 'validée', '2022-02-01', '19.6');
-INSERT INTO panier (idpanier, iduser, idproduit, quantiteproduit, statut, dateCommande, tvaCommande) 
+INSERT INTO commande (idcommande, iduser, idproduit, quantiteproduit, statut, dateCommande, tvaCommande) 
 VALUES (3, 3, 3, 3, 'annulée', '2022-03-01', '19.6');
 
 

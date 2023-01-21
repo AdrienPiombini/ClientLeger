@@ -23,14 +23,14 @@
         <?php
         foreach($les_commandes_en_cours as $une_commande_en_cours){
             echo"<form method='post'><tr>";
-            echo"<td>".$une_commande_en_cours['idpanier']."</td>";
+            echo"<td>".$une_commande_en_cours['idcommande']."</td>";
             echo"<td>".$une_commande_en_cours['iduser']."</td>";
             echo"<td>".$une_commande_en_cours['statut']."</td>";
             echo"<td>".$une_commande_en_cours["nbArticle"]."</td>";
             echo"<td>".$une_commande_en_cours["totalHT"]."</td>";
             echo"<td>".$une_commande_en_cours["totalTTC"]."</td>";
             echo"<td>".$une_commande_en_cours["datecommande"]."</td>";
-            echo '<input type="hidden" name="idpanier" value="'.$une_commande_en_cours['idpanier'].'">';
+            echo '<input type="hidden" name="idpanier" value="'.$une_commande_en_cours['idcommande'].'">';
             echo"<td><input type='submit' name='valider_commande' value='Valider'>
                         <input type='submit' name='annule_commande' value='Annuler'>
                         <input type='submit' name='archive_commande' value='Archiver'></td>";
@@ -58,14 +58,14 @@
         <?php
         foreach($les_commandes_archives as $une_commande_archive){
             echo"<form method='post'><tr>";
-            echo"<td>".$une_commande_archive['idpanier']."</td>";
+            echo"<td>".$une_commande_archive['idcommande']."</td>";
             echo"<td>".$une_commande_archive['iduser']."</td>";
             echo"<td>".$une_commande_archive['statut']."</td>";
             echo"<td>".$une_commande_archive["nbArticle"]."</td>";
             echo"<td>".$une_commande_archive["totalHT"]."</td>";
             echo"<td>".$une_commande_archive["totalTTC"]."</td>";
             echo"<td>".$une_commande_archive["datecommande"]."</td>";
-            echo '<input type="hidden" name="iduser" value="'.$une_commande_archive['idpanier'].'">';
+            echo '<input type="hidden" name="iduser" value="'.$une_commande_archive['idcommande'].'">';
             echo "<tr></form>";
         }
 
@@ -82,14 +82,14 @@
 <?php
 foreach($mes_commandes_en_cours as $mes_commande_en_cours){
     echo"<form method='post'><tr>";
-    echo"<td>".$mes_commande_en_cours['idpanier']."</td>";
+    echo"<td>".$mes_commande_en_cours['idcommande']."</td>";
     echo"<td>".$mes_commande_en_cours['iduser']."</td>";
     echo"<td>".$mes_commande_en_cours['statut']."</td>";
     echo"<td>".$mes_commande_en_cours["nbArticle"]."</td>";
     echo"<td>".$mes_commande_en_cours["totalHT"]."</td>";
     echo"<td>".$mes_commande_en_cours["totalTTC"]."</td>";
     echo"<td>".$mes_commande_en_cours["datecommande"]."</td>";
-    echo '<input type="hidden" name="idpanier" value="'.$mes_commande_en_cours['idpanier'].'">';
+    echo '<input type="hidden" name="idpanier" value="'.$mes_commande_en_cours['idcommande'].'">';
     echo "<tr></form>";
 }
 ?>
@@ -113,14 +113,14 @@ foreach($mes_commandes_en_cours as $mes_commande_en_cours){
 <?php
 foreach($mes_commandes_archives as $mes_commande_archive){
     echo"<form method='post'><tr>";
-    echo"<td>".$mes_commande_archive['idpanier']."</td>";
+    echo"<td>".$mes_commande_archive['idcommande']."</td>";
     echo"<td>".$mes_commande_archive['iduser']."</td>";
     echo"<td>".$mes_commande_archive['statut']."</td>";
     echo"<td>".$mes_commande_archive["nbArticle"]."</td>";
     echo"<td>".$mes_commande_archive["totalHT"]."</td>";
     echo"<td>".$mes_commande_archive["totalTTC"]."</td>";
     echo"<td>".$mes_commande_archive["datecommande"]."</td>";
-    echo '<input type="hidden" name="iduser" value="'.$mes_commande_archive['idpanier'].'">';
+    echo '<input type="hidden" name="iduser" value="'.$mes_commande_archive['idcommande'].'">';
     echo "<tr></form>";
 }
 }

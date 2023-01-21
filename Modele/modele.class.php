@@ -229,7 +229,7 @@ class Modele {
 
 		public function idpanier(){
 			if($this->unPDO != null){
-				$requete = "select max(idpanier) + 1 from ".$this->table.";";
+				$requete = "select max(idcommande) + 1 from ".$this->table.";";
 				$select = $this->unPDO->prepare($requete);
 				$select->execute();
 				$lesResultats = $select->fetch();
@@ -247,7 +247,7 @@ class Modele {
 
 	public function valider_commande($idpanier){
 		if($this->unPDO != null){
-			$requete = "update panier set statut ='validée' where idpanier =:".$idpanier.";";
+			$requete = "update commande set statut ='validée' where idcommande =:".$idpanier.";";
 			$donnees = array(":".$idpanier=>$idpanier);
 			$update = $this->unPDO->prepare($requete);
 			$update->execute($donnees);
@@ -256,7 +256,7 @@ class Modele {
 
 	public function archive_commande($idpanier){
 		if($this->unPDO != null){
-			$requete = "update panier set statut ='archivée' where idpanier =:".$idpanier.";";
+			$requete = "update commande set statut ='archivée' where idcommande =:".$idpanier.";";
 			$donnees = array(":".$idpanier=>$idpanier);
 			$update = $this->unPDO->prepare($requete);
 			$update->execute($donnees);
@@ -265,7 +265,7 @@ class Modele {
 
 	public function annule_commande($idpanier){
 		if($this->unPDO != null){
-			$requete = "update panier set statut ='annulée' where idpanier =:".$idpanier.";";
+			$requete = "update commande set statut ='annulée' where idcommande =:".$idpanier.";";
 			$donnees = array(":".$idpanier=>$idpanier);
 			$update = $this->unPDO->prepare($requete);
 			$update->execute($donnees);
