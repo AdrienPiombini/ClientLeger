@@ -28,6 +28,8 @@
 				echo'
 					<button class="btn-2" type="submit" name="administration" value="Administration">Administration</button>
 					<button class="btn-2" type="submit" name="statistiques" value="Statistiques">Statistiques</button><br>
+					<button class="btn-2" type="submit" name="produits" value="Produits">Produits</button><br>
+
 				';}
 		'</div></form></div>';
 			
@@ -259,7 +261,9 @@ if (isset($_POST['archive_commande'])){
 
 }
 
-		
+ /************************  VUE PRODUITS *******************************************/
+ $unControleur->setTable('produit');
+ $les_produits = $unControleur->selectAll();		
  
 
 /***************************************EN TETE******************************************/
@@ -274,6 +278,8 @@ if (isset($_POST['archive_commande'])){
 		require_once("vue/espace_membre/vue_administration.php");
 	}elseif(isset($_POST['statistiques'])){
 		require_once("vue/espace_membre/vue_statistiques.php");
+	}elseif(isset($_POST['produits'])){
+		require_once("vue/espace_membre/vue_produits.php");
 	}
 
 	
