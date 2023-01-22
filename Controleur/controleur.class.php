@@ -158,8 +158,8 @@ public function select_mine_commandes_archive(){
     return $mes_commandes;
 }
 
-public funciton updateStock($qteCommande, $idproduit){
-    $this->unModele->updateStock();
+public function updateStock($qteCommande, $idproduit){
+    $this->unModele->updateStock($qteCommande, $idproduit);
 }
 
 

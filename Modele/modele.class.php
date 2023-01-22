@@ -314,10 +314,10 @@ class Modele {
 
 	public function updateStock($qteCommande, $idproduit){
 		if($this->unPDO != null){
-			$requete = "update produit set quantite = :qteCommande where idproduit = :idproduit;";
+			$requete = "update produit set quantite = quantite + :qteCommande where idProduit = :idproduit;";
             $donnees =  array("qteCommande"=>$qteCommande, ":idproduit"=>$idproduit); 
             $select = $this->unPDO->prepare($requete);
-            $select->execute($donnees)
+            $select->execute($donnees);
 		}
 	}
 
