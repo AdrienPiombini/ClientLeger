@@ -263,7 +263,12 @@ if (isset($_POST['archive_commande'])){
 
  /************************  VUE PRODUITS *******************************************/
  $unControleur->setTable('produit');
- $les_produits = $unControleur->selectAll();		
+ if (isset($_POST['commander_produit'])){
+	$unControleur->updateStock($_POST['qteproduit'], $_POST['idproduit']);
+	echo "<br/>Le produit : ".$_POST['idproduit']." a bien était commandé ";  
+ }else{
+	$les_produits = $unControleur->selectAll();
+ }
  
 
 /***************************************EN TETE******************************************/

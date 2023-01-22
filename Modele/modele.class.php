@@ -312,6 +312,15 @@ class Modele {
         }
     }
 
+	public function updateStock($qteCommande, $idproduit){
+		if($this->unPDO != null){
+			$requete = "update produit set quantite = :qteCommande where idproduit = :idproduit;";
+            $donnees =  array("qteCommande"=>$qteCommande, ":idproduit"=>$idproduit); 
+            $select = $this->unPDO->prepare($requete);
+            $select->execute($donnees)
+		}
+	}
+
 }
 
 ?>
