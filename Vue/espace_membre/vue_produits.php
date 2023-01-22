@@ -1,5 +1,5 @@
 <br><br>
-<h3>STATISTIQUES DE L'ENTREPRISE</h3>
+<h3>PRODUIT EN STOCK</h3>
 <br>
 
 <table border="1" style="
@@ -21,8 +21,15 @@
             echo"<td>".$un_produit['nomProduit']."</td>";
             echo"<td>".$un_produit['quantite']."</td>";
             echo '<input type="hidden" name="idproduit" value="'.$un_produit['idProduit'].'">';
-            echo"<td><input type='submit' name='delete_user' value='Supprimer'>
-                        <input type='submit' name='edit_user' value='Modifier'></td>";
+            echo"<td>
+                    <select name='qteproduit' style='width: 175px;'>
+                        <option value='10'>10</option>
+                        <option value='50'>50</option>
+                        <option value='100'>100</option>
+                        <option value='500'>500</option>
+                        <option value='1000>1000</option>
+                    </select>
+                        <input type='submit' name='commander_produit' value='Commander'></td>";
             echo "<tr></form>";
         }
     ?>
