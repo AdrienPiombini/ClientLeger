@@ -36,11 +36,31 @@
                                         <form method="post" class="form">
 											<h4 class="mb-4 pb-3">Sign Up</h4>
 											<div class="form-group">
-												<input type="text" name="email" class="form-style" placeholder="Your Full Name" id="logname" autocomplete="off" required>
+												<input type="text" name="email" class="form-style" placeholder="Email" id="logname" autocomplete="off" required>
 												<i class="input-icon uil uil-user"></i>
 											</div>	
 											<div class="form-group mt-2">
-												<input type="password" name="mdp" class="form-style" placeholder="Your Password" id="logpass" autocomplete="off" required>
+												<input type="text" name="email" class="form-style" placeholder="Nom" id="logname" autocomplete="off" required>
+												<i class="input-icon uil uil-user"></i>
+											</div>	
+											<div class="form-group mt-2">
+												<input type="text" name="email" class="form-style" placeholder="Adresse" id="logname" autocomplete="off" required>
+												<i class="input-icon uil uil-user"></i>
+											</div>	
+											<div class="form-group mt-2">
+												<input type="text" name="email" class="form-style" placeholder="Ville" id="logname" autocomplete="off" required>
+												<i class="input-icon uil uil-user"></i>
+											</div>	
+											<div class="form-group mt-2">
+												<input type="password" name="text" class="form-style" placeholder="Code postal" id="logpass" autocomplete="off" required>
+												<i class="input-icon uil uil-lock-alt"></i>
+											</div>
+											<div class="form-group mt-2">
+												<input type="text" name="email" class="form-style" placeholder="Telephone" id="logname" autocomplete="off" required>
+												<i class="input-icon uil uil-user"></i>
+											</div>	
+											<div class="form-group mt-2">
+												<input type="password" name="mdp" class="form-style" placeholder="Mot de passe fort" id="logpass" autocomplete="off" required>
 												<i class="input-icon uil uil-lock-alt"></i>
 											</div>
 											<div class="form-check">
