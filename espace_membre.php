@@ -66,12 +66,13 @@
 					// -->
 					</script>';
 				}else{
+					echo "<script> alert('Veillez à changer votre mot de passe !'); </script>";
 					echo '<script language="Javascript">
 					<!--
 					document.location.replace("index.php?page=2");
 					// -->
 					</script>';
-					?><center style="color: red; font-weight: bolder; position:absolute; bottom:150px; left:30%;"><?='Penser à modifier votre mot de passe ! ';?></center><?php
+   					
 				}
 				
 			}
