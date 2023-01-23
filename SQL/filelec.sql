@@ -136,11 +136,10 @@ create table grainSel(
 
 create table mdpOublie(
     idmdpoublie int auto_increment not null,
-    question enum ('Quelle est le nom de jeune fille de votre mère ?', 'Quelle était le nom de votre premier animal de compagnie ?',"Comment s'appelait votre instituteur préféré à l'ecole primaire ?" ),
+    question enum ('Quel est le nom de jeune fille de votre mère ?', 'Quel était le nom de votre premier animal de compagnie ?',"Comment s'appelait votre instituteur préféré à l'ecole primaire ?" ),
     reponse varchar(255),
-    iduser int not null,
-    constraint pk_idmdpoublie primary key (idmdpoublie),
-    constraint fk_iduser foreign key (iduser) references users (iduser)
+    email varchar(100) not null,
+    constraint pk_idmdpoublie primary key (idmdpoublie)
 );
 
 /* VUE */ 

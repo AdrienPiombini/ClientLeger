@@ -87,15 +87,18 @@
 			/*REGEX MDP ET EMAIL */
 			if (filter_var($_POST['email'], FILTER_VALIDATE_EMAIL ) AND preg_match("/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[-+!*$@%_])([-+!*$@%_\w]{8,})$/", $_POST['mdp'])){
 				if($_POST['type'] == 'professionnel'){
-					$unControleur->setTable('professionnel');				//header("Location: index.php?page=2") ;
+					$unControleur->setTable('professionnel');
 					$tab = array("email"=>$_POST['email'],"mdp"=>$_POST['mdp'],"nom"=>$_POST['nom'],"roles"=>"client","datemdp"=>date("Y-m-d"), "typeclient"=>$_POST['type'], "adresse"=>$_POST['adresse'],"ville"=>$_POST['ville'], "cp"=>$_POST['codepostal'], "telephone"=>$_POST['telephone'],  "numeroSiret"=>0);
 				}elseif ($_POST['type'] == 'particulier') {
 					$unControleur->setTable('particulier');	
 					$tab = array("email"=>$_POST['email'],"mdp"=>$_POST['mdp'],"nom"=>$_POST['nom'],"roles"=>"client","datemdp"=>date("Y-m-d"), "typeclient"=>$_POST['type'], "adresse"=>$_POST['adresse'],"ville"=>$_POST['ville'], "cp"=>$_POST['codepostal'], "telephone"=>$_POST['telephone'],  "prenom"=>"");
 				}
 					try{
-						$une_inscription = $unControleur->insert($tab);
+						$unControleur->insert($tab); //$une_inscription =
 						echo"Votre inscription à bien été enregistré";
+						$unControleur->setTable('mdpOublie');
+						$tab = array("question"=>$_POST['question'], "reponse"=>$_POST['reponse'], "email"=>$_POST['email']);
+						$unControleur->insert($tab);												
 					}
 					catch( PDOException $erreur){
 							echo"Une erreur est survenue".$erreur;

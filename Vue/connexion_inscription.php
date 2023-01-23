@@ -36,6 +36,15 @@
 										<div class="section text-center">
                                         <form method="post" class="form">
 											<h4 class="mb-4 pb-3">Formulaire d'inscription</h4>
+											<div class="form-check">
+												<input class="form-check-input" type="radio" name="type" id="flexRadioDefault1" value="particulier" required>
+												<label class="form-check-label" for="flexRadioDefault1">Particulier</label>
+											</div>
+											<div class="form-check">
+												<input class="form-check-input" type="radio" name="type" id="flexRadioDefault2" value="professionnel" required>
+												<label class="form-check-label" for="flexRadioDefault2">Professionnel</label>
+											</div>
+											<br>
 											<div class="form-group">
 												<input type="email" name="email" class="form-style" placeholder="Email" id="logname" autocomplete="off" >
 												<i class="input-icon uil uil-at"></i>
@@ -57,21 +66,27 @@
 												<i class="input-icon uil uil-mailbox"></i>
 											</div>
 											<div class="form-group mt-2">
-												<input type="text" name="telephone" class="form-style" placeholder="Telephone" id="logname" autocomplete="off">
+												<input type="text" name="telephone" class="form-style" placeholder="Téléphone" id="logname" autocomplete="off">
 												<i class="input-icon uil uil-phone"></i>
 											</div>	
 											<div class="form-group mt-2">
 												<input type="password" name="mdp" class="form-style" placeholder="Mot de passe fort" id="logpass" autocomplete="off" required>
 												<i class="input-icon uil uil-lock-alt"></i>
 											</div>
-											<div class="form-check">
-												<input class="form-check-input" type="radio" name="type" id="flexRadioDefault1" value="particulier" required>
-												<label class="form-check-label" for="flexRadioDefault1">Particulier</label>
+											<br>
+											<div class="form-group mt-2">
+												<select name="question" class="form-style"  id="logname" autocomplete="off">
+													<option value="Quel est le nom de jeune fille de votre mère ?">Quel est le nom de jeune fille de votre mère ?</option>
+													<option value="Quel était le nom de votre premier animal de compagnie ?">Quel était le nom de votre premier animal de compagnie ?</option>
+													<option value="Comment s'appelait votre instituteur préféré à l'ecole primaire ?">Comment s'appelait votre instituteur préféré à l'ecole primaire ?</option>
+												</select>
+												<i class="input-icon uil uil-question-circle"></i>
 											</div>
-											<div class="form-check">
-												<input class="form-check-input" type="radio" name="type" id="flexRadioDefault2" value="professionnel" required>
-												<label class="form-check-label" for="flexRadioDefault2">Professionnel</label>
-											</div>
+											<div class="form-group mt-2">
+												<input type="text" name="reponse" class="form-style" placeholder="Reponse secrete" id="logname" autocomplete="off">
+												<i class="input-icon uil uil-comment-lock"></i>
+											</div>	
+											<br>
 											<input type="submit" name="inscription" value="Inscription" >
                                         </form>
 				      					</div>
