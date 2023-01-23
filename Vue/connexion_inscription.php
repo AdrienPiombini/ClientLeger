@@ -6,7 +6,7 @@
 			<div class="row full-height justify-content-center">
 				<div class="col-12 text-center align-self-center py-5">
 					<div class="section pb-5 pt-5 pt-sm-2 text-center">
-						<h6 class="mb-0 pb-3"><span>Log In </span><span>Sign Up</span></h6>
+						<h6 class="mb-0 pb-3"><span>Connexion</span><span>Inscription</span></h6>
 			          	<input class="checkbox" type="checkbox" id="reg-log" name="reg-log"/>
 			          	<label for="reg-log"></label>
 						<div class="card-3d-wrap mx-auto">
@@ -15,16 +15,17 @@
 									<div class="center-wrap">
 										<div class="section text-center">
                                             <form method="post" class="form">
-											<h4 class="mb-4 pb-3">Log In</h4>
+											<h4 class="mb-4 pb-3">Connexion</h4>
 											<div class="form-group">
-												<input type="text" name="email" class="form-style" placeholder="Your Email" id="logemail" autocomplete="off" required>
+												<input type="email" name="email" class="form-style" placeholder="Your Email" id="logemail" autocomplete="off" required>
 												<i class="input-icon uil uil-at"></i>
 											</div>	
 											<div class="form-group mt-2">
 												<input type="password" name="mdp" class="form-style" placeholder="Your Password" id="logpass" autocomplete="off" required>
 												<i class="input-icon uil uil-lock-alt"></i>
 											</div>
-										    <input type="submit" value='se connecter' name='signin'>
+											<br>
+										    <input type="submit" value='Connexion' name='signin'>
                             				<p class="mb-0 mt-4 text-center"><a href="#0" class="link">Forgot your password?</a></p>
                                             </form>
 				      					</div>
@@ -34,48 +35,44 @@
 									<div class="center-wrap">
 										<div class="section text-center">
                                         <form method="post" class="form">
-											<h4 class="mb-4 pb-3">Sign Up</h4>
+											<h4 class="mb-4 pb-3">Formulaire d'inscription</h4>
 											<div class="form-group">
-												<input type="text" name="email" class="form-style" placeholder="Email" id="logname" autocomplete="off" required>
+												<input type="email" name="email" class="form-style" placeholder="Email" id="logname" autocomplete="off" >
+												<i class="input-icon uil uil-at"></i>
+											</div>	
+											<div class="form-group mt-2">
+												<input type="text" name="nom" class="form-style" placeholder="Nom" id="logname" autocomplete="off" >
 												<i class="input-icon uil uil-user"></i>
 											</div>	
 											<div class="form-group mt-2">
-												<input type="text" name="email" class="form-style" placeholder="Nom" id="logname" autocomplete="off" required>
-												<i class="input-icon uil uil-user"></i>
+												<input type="text" name="adresse" class="form-style" placeholder="Adresse" id="logname" autocomplete="off">
+												<i class="input-icon uil uil-house-user"></i>
 											</div>	
 											<div class="form-group mt-2">
-												<input type="text" name="email" class="form-style" placeholder="Adresse" id="logname" autocomplete="off" required>
-												<i class="input-icon uil uil-user"></i>
+												<input type="text" name="ville" class="form-style" placeholder="Ville" id="logname" autocomplete="off">
+												<i class="input-icon uil uil-home"></i>
 											</div>	
 											<div class="form-group mt-2">
-												<input type="text" name="email" class="form-style" placeholder="Ville" id="logname" autocomplete="off" required>
-												<i class="input-icon uil uil-user"></i>
-											</div>	
-											<div class="form-group mt-2">
-												<input type="password" name="text" class="form-style" placeholder="Code postal" id="logpass" autocomplete="off" required>
-												<i class="input-icon uil uil-lock-alt"></i>
+												<input type="text" name="codepostal" class="form-style" placeholder="Code postal" id="logpass" autocomplete="off">
+												<i class="input-icon uil uil-mailbox"></i>
 											</div>
 											<div class="form-group mt-2">
-												<input type="text" name="email" class="form-style" placeholder="Telephone" id="logname" autocomplete="off" required>
-												<i class="input-icon uil uil-user"></i>
+												<input type="text" name="telephone" class="form-style" placeholder="Telephone" id="logname" autocomplete="off">
+												<i class="input-icon uil uil-phone"></i>
 											</div>	
 											<div class="form-group mt-2">
 												<input type="password" name="mdp" class="form-style" placeholder="Mot de passe fort" id="logpass" autocomplete="off" required>
 												<i class="input-icon uil uil-lock-alt"></i>
 											</div>
 											<div class="form-check">
-												<input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
-												<label class="form-check-label" for="flexRadioDefault1">
-													Particulier
-												</label>
+												<input class="form-check-input" type="radio" name="type" id="flexRadioDefault1" value="particulier" required>
+												<label class="form-check-label" for="flexRadioDefault1">Particulier</label>
 											</div>
 											<div class="form-check">
-												<input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked>
-												<label class="form-check-label" for="flexRadioDefault2">
-													Professionnel
-												</label>
+												<input class="form-check-input" type="radio" name="type" id="flexRadioDefault2" value="professionnel" required>
+												<label class="form-check-label" for="flexRadioDefault2">Professionnel</label>
 											</div>
-											<input type="submit" name="inscription" value="s'inscrire" >
+											<input type="submit" name="inscription" value="Inscription" >
                                         </form>
 				      					</div>
 			      					</div>

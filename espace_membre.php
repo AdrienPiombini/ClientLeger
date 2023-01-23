@@ -48,37 +48,57 @@
 			if($unUser == null){
 				?><br> <center style="color: red; font-weight: bolder; position:absolute; bottom:150px; left:30%;"><?='Les informations renseignées ne permettent pas de vous authentifier'; ?></center><?php
 			}else{
+				$today = date ("Y-m-d");
+				$dtmdp = $unUser['datemdp'];
+				$debut = new DateTime ($today);
+				$fin = new DateTime ($dtmdp);
+				$interval = $debut->diff($fin);
 				$_SESSION['email'] = $unUser['email'];
 				$_SESSION['roles'] = $unUser['roles'];
 				$_SESSION['mdp'] = $unUser['mdp'];
 				$_SESSION['nom'] = $unUser['nom'];
 				$_SESSION['iduser'] = $unUser['iduser'];
-				echo '<script language="Javascript">
-				<!--
-				document.location.replace("index.php?page=2");
-				// -->
-				</script>';
-				//header("Location: index.php?page=2");
+
+				if ($interval->format("%a") > 20 ){
+					echo '<script language="Javascript">
+					<!--
+					document.location.replace("index.php?page=2");
+					// -->
+					</script>';
+				}else{
+					echo '<script language="Javascript">
+					<!--
+					document.location.replace("index.php?page=2");
+					// -->
+					</script>';
+					?><center style="color: red; font-weight: bolder; position:absolute; bottom:150px; left:30%;"><?='Penser à modifier votre mot de passe ! ';?></center><?php
+				}
+				
 			}
 
 
 	}
 
-	$unControleur->setTable('users');
+	//$unControleur->setTable('users');
 
 	if(isset($_POST['inscription'])){
 		if(!empty($_POST['email']) AND !empty($_POST['mdp'])){
 			/*REGEX MDP ET EMAIL */
 			if (filter_var($_POST['email'], FILTER_VALIDATE_EMAIL ) AND preg_match("/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[-+!*$@%_])([-+!*$@%_\w]{8,})$/", $_POST['mdp'])){
-				$tab = array("email"=>$_POST['email'],"mdp"=>sha1($_POST['mdp']),"nom"=>"","roles"=>"client","datemdp"=>date("Y-m-d"));
-				try{
-					$une_inscription = $unControleur->insert($tab);
-					echo '<script language="Javascript"><!-- document.location.replace("index.php?page=2");// --></script>';
-					echo"Votre inscription à bien été enregistré";
+				if($_POST['type'] == 'professionnel'){
+					$unControleur->setTable('professionnel');				//header("Location: index.php?page=2") ;
+					$tab = array("email"=>$_POST['email'],"mdp"=>$_POST['mdp'],"nom"=>$_POST['nom'],"roles"=>"client","datemdp"=>date("Y-m-d"), "typeclient"=>$_POST['type'], "adresse"=>$_POST['adresse'],"ville"=>$_POST['ville'], "cp"=>$_POST['codepostal'], "telephone"=>$_POST['telephone'],  "numeroSiret"=>0);
+				}elseif ($_POST['type'] == 'particulier') {
+					$unControleur->setTable('particulier');	
+					$tab = array("email"=>$_POST['email'],"mdp"=>$_POST['mdp'],"nom"=>$_POST['nom'],"roles"=>"client","datemdp"=>date("Y-m-d"), "typeclient"=>$_POST['type'], "adresse"=>$_POST['adresse'],"ville"=>$_POST['ville'], "cp"=>$_POST['codepostal'], "telephone"=>$_POST['telephone'],  "prenom"=>"");
 				}
-				catch( PDOException $erreur){
-						echo"Une erreur est survenue".$erreur;
-				}					//header("Location: index.php?page=2") ;
+					try{
+						$une_inscription = $unControleur->insert($tab);
+						echo"Votre inscription à bien été enregistré";
+					}
+					catch( PDOException $erreur){
+							echo"Une erreur est survenue".$erreur;
+					}	
 			}else {
 				echo'Renseigner des données valides !';
 			}

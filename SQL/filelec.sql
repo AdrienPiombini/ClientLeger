@@ -10,7 +10,7 @@ email varchar (150) unique,
 mdp varchar (255),
 nom varchar (50),
 roles enum ('admin', 'technicien', 'client'),
-datemdp date, 
+datemdp DATE, 
 constraint pk_user primary key (iduser)
 );
 
@@ -208,8 +208,8 @@ select salt into grain from grainSel;
 set new.mdp = sha1(concat(new.mdp, grain));
 select count(*) into user from users where email = new.email;
 if user = 0 then 
-    insert into users (email, mdp, roles, nom) values (new.email, new.mdp, 'client', new.nom);
-    insert into client (email, mdp, roles, typeclient, nom, adresse, ville, cp, telephone) values (new.email, new.mdp, 'client', 'particulier', new.nom, new.adresse, new.ville, new.cp, new.telephone);
+    insert into users (email, mdp, roles, nom, datemdp) values (new.email, new.mdp, 'client', new.nom, new.datemdp);
+    insert into client (email, mdp, roles, typeclient, nom, datemdp, adresse, ville, cp, telephone) values (new.email, new.mdp, 'client', 'particulier', new.nom, new.datemdp, new.adresse, new.ville, new.cp, new.telephone);
 else 
     signal sqlstate '45000'
     set message_text = 'Données déja existantes';
@@ -230,8 +230,8 @@ select salt into grain from grainSel;
 set new.mdp = sha1(concat(new.mdp, grain));
 select count(*) into user from users where email = new.email;
 if user = 0 then 
-    insert into users (email, mdp, roles, nom) values (new.email, new.mdp, 'client', new.nom);
-    insert into client (email, mdp, roles, typeclient, nom, adresse, ville, cp, telephone) values (new.email, new.mdp, 'client', 'professionnel', new.nom, new.adresse, new.ville, new.cp, new.telephone);
+    insert into users (email, mdp, roles, nom, datemdp) values (new.email, new.mdp, 'client', new.nom, new.datemdp);
+    insert into client (email, mdp, roles, typeclient, nom, datemdp, adresse, ville, cp, telephone) values (new.email, new.mdp, 'client', 'professionnel', new.nom, new.datemdp, new.adresse, new.ville, new.cp, new.telephone);
 else 
     signal sqlstate '45000'
     set message_text = 'Données déja existantes';
@@ -251,7 +251,7 @@ select salt into grain from grainSel;
 set new.mdp = sha1(concat(new.mdp, grain));
 select count(*) into user from users where email = new.email; 
 if user = 0 then 
-    insert into users (email, mdp, nom, roles) values (new.email, new.mdp, new.nom, 'admin');
+    insert into users (email, mdp, nom, roles, datemdp) values (new.email, new.mdp, new.nom, 'admin', new.datemdp);
 else 
     signal sqlstate '45000'
     set message_text = "L'utilisateur existe déja !";
@@ -272,7 +272,7 @@ select salt into grain from grainSel;
 set new.mdp = sha1(concat(new.mdp, grain));
 select count(*) into user from users where email = new.email; 
 if user = 0 then 
-    insert into users (email, mdp, nom, roles) values (new.email, new.mdp, new.nom, 'technicien');
+    insert into users (email, mdp, nom, roles, datemdp) values (new.email, new.mdp, new.nom, 'technicien', new.datemdp);
 else 
     signal sqlstate '45000'
     set message_text = "L'utilisateur existe déja !";
@@ -288,8 +288,8 @@ create trigger modifier_particulier
 before update on particulier
 for each row 
 begin 
-        update users set email = new.email, nom = new.nom, mdp = new.mdp where email = old.email;
-        update client set email = new.email, nom = new.nom, mdp = new.mdp, adresse = new.adresse, ville = new.ville, cp = new.cp, telephone = new.telephone  where email = old.email;
+        update users set email = new.email, nom = new.nom, mdp = new.mdp, datemdp = new.datemdp where email = old.email;
+        update client set email = new.email, nom = new.nom, mdp = new.mdp, adresse = new.adresse, ville = new.ville, cp = new.cp, telephone = new.telephone, datemdp = new.datemdp  where email = old.email;
 end // 
 delimiter ; 
 
@@ -300,8 +300,8 @@ CREATE TRIGGER modifier_professionnel
 BEFORE UPDATE ON professionnel
 FOR EACH ROW
 BEGIN
-    UPDATE users SET email = new.email, nom = NEW.nom, mdp = NEW.mdp WHERE email = OLD.email;
-    UPDATE client SET email = NEW.email, nom = NEW.nom, mdp = NEW.mdp, adresse = NEW.adresse, ville = NEW.ville, cp = NEW.cp, telephone = NEW.telephone WHERE email = OLD.email;
+    UPDATE users SET email = new.email, nom = NEW.nom, mdp = NEW.mdp, datemdp = new.datemdp WHERE email = OLD.email;
+    UPDATE client SET email = NEW.email, nom = NEW.nom, mdp = NEW.mdp, adresse = NEW.adresse, ville = NEW.ville, cp = NEW.cp, telephone = NEW.telephone, datemdp = new.datemdp WHERE email = OLD.email;
 END //
 delimiter ; 
 
@@ -312,7 +312,7 @@ create trigger modifier_admin
 before update on admin
 for each row 
 begin 
-UPDATE users SET email = new.email, nom = NEW.nom, mdp = NEW.mdp WHERE email = OLD.email;
+UPDATE users SET email = new.email, nom = NEW.nom, mdp = NEW.mdp, datemdp = new.datemdp WHERE email = OLD.email;
 end // 
 delimiter ;
 
@@ -322,7 +322,7 @@ create trigger modifier_tech
 before update on technicien
 for each row 
 begin 
-UPDATE users SET email = new.email, nom = NEW.nom, mdp = NEW.mdp WHERE email = OLD.email;
+UPDATE users SET email = new.email, nom = NEW.nom, mdp = NEW.mdp, datemdp = new.datemdp WHERE email = OLD.email;
 end // 
 delimiter ;
 
@@ -398,6 +398,8 @@ INSERT INTO particulier (email, mdp, roles, nom) VALUES ('Isabelle@gmail.com', '
 INSERT INTO technicien (email, mdp, roles, nom) VALUES ('Jack@gmail.com', 'password5', 'technicien', 'Jack');
 
 
+
+
 /*** PANIER ******/
 INSERT INTO commande (idcommande, iduser, idproduit, quantiteproduit, statut, dateCommande, tvaCommande ) 
 VALUES (1, 1, 1, 2, 'en cours', '2022-01-01', '19.6');
@@ -412,8 +414,9 @@ VALUES (2, 2, 2, 1, 'validée', '2022-02-01', '19.6');
 INSERT INTO commande (idcommande, iduser, idproduit, quantiteproduit, statut, dateCommande, tvaCommande) 
 VALUES (3, 3, 3, 3, 'annulée', '2022-03-01', '19.6');
 
-
 insert into intervention (libelle, dateintervention, iduser) values ('reparation', curdate(), 1);
+
+
 
 /*
 
