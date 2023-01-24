@@ -26,7 +26,7 @@
 											</div>
 											<br>
 										    <input type="submit" value='Connexion' name='signin'>
-                            				<p class="mb-0 mt-4 text-center"><a href="index.php?page=4" class="link">Forgot your password?</a></p>
+                            				<p class="mb-0 mt-4 text-center"><a href="index.php?page=4" class="link">Mot de passe oublié ?</a></p>
                                             </form>
 				      					</div>
 			      					</div>

@@ -163,6 +163,8 @@ create or replace view  vue_commande_archive as (
     group by idcommande, iduser, statut, totalHT, totalTTC, datecommande
 );
 
+
+
 /*-------------------PROCEDURE --------------------*/
 
 drop procedure if exists gestion_panier;
@@ -287,8 +289,11 @@ create trigger modifier_particulier
 before update on particulier
 for each row 
 begin 
-        update users set email = new.email, nom = new.nom, mdp = new.mdp, datemdp = new.datemdp where email = old.email;
-        update client set email = new.email, nom = new.nom, mdp = new.mdp, adresse = new.adresse, ville = new.ville, cp = new.cp, telephone = new.telephone, datemdp = new.datemdp  where email = old.email;
+    declare grain varchar(100);
+    select salt into grain from grainSel;
+    set new.mdp = sha1(concat(new.mdp, grain));
+    update users set email = new.email, nom = new.nom, mdp = new.mdp, datemdp = new.datemdp where email = old.email;
+    update client set email = new.email, nom = new.nom, mdp = new.mdp, adresse = new.adresse, ville = new.ville, cp = new.cp, telephone = new.telephone, datemdp = new.datemdp  where email = old.email;
 end // 
 delimiter ; 
 
@@ -299,6 +304,9 @@ CREATE TRIGGER modifier_professionnel
 BEFORE UPDATE ON professionnel
 FOR EACH ROW
 BEGIN
+    declare grain varchar(100);
+    select salt into grain from grainSel;
+    set new.mdp = sha1(concat(new.mdp, grain));
     UPDATE users SET email = new.email, nom = NEW.nom, mdp = NEW.mdp, datemdp = new.datemdp WHERE email = OLD.email;
     UPDATE client SET email = NEW.email, nom = NEW.nom, mdp = NEW.mdp, adresse = NEW.adresse, ville = NEW.ville, cp = NEW.cp, telephone = NEW.telephone, datemdp = new.datemdp WHERE email = OLD.email;
 END //
@@ -311,7 +319,10 @@ create trigger modifier_admin
 before update on admin
 for each row 
 begin 
-UPDATE users SET email = new.email, nom = NEW.nom, mdp = NEW.mdp, datemdp = new.datemdp WHERE email = OLD.email;
+    declare grain varchar(100);
+    select salt into grain from grainSel;
+    set new.mdp = sha1(concat(new.mdp, grain));
+    UPDATE users SET email = new.email, nom = NEW.nom, mdp = NEW.mdp, datemdp = new.datemdp WHERE email = OLD.email;
 end // 
 delimiter ;
 
@@ -320,8 +331,11 @@ delimiter //
 create trigger modifier_tech
 before update on technicien
 for each row 
-begin 
-UPDATE users SET email = new.email, nom = NEW.nom, mdp = NEW.mdp, datemdp = new.datemdp WHERE email = OLD.email;
+begin
+    declare grain varchar(100);
+    select salt into grain from grainSel;
+    set new.mdp = sha1(concat(new.mdp, grain)); 
+    UPDATE users SET email = new.email, nom = NEW.nom, mdp = NEW.mdp, datemdp = new.datemdp WHERE email = OLD.email;
 end // 
 delimiter ;
 
@@ -416,141 +430,3 @@ VALUES (3, 3, 3, 3, 'annulée', '2022-03-01', '19.6');
 insert into intervention (libelle, dateintervention, iduser) values ('reparation', curdate(), 1);
 
 
-
-/*
-
-select idpanier, sum(quantiteproduit), sum(montantHT), nom from panier left join users on panier.iduser= users.iduser where idpanier = 1 group by panier.idpanier, users.nom
-select panier.*, prixProduit, nom from panier, produit, users where panier.iduser = users.iduser and panier.idproduit = produit.idproduit
-
-select idpanier, quantiteproduit, statut, prixProduit, nom from panier, produit, users where panier.iduser = users.iduser and panier.idproduit = produit.idproduit;
-
-
-drop procedure if exists gestion_panier;
-delimiter  //
-create procedure gestion_panier (idpan int, idu int, idprod varchar(25), qtprod int)
-begin 
-declare PrixProduit float; 
-declare totalHT float;
-declare  totalTTC float; 
-select prixProduit from produit where idproduit = idprod  into PrixProduit ;
-set totalHT = PrixProduit * qtprod;
-set totalHT = PrixProduit * qtprod * 1.2; 
-insert into panier (idpanier, iduser, idproduit, quantiteproduit, statut, dateCommande, tvaCommande) values (idpan, idu, idprod, qtprod, 'en cours', curdate(), '20%');
-update panier set totalHT = totalHT, totalTTC = totalTTC where idpanier = idpan and iduser =idu and idproduit = idprod;
-end ;
-//
-delimiter ;
-
-drop trigger if exists maj_panier; 
-delimiter // 
-create trigger maj_panier 
-after insert on panier 
-for each row 
-begin 
-    update vue_panier set totalHT = 1 where idpanier = new.idpanier;
-end //
-delimiter ;
-
-
-drop procedure if exists gestion_panier;
-delimiter  //
-create procedure gestion_panier (idpanier int, iduser int, idproduit varchar(25), quantiteproduit int)
-begin 
-insert into panier (idpanier, iduser, idproduit, quantiteproduit, statut, dateCommande, tvaCommande) values (idpanier, iduser, idproduit, quantiteproduit, 'en cours', curdate(), '20%');
-end ;
-//
-delimiter ;
-
-drop trigger if exists maj_panier; 
-delimiter // 
-create trigger maj_panier 
-after insert on panier 
-for each row 
-begin 
-    update vue_panier set totalHT = 1 where idpanier = new.idpanier;
-end //
-delimiter ;
-
-create view vue_user as ( 
-    select * from users
-);
-
-
-
-
-select idpanier, sum(quantiteproduit) from vue_panier where idpanier = 1 group by idpanier with rollup;
-
-select idpanier, nom, sum(quantiteproduit), montantHT from panier left join users on panier.iduser= users.iduser where idpanier = 1  group by ;  
-
-select count(quantiteproduit), nom, montantHT from panier left join users on panier.iduser= users.iduser where idpanier = 1  group by idpanier, quantiteproduit ; 
-
-
-
-
-
-
-
-create table commande (   
-idCommande int not null auto_increment,
-dateCommande date ,
-nbProduit int(5)  ,
-montantHT float(5,2) ,
-tvaCommande float(5,2)  ,
-montantTTC float (9,2) ,
-dateLivraison date,
-idpanier int, 
-constraint pk_commande primary key (idCommande),
-constraint fk_panier foreign key (idpanier) references panier(idpanier)
-);
-
-
-
-insert into commande (dateCommande, nbProduit, montantHT,montantTTC, dateLivraison, iduser) values (curdate(), 1, 100, 120, curdate(), 2);
-
-OLD TRIGGER HERITAGE 
-
-drop trigger if exists supprimer_particulier; 
-delimiter // 
-create trigger supprimer_particulier 
-before delete on particulier 
-for each row 
-begin 
-    delete from client where email = old.email; 
-    delete from users where email = old.email; 
-end //
-delimiter ;
-
-drop trigger if exists supprimer_professionnel; 
-delimiter // 
-create trigger supprimer_professionnel 
-before delete on professionnel 
-for each row 
-begin 
-    delete from client where email = old.email; 
-    delete from users where email = old.email; 
-end //
-delimiter ;
-
-drop trigger if exists supprimer_admin; 
-delimiter // 
-create trigger supprimer_admin 
-before delete on admin 
-for each row 
-begin 
-    delete from users where email = old.email; 
-end //
-delimiter ;
-
-drop trigger if exists supprimer_tech; 
-delimiter // 
-create trigger supprimer_tech 
-before delete on technicien 
-for each row 
-begin 
-    delete from users where email = old.email; 
-end //
-delimiter ;
-
-
-
-*/

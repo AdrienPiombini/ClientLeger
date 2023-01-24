@@ -162,6 +162,9 @@ public function updateStock($qteCommande, $idproduit){
     $this->unModele->updateStock($qteCommande, $idproduit);
 }
 
+public function updateMDP($mdp, $email){    
+    $this->unModele->updateMDP($mdp, $email);
+}
 
 }
 ?>

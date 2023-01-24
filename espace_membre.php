@@ -59,7 +59,7 @@
 				$_SESSION['nom'] = $unUser['nom'];
 				$_SESSION['iduser'] = $unUser['iduser'];
 
-				if ($interval->format("%a") > 20 ){
+				if ($interval->format("%a") < 20 ){
 					echo '<script language="Javascript">
 					<!--
 					document.location.replace("index.php?page=2");
@@ -224,12 +224,20 @@ $one_intervention = null;
 
 /***************************************VUE GESTION COMPTE******************************************/
 	if (isset($_POST['edit_mdp'])){
-		if (htmlspecialchars(sha1($_POST['new_mdp']))!==htmlspecialchars(sha1($_POST['new_mdp_verif'])) || sha1($_POST['old_mdp']) !== $_SESSION['mdp']) {
+		$unControleur->setTable("grainSel");
+		$resultat = $unControleur->selectAll();
+		$grain = $resultat[0]['salt'];
+		$mdp = $_POST['old_mdp'].$grain;
+		$mdp = sha1($mdp);
+		$newMdp = $_POST['new_mdp'].$grain;
+		$newMdp = sha1($newMdp);
+		$mdpVerif = sha1($_POST['new_mdp_verif'].$grain);
+		if ($newMdp!== $mdpVerif || $mdp !== $_SESSION['mdp']) {
 			echo'<br/>Les informations renseignées ne sont pas correct';
 		}else {
 			$unControleur->setTable('users');
-			$tab = array("mdp"=>htmlspecialchars(sha1($_POST['new_mdp'])));
-			$unControleur->update($tab, "iduser", $_SESSION['iduser']);
+			$tab = array("mdp"=>htmlspecialchars($_POST['new_mdp']));
+			$unControleur->updateMDP($_POST['new_mdp'], $_SESSION['email']);
 			echo "<br/>Le mot de passe a bien été changé !"; 
 		}
 		

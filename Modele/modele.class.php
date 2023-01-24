@@ -321,6 +321,26 @@ class Modele {
 		}
 	}
 
+	public function updateMDP($mdp, $email){
+		if($this->unPDO != null){
+			$requete = "update particulier set mdp = :mdp where email = :email;";
+			$donnees =  array("mdp"=>$mdp, ":email"=>$email); 
+            $select = $this->unPDO->prepare($requete);
+            $select->execute($donnees);
+			$requete = "update professionnel set mdp = :mdp where email = :email;";
+			$donnees =  array("mdp"=>$mdp, ":email"=>$email); 
+            $select = $this->unPDO->prepare($requete);
+            $select->execute($donnees);
+			$requete = "update admin set mdp = :mdp where email = :email;";
+			$donnees =  array("mdp"=>$mdp, ":email"=>$email); 
+            $select = $this->unPDO->prepare($requete);
+            $select->execute($donnees);
+			$requete = "update technicien set mdp = :mdp where email = :email;";
+			$donnees =  array("mdp"=>$mdp, ":email"=>$email);  
+            $select = $this->unPDO->prepare($requete);
+            $select->execute($donnees);
+		}
+	}
 }
 
 ?>
