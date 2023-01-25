@@ -59,11 +59,16 @@ delimiter ;
 
 /*
 CREATE OR REPLACE VIEW  allUsers as
-(select admin.*, t.*, part.*, pro.* from users left join admin on users.email = admin.email
+(select users.* from users left join admin on users.email = admin.email
  left join technicien t on users.email = t.email
  left join particulier part on users.email = part.email
- left join professionnel pro on users.email = pro.email);
+ left join professionnel pro on users.email = pro.email); 
 
+insert into users from users left join admin on users.email = admin.email
+ left join technicien t on users.email = t.email
+ left join particulier part on users.email = part.email
+ left join professionnel pro on users.email = pro.email
+ values (100, 'adkiok@gmail.com', 'mdp','jean', 'client' curdate());
 
 select idpanier, sum(quantiteproduit), sum(montantHT), nom from panier left join users on panier.iduser= users.iduser where idpanier = 1 group by panier.idpanier, users.nom
 select panier.*, prixProduit, nom from panier, produit, users where panier.iduser = users.iduser and panier.idproduit = produit.idproduit

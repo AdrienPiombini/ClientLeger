@@ -22,6 +22,8 @@ $unControleur = new Controleur($serveur, $bdd, $user, $mdp);
     <ul class="nav">
         <li><a href="index.php?page=0">Accueil</a></li>
         <li><a href="index.php?page=1">Produits</a></li>
+        <li><a href="index.php?page=5">A Propos</a></li>
+
     </ul>
 </nav>
 <div class="icon">
@@ -46,6 +48,7 @@ $unControleur = new Controleur($serveur, $bdd, $user, $mdp);
                 case 2 : require_once("espace_membre.php"); break;
                 case 3  : require_once("panier.php"); break;
                 case 4 : require_once("mdpOublie.php"); break; 
+                case 5 : require_once("aPropos.php"); break; 
                default : require_once("erreur404.php"); break;
             }
             ?>

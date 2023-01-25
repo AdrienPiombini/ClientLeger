@@ -110,9 +110,6 @@
 	}
 /***************************************ESPACE ADMINISTRATION***************************************** */
 
-
-/**************Particulier******** */
-
 	$one_user = null;
 	$unControleur->setTable('users');
 	if (isset($_POST['rechercher_user']))
@@ -151,7 +148,6 @@
 		}
     }
 
-	
 	if (isset($_POST['edit_user'])){
 		$iduser = $_POST['iduser']; 
         $one_user = $unControleur->selectWhere("iduser", $iduser); 
@@ -169,12 +165,7 @@
 	}
 
 
-/**************PROFESSIONNEL******** */
-
-
-/**************ADMIN******** */
-
-
+	/*************ADMIN****** */
 	$one_admin = null;
 	$unControleur->setTable('admin');
 	if (isset($_POST['rechercher_admin']))
@@ -289,7 +280,6 @@ if (isset($_POST['modifier_tech'])){
 }
 
 
-	
 /***************************************VUE INTERVENTION******************************************/
 $unControleur->setTable('technicien');
 $lesTechniciens = $unControleur->selectAll();
@@ -297,7 +287,6 @@ $unControleur->setTable('vue_intervention_and_users');
 $one_intervention = null;
 	if (isset($_POST['rechercher_intervention']))
 	{
-		
 		$mot = $_POST['mot']; 
 		$tab = array("idintervention", "libelle", "dateintervention","iduser", "nomClient", "nomTech", "statut");
 		$les_interventions = $unControleur->selectLikeAll($mot, $tab); 

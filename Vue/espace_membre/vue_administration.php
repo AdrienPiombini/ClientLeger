@@ -47,7 +47,7 @@
         <tr>
             <td style="background: #00bcd4; color: #fff; box-sizing: border-box;"></td>
             <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Iduser</td>
-            <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Prenom</td>
+            <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Email</td>
             <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Roles</td>
             <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Action</td>
             
@@ -70,9 +70,7 @@
         ?>
     </table>
     </div>
-
     <br><br>
-<h3> Ajout d'un admin</h3>
 <br>
 <div class="box-insert">
 
@@ -142,7 +140,7 @@
 
 
     <br><br>
-<h3> Ajout d'un technicien</h3>
+
 <br>
 <div class="box-insert">
 
@@ -209,3 +207,4 @@
         ?>
     </table>
     </div>
+
