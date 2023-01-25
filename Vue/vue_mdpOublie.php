@@ -14,7 +14,7 @@
 									<div class="center-wrap">
 										<div class="section text-center">
                                             <form method="post" class="form">
-											<h4 class="mb-4 pb-3">Connexion</h4>
+											<h4 class="mb-4 pb-3">Mot de passe oublié </h4>
 											<div class="form-group mt-2">
 												<input type="email" name="email" class="form-style" placeholder="Your Email" id="logemail" autocomplete="off" required>
 												<i class="input-icon uil uil-at"></i>
@@ -36,7 +36,7 @@
 												<i class="input-icon uil uil-lock-alt"></i>
 											</div>
 											<br>
-										    <input type="submit" value='Reinitialiser son mot de passe' name='mdpOublie'>
+										    <input type="submit" value='Réinitialiser' name='mdpOublie'>
                                             </form>
 				      					</div>
 			      					</div>
