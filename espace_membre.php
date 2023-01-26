@@ -116,12 +116,12 @@ $one_user = null;
 $one_tech = null;
 
 	$unControleur->setTable('users');
-	if (isset($_POST['rechercher_user']))
+	if (isset($_POST['rechercher_user']) && isset($_POST['administration']))
 	{
 		$mot = $_POST['mot']; 
 		$tab = array("iduser", "email", "roles");
 		$les_users = $unControleur->selectLikeAll($mot, $tab); 
-		// require_once("vue/espace_membre/vue_administration.php");
+		//require_once("vue/espace_membre/vue_administration.php");
 	}else{
 		$les_users = $unControleur->selectAll(); 
 		}
@@ -296,7 +296,7 @@ $one_intervention = null;
 		$tab = array("idintervention", "libelle", "dateintervention","iduser", "nomClient", "nomTech", "statut");
 		$les_interventions = $unControleur->selectLikeAll($mot, $tab); 
 		$mes_interventions = $unControleur->select_like_mine_intervention($mot); 
-		//require_once("vue/espace_membre/vue_interventions.php");
+		 require_once("vue/espace_membre/vue_interventions.php");
 	}else{
 		$les_interventions = $unControleur->selectAll();
 		$mes_interventions = $unControleur->select_mes_interventions ();
@@ -325,7 +325,7 @@ $one_intervention = null;
 	if (isset($_POST['edit_intervention'])){
 		$idintervention = $_POST['idintervention']; 
         $one_intervention = $unControleur->selectWhere('idintervention', $idintervention); 
-		//require_once("vue/espace_membre/vue_interventions.php");
+		require_once("vue/espace_membre/vue_interventions.php");
 	}
 
 	if (isset($_POST['modifier_intervention'])){
@@ -362,27 +362,33 @@ $one_intervention = null;
 	}
 
  /************************  VUE COMMANDES *******************************************/
- $unControleur->setTable('vue_commande_en_cours');
+
+ 
  if(isset($_SESSION['iduser'])){
 	$iduser = $_SESSION['iduser'];
  }else {
 	$iduser ='';
  }
+ $unControleur->setTable('vue_commande_archive');
+ $les_commandes_archives = $unControleur->selectAll(); 
+ $mes_commandes_archives = $unControleur->select_mine_commandes_archive($iduser); 
 
+ $unControleur->setTable('vue_commande_en_cours');
  if (isset($_POST['rechercher_commande_en_cours']))
  {
 	 $mot = $_POST['mot']; 
 	 $tab = array("idcommande", "iduser", "nbArticle", "statut");
 	 $les_commandes_en_cours = $unControleur->selectLikeAll($mot, $tab); 
 	 $mes_commandes_en_cours = $unControleur->select_like_mine_commande($mot); 
+	 require_once("vue/espace_membre/vue_commandes.php");
  }else{
 	 $les_commandes_en_cours = $unControleur->selectAll(); 
 	 $mes_commandes_en_cours = $unControleur->select_mine_commandes_en_cours($iduser); 
+	
 	 }
-	 $unControleur->setTable('vue_commande_archive');
-	$les_commandes_archives = $unControleur->selectAll(); 
-	$mes_commandes_archives = $unControleur->select_mine_commandes_archive($iduser); 
-	//require_once("vue/espace_membre/vue_commandes.php");
+	 
+	
+	
 
 		
 if (isset($_POST['valider_commande'])){
@@ -410,10 +416,10 @@ if (isset($_POST['archive_commande'])){
  if (isset($_POST['commander_produit'])){
 	$unControleur->updateStock($_POST['qteproduit'], $_POST['idproduit']);
 	echo "<br/>Le produit : ".$_POST['idproduit']." a bien était commandé ";  
+   
  }else{
 	$les_produits = $unControleur->selectAll();
  }
- 
 
 /***************************************EN TETE******************************************/
 
