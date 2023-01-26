@@ -108,16 +108,20 @@
 			}
 	    }
 	}
-/***************************************ESPACE ADMINISTRATION***************************************** */
 
-	$one_user = null;
+/***************************************ESPACE ADMINISTRATION***************************************** */
+/************** Objets de modiffication   **************/
+$one_admin = null;
+$one_user = null;
+$one_tech = null;
+
 	$unControleur->setTable('users');
 	if (isset($_POST['rechercher_user']))
 	{
 		$mot = $_POST['mot']; 
 		$tab = array("iduser", "email", "roles");
 		$les_users = $unControleur->selectLikeAll($mot, $tab); 
-		require_once("vue/espace_membre/vue_administration.php");
+		// require_once("vue/espace_membre/vue_administration.php");
 	}else{
 		$les_users = $unControleur->selectAll(); 
 		}
@@ -151,7 +155,7 @@
 	if (isset($_POST['edit_user'])){
 		$iduser = $_POST['iduser']; 
         $one_user = $unControleur->selectWhere("iduser", $iduser); 
-		require_once("vue/espace_membre/vue_administration.php");
+		//require_once("vue/espace_membre/vue_administration.php");
 	}
 
 	if (isset($_POST['modifier_user'])){
@@ -166,14 +170,14 @@
 
 
 	/*************ADMIN****** */
-	$one_admin = null;
+	
 	$unControleur->setTable('admin');
 	if (isset($_POST['rechercher_admin']))
 	{
 		$mot = $_POST['mot']; 
 		$tab = array("iduser", "email", "roles");
 		$les_admins = $unControleur->selectLikeAll($mot, $tab); 
-		require_once("vue/espace_membre/vue_administration.php");
+	//	require_once("vue/espace_membre/vue_administration.php");
 	}else{
 		$les_admins = $unControleur->selectAll(); 
 		}
@@ -184,7 +188,7 @@
 		if(empty(trim($_POST['email'])) || empty(trim($_POST['mdp'])) || $_POST['roles']=='Choisir un rôles utilisateur'){
 			echo "<br/></br>Problème rencontré à la saisie des données, aucun utilisateur n'a été ajouté"; 
 		}else{
-		$tab = array("email"=>$_POST['email'],"mdp"=>sha1($_POST['mdp']), "nom"=>"","roles"=>$_POST['roles'], "datemdp"=>date("Y-m-d"));
+		$tab = array("email"=>$_POST['email'],"mdp"=>sha1($_POST['mdp']), "nom"=>"","roles"=>$_POST['roles'], "datemdp"=>date("Y-m-d"), "prenom"=>"");
 		$unControleur->insert($tab); 
 		echo "<br/>L'utilisateur : ".$_POST['email']." à été ajouté"; 
 		}
@@ -208,7 +212,7 @@
 	if (isset($_POST['edit_admin'])){
 		$idadmin = $_POST['iduser']; 
         $one_admin = $unControleur->selectWhere("iduser", $idadmin); 
-		require_once("vue/espace_membre/vue_administration.php");
+		//require_once("vue/espace_membre/vue_administration.php");
 	}
 
 	if (isset($_POST['modifier_admin'])){
@@ -224,14 +228,14 @@
 
 /**************TECHNICIEN******** */
 
-$one_tech = null;
+
 $unControleur->setTable('technicien');
 if (isset($_POST['rechercher_tech']))
 {
 	$mot = $_POST['mot']; 
 	$tab = array("iduser", "email", "roles");
 	$les_techs = $unControleur->selectLikeAll($mot, $tab); 
-	require_once("vue/espace_membre/vue_administration.php");
+	//require_once("vue/espace_membre/vue_administration.php");
 }else{
 	$les_techs = $unControleur->selectAll(); 
 	}
@@ -242,7 +246,7 @@ if (isset($_POST['ajouter_tech']))
 	if(empty(trim($_POST['email'])) || empty(trim($_POST['mdp'])) || $_POST['roles']=='Choisir un rôles utilisateur'){
 		echo "<br/></br>Problème rencontré à la saisie des données, aucun utilisateur n'a été ajouté"; 
 	}else{
-	$tab = array("email"=>$_POST['email'],"mdp"=>sha1($_POST['mdp']), "nom"=>"","roles"=>$_POST['roles'], "datemdp"=>date("Y-m-d"));
+	$tab = array("email"=>$_POST['email'],"mdp"=>sha1($_POST['mdp']), "nom"=>"","roles"=>$_POST['roles'], "datemdp"=>date("Y-m-d"), "prenom"=>"", "diplome"=>"", "dateEmb"=>date("Y-m-d"), "dateDept"=>date("Y-m-d"));
 	$unControleur->insert($tab); 
 	echo "<br/>L'utilisateur : ".$_POST['email']." à été ajouté"; 
 	}
@@ -266,7 +270,7 @@ if (isset($_POST['delete_tech']))
 if (isset($_POST['edit_tech'])){
 	$idtech = $_POST['iduser']; 
 	$one_tech = $unControleur->selectWhere("iduser", $idtech); 
-	require_once("vue/espace_membre/vue_administration.php");
+	//require_once("vue/espace_membre/vue_administration.php");
 }
 
 if (isset($_POST['modifier_tech'])){
@@ -279,7 +283,8 @@ if (isset($_POST['modifier_tech'])){
 	}
 }
 
-
+//require_once("vue/espace_membre/vue_administration.php");
+	
 /***************************************VUE INTERVENTION******************************************/
 $unControleur->setTable('technicien');
 $lesTechniciens = $unControleur->selectAll();
@@ -291,7 +296,7 @@ $one_intervention = null;
 		$tab = array("idintervention", "libelle", "dateintervention","iduser", "nomClient", "nomTech", "statut");
 		$les_interventions = $unControleur->selectLikeAll($mot, $tab); 
 		$mes_interventions = $unControleur->select_like_mine_intervention($mot); 
-		require_once("vue/espace_membre/vue_interventions.php");
+		//require_once("vue/espace_membre/vue_interventions.php");
 	}else{
 		$les_interventions = $unControleur->selectAll();
 		$mes_interventions = $unControleur->select_mes_interventions ();
@@ -320,7 +325,7 @@ $one_intervention = null;
 	if (isset($_POST['edit_intervention'])){
 		$idintervention = $_POST['idintervention']; 
         $one_intervention = $unControleur->selectWhere('idintervention', $idintervention); 
-		require_once("vue/espace_membre/vue_interventions.php");
+		//require_once("vue/espace_membre/vue_interventions.php");
 	}
 
 	if (isset($_POST['modifier_intervention'])){
@@ -358,7 +363,6 @@ $one_intervention = null;
 
  /************************  VUE COMMANDES *******************************************/
  $unControleur->setTable('vue_commande_en_cours');
- 
  if(isset($_SESSION['iduser'])){
 	$iduser = $_SESSION['iduser'];
  }else {
@@ -370,18 +374,15 @@ $one_intervention = null;
 	 $mot = $_POST['mot']; 
 	 $tab = array("idcommande", "iduser", "nbArticle", "statut");
 	 $les_commandes_en_cours = $unControleur->selectLikeAll($mot, $tab); 
-	 $mes_commandes_en_cours = $unControleur->select_like_mine_commandes_en_cours($mot); 
-
-	 require_once("vue/espace_membre/vue_commandes.php");
+	 $mes_commandes_en_cours = $unControleur->select_like_mine_commande($mot); 
  }else{
 	 $les_commandes_en_cours = $unControleur->selectAll(); 
 	 $mes_commandes_en_cours = $unControleur->select_mine_commandes_en_cours($iduser); 
-
 	 }
-
 	 $unControleur->setTable('vue_commande_archive');
 	$les_commandes_archives = $unControleur->selectAll(); 
 	$mes_commandes_archives = $unControleur->select_mine_commandes_archive($iduser); 
+	//require_once("vue/espace_membre/vue_commandes.php");
 
 		
 if (isset($_POST['valider_commande'])){
@@ -396,13 +397,11 @@ if (isset($_POST['annule_commande'])){
 	$unControleur->annule_commande($idpanier);
 	echo "<br/>Commande mis à jour !"; 
 
-
 }
 if (isset($_POST['archive_commande'])){
 	$idpanier = $_POST['idpanier']; 
 	$unControleur->archive_commande($idpanier);
 	echo "<br/>Commande mis à jour !"; 
-
 
 }
 
@@ -432,10 +431,5 @@ if (isset($_POST['archive_commande'])){
 		require_once("vue/espace_membre/vue_produits.php");
 	}
 
-	
-
-
-
-	
 	?>
 

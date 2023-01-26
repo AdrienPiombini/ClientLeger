@@ -288,7 +288,7 @@ class Modele {
 
     public function select_like_mine_commande($mot){
         if($this->unPDO != null){
-            $requete = "select * from vue_commande_en_cours where (idpanier like :mot or nbArticle like :mot or statut like :mot or datecommande like :mot or totalTTC like :mot or totalHT like :mot) and i.iduser = :iduser ;";
+            $requete = "select * from vue_commande_en_cours where (idcommande like :mot or nbArticle like :mot or statut like :mot or datecommande like :mot or totalTTC like :mot or totalHT like :mot) and iduser = :iduser ;";
             $donnees = array(":mot"=>"%".$mot."%",":iduser"=>$_SESSION['iduser'] );
             $select = $this->unPDO->prepare($requete);
             $select->execute($donnees);
