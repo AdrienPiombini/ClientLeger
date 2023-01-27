@@ -1,4 +1,8 @@
-
+<p></p>
+<br>
+<h4>
+Toutes les commandes sont disponible sous 48H, une fois validé elle seront disposnible en magasin et ce pendant 30 jours. Passé ce délais la commande sera considéré comme étant annulée
+</h4>
 <br>
 <h3>Liste des Commandes</h3>
 <form method="post">
@@ -69,7 +73,7 @@
             echo "<tr></form>";
         }
 
-}else{ ?>
+}else{  ?>
     <tr>
     <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">References commandes</td>
     <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Reference User </td>

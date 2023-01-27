@@ -2,6 +2,13 @@
 <h3>PRODUIT EN STOCK</h3>
 <br>
 
+<div class="header_product">
+        <form method="post">
+        <input type="recherche" name="mot" placeholder="  Recherche...">
+        <input type="submit" name='filtrer_produits' value="rechercher">
+        </form>
+    </div>
+
 <table border="1" style="
     background: #fff;
     box-shadow: 0 10px 100px rgba(0, 0, 0, 0.5);
