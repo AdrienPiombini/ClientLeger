@@ -26,10 +26,8 @@
 			<button class="btn-2" type="submit" name="interventions" value="Interventions">Interventions</button>';
 			if(isset($_SESSION['roles']) && $_SESSION['roles']=='admin'){
 				echo'
-					<button class="btn-2" type="submit" name="administration" value="Administration">Administration</button>
 					<button class="btn-2" type="submit" name="statistiques" value="Statistiques">Statistiques</button><br>
 					<button class="btn-2" type="submit" name="produits" value="Produits">Produits</button><br>
-
 				';}
 		'</div></form></div>';
 			
@@ -115,176 +113,6 @@ $one_admin = null;
 $one_user = null;
 $one_tech = null;
 
-	$unControleur->setTable('users');
-	if (isset($_POST['rechercher_user']) && isset($_POST['administration']))
-	{
-		$mot = $_POST['mot']; 
-		$tab = array("iduser", "email", "roles");
-		$les_users = $unControleur->selectLikeAll($mot, $tab); 
-		//require_once("vue/espace_membre/vue_administration.php");
-	}else{
-		$les_users = $unControleur->selectAll(); 
-		}
-
-
-	if (isset($_POST['ajouter_user']))
-	{
-		if(empty(trim($_POST['email'])) || empty(trim($_POST['mdp'])) || $_POST['roles']=='Choisir un rôles utilisateur'){
-			echo "<br/></br>Problème rencontré à la saisie des données, aucun utilisateur n'a été ajouté"; 
-		}else{
-		$tab = array("email"=>$_POST['email'],"mdp"=>sha1($_POST['mdp']), "nom"=>"","roles"=>$_POST['roles'], "datemdp"=>date("Y-m-d"));
-		$unControleur->insert($tab); 
-		echo "<br/>L'utilisateur : ".$_POST['email']." à été ajouté"; 
-		}
-	}
-
-	if (isset($_POST['delete_user']))
-    {
-        $iduser = $_POST['iduser']; 
-        $unControleur->delete("iduser", $iduser);  
-		if ($_SESSION['iduser'] ==$iduser){
-			session_destroy();
-			unset($_SESSION['email']);
-			header("Location: index.php?page=2");
-		}
-		else {
-		echo "<br/>L'utilisateur ".$iduser." à été supprimé"; 
-		}
-    }
-
-	if (isset($_POST['edit_user'])){
-		$iduser = $_POST['iduser']; 
-        $one_user = $unControleur->selectWhere("iduser", $iduser); 
-		//require_once("vue/espace_membre/vue_administration.php");
-	}
-
-	if (isset($_POST['modifier_user'])){
-		if(empty(trim($_POST['email'])) || empty(trim($_POST['mdp'])) || $_POST['roles']=='Choisir un rôles utilisateur'){
-			echo "<br/></br>Problème rencontré à la saisie des données, aucun utilisateur n'a été modifé"; 
-		}else{
-		$tab = array("email"=>$_POST['email'],"mdp"=>$_POST['mdp'],"roles"=>$_POST['roles']);
-		$unControleur->update($tab, "iduser", $_POST['iduser']);
-		echo "<br/>L'utilisateur ".$_POST['email']." à été modifié"; 
-		}
-	}
-
-
-	/*************ADMIN****** */
-	
-	$unControleur->setTable('admin');
-	if (isset($_POST['rechercher_admin']))
-	{
-		$mot = $_POST['mot']; 
-		$tab = array("iduser", "email", "roles");
-		$les_admins = $unControleur->selectLikeAll($mot, $tab); 
-	//	require_once("vue/espace_membre/vue_administration.php");
-	}else{
-		$les_admins = $unControleur->selectAll(); 
-		}
-
-
-	if (isset($_POST['ajouter_admin']))
-	{
-		if(empty(trim($_POST['email'])) || empty(trim($_POST['mdp'])) || $_POST['roles']=='Choisir un rôles utilisateur'){
-			echo "<br/></br>Problème rencontré à la saisie des données, aucun utilisateur n'a été ajouté"; 
-		}else{
-		$tab = array("email"=>$_POST['email'],"mdp"=>sha1($_POST['mdp']), "nom"=>"","roles"=>$_POST['roles'], "datemdp"=>date("Y-m-d"), "prenom"=>"");
-		$unControleur->insert($tab); 
-		echo "<br/>L'utilisateur : ".$_POST['email']." à été ajouté"; 
-		}
-	}
-
-	if (isset($_POST['delete_admin']))
-    {
-        $idadmin = $_POST['iduser']; 
-        $unControleur->delete("iduser", $idadmin);  
-		if ($_SESSION['iduser'] ==$idadmin){
-			session_destroy();
-			unset($_SESSION['email']);
-			header("Location: index.php?page=2");
-		}
-		else {
-		echo "<br/>L'utilisateur ".$idadmin." à été supprimé"; 
-		}
-    }
-
-	
-	if (isset($_POST['edit_admin'])){
-		$idadmin = $_POST['iduser']; 
-        $one_admin = $unControleur->selectWhere("iduser", $idadmin); 
-		//require_once("vue/espace_membre/vue_administration.php");
-	}
-
-	if (isset($_POST['modifier_admin'])){
-		if(empty(trim($_POST['email'])) || empty(trim($_POST['mdp'])) || $_POST['roles']=='Choisir un rôles utilisateur'){
-			echo "<br/></br>Problème rencontré à la saisie des données, aucun utilisateur n'a été modifé"; 
-		}else{
-		$tab = array("email"=>$_POST['email'],"mdp"=>$_POST['mdp'],"roles"=>$_POST['roles']);
-		$unControleur->update($tab, "iduser", $_POST['iduser']);
-		echo "<br/>L'utilisateur ".$_POST['email']." à été modifié"; 
-		}
-	}
-
-
-/**************TECHNICIEN******** */
-
-
-$unControleur->setTable('technicien');
-if (isset($_POST['rechercher_tech']))
-{
-	$mot = $_POST['mot']; 
-	$tab = array("iduser", "email", "roles");
-	$les_techs = $unControleur->selectLikeAll($mot, $tab); 
-	//require_once("vue/espace_membre/vue_administration.php");
-}else{
-	$les_techs = $unControleur->selectAll(); 
-	}
-
-
-if (isset($_POST['ajouter_tech']))
-{
-	if(empty(trim($_POST['email'])) || empty(trim($_POST['mdp'])) || $_POST['roles']=='Choisir un rôles utilisateur'){
-		echo "<br/></br>Problème rencontré à la saisie des données, aucun utilisateur n'a été ajouté"; 
-	}else{
-	$tab = array("email"=>$_POST['email'],"mdp"=>sha1($_POST['mdp']), "nom"=>"","roles"=>$_POST['roles'], "datemdp"=>date("Y-m-d"), "prenom"=>"", "diplome"=>"", "dateEmb"=>date("Y-m-d"), "dateDept"=>date("Y-m-d"));
-	$unControleur->insert($tab); 
-	echo "<br/>L'utilisateur : ".$_POST['email']." à été ajouté"; 
-	}
-}
-
-if (isset($_POST['delete_tech']))
-{
-	$idtech = $_POST['email']; 
-	$unControleur->delete("email", $idtech);  
-	if ($_SESSION['email'] ==$idtech){
-		session_destroy();
-		unset($_SESSION['email']);
-		header("Location: index.php?page=2");
-	}
-	else {
-	echo "<br/>L'utilisateur ".$idtech." à été supprimé"; 
-	}
-}
-
-
-if (isset($_POST['edit_tech'])){
-	$idtech = $_POST['iduser']; 
-	$one_tech = $unControleur->selectWhere("iduser", $idtech); 
-	//require_once("vue/espace_membre/vue_administration.php");
-}
-
-if (isset($_POST['modifier_tech'])){
-	if(empty(trim($_POST['email'])) || empty(trim($_POST['mdp'])) || $_POST['roles']=='Choisir un rôles utilisateur'){
-		echo "<br/></br>Problème rencontré à la saisie des données, aucun utilisateur n'a été modifé"; 
-	}else{
-	$tab = array("email"=>$_POST['email'],"mdp"=>$_POST['mdp'],"roles"=>$_POST['roles']);
-	$unControleur->update($tab, "iduser", $_POST['iduser']);
-	echo "<br/>L'utilisateur ".$_POST['email']." à été modifié"; 
-	}
-}
-
-//require_once("vue/espace_membre/vue_administration.php");
-	
 /***************************************VUE INTERVENTION******************************************/
 $unControleur->setTable('technicien');
 $lesTechniciens = $unControleur->selectAll();
@@ -341,6 +169,15 @@ $one_intervention = null;
  
 
 /***************************************VUE GESTION COMPTE******************************************/
+	
+	$unControleur->setTable("clientAll");
+	if (isset($_SESSION['email'])){
+		$emailuser = $_SESSION['email'];
+	}else{
+		$emailuser='';
+	}
+	$one_user = $unControleur->selectWhere("email", $emailuser); 
+
 	if (isset($_POST['edit_mdp'])){
 		$unControleur->setTable("grainSel");
 		$resultat = $unControleur->selectAll();
@@ -358,8 +195,8 @@ $one_intervention = null;
 			$unControleur->updateMDP($_POST['new_mdp'], $_SESSION['email']);
 			echo "<br/>Le mot de passe a bien été changé !"; 
 		}
-		
 	}
+
 
  /************************  VUE COMMANDES *******************************************/
 
@@ -429,8 +266,6 @@ if (isset($_POST['archive_commande'])){
 		require_once("vue/espace_membre/vue_commandes.php");
 	}elseif(isset($_POST['interventions'])){
 		require_once("vue/espace_membre/vue_interventions.php");
-	}elseif(isset($_POST['administration'])){
-		require_once("vue/espace_membre/vue_administration.php");
 	}elseif(isset($_POST['statistiques'])){
 		require_once("vue/espace_membre/vue_statistiques.php");
 	}elseif(isset($_POST['produits'])){
