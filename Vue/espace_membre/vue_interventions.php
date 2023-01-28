@@ -89,6 +89,7 @@
             echo '<input type="hidden" name="idintervention" value="'.$une_intervention_enCours['idintervention'].'">';
             echo"<td><input type='submit' name='valider_intervention' value='Valider'>
             <input type='submit' name='annule_intervention' value='Annuler'>
+            <input type='submit' name='edit_intervention' value='Modifier'>
             <input type='submit' name='archive_intervention' value='Archiver'></td>";
             echo "<tr></form>";
         }

@@ -172,6 +172,22 @@ create  or replace view vue_intervention_and_users_archive as(
     where statut in ("Annulée", "Archivée")
 );
 
+create or replace view vue_intervention_archive as (
+    select * from intervention where statut = "Archivée"
+);
+
+create or replace view vue_intervention_annulee as (
+    select * from intervention where statut = "Annulée"
+);
+
+create or replace view vue_intervention_enAttente as (
+    select * from intervention where statut = "En attente"
+);
+
+create or replace view vue_intervention_validee as (
+    select * from intervention where statut = "Validée"
+);
+
 
 create or replace view  vue_commande_en_cours as (
     select idcommande, iduser, sum(quantiteproduit) as "nbArticle", statut, totalHT, totalTTC, datecommande
@@ -186,7 +202,21 @@ create or replace view  vue_commande_archive as (
     group by idcommande, iduser, statut, totalHT, totalTTC, datecommande
 );
 
+create or replace view vue_commande_enCours as (
+    select * from commande where statut = 'en cours'
+);
 
+create or replace view vue_commande_archivee as (
+    select * from commande where statut = 'archivée'
+);
+
+create or replace view vue_commande_annulee as (
+    select * from commande where statut = 'annulée'
+);
+
+create or replace view vue_commande_validee as (
+    select * from commande where statut = 'validée'
+);
 
 /*-------------------PROCEDURE --------------------*/
 
