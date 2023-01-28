@@ -89,12 +89,12 @@ constraint pk_user primary key (iduser)
 );
 
 create table produit (
-    idProduit int auto_increment not null,
-    nomProduit varchar(25) not null,
-    prixProduit float (5,2) not null,
-    description varchar(8000),
-    quantite int,
-    constraint pk_produit primary key (idProduit)
+idProduit int auto_increment not null,
+nomProduit varchar(25) not null,
+prixProduit float (5,2) not null,
+description varchar(8000),
+quantite int,
+constraint pk_produit primary key (idProduit)
 );
 
 
@@ -115,34 +115,47 @@ constraint fk_produit foreign key (idproduit) references produit(idProduit)
 
 
 create table intervention (
-    idintervention int(3) not null auto_increment,
-    libelle varchar(50),
-    dateintervention date,
-    statut enum('En attente', 'En cours', 'Finalisée') default 'En attente',
-    iduser int(3),
-    idtechnicien int(3),
-    primary key (idintervention),
-    foreign key (iduser) references users(iduser),
-    foreign key (idtechnicien) references technicien(iduser)
-
+idintervention int(3) not null auto_increment,
+libelle varchar(50),
+dateintervention date,
+statut enum('En attente', 'En cours', 'Finalisée') default 'En attente',
+prixHT float,
+prixTTC float,
+iduser int(3),
+idtechnicien int(3),
+primary key (idintervention),
+foreign key (iduser) references users(iduser),
+foreign key (idtechnicien) references technicien(iduser)
 ) ENGINE=INNODB;
 
 
 create table grainSel(
-    salt varchar(100) not null,
-    constraint pk_salt primary key (salt)
+salt varchar(100) not null,
+constraint pk_salt primary key (salt)
 );
 
 
 create table mdpOublie(
-    idmdpoublie int auto_increment not null,
-    question enum ('Quel est le nom de jeune fille de votre mère ?', 'Quel était le nom de votre premier animal de compagnie ?',"Comment s'appelait votre instituteur préféré à l'ecole primaire ?" ),
-    reponse varchar(255),
-    email varchar(100) not null,
-    constraint pk_idmdpoublie primary key (idmdpoublie)
+idmdpoublie int auto_increment not null,
+question enum ('Quel est le nom de jeune fille de votre mère ?', 'Quel était le nom de votre premier animal de compagnie ?',"Comment s'appelait votre instituteur préféré à l'ecole primaire ?" ),
+reponse varchar(255),
+email varchar(100) not null,
+constraint pk_idmdpoublie primary key (idmdpoublie)
 );
 
-/* VUE */ 
+alter table intervention 
+add reglement enum ("en attente de paiement", "payé partiellement", "payé") default "en attente de paiement";
+
+create table archive_commande as
+    select users.*, idcommande, sum(quantiteproduit) as "nbArticle", statut , totalHT, totalTTC, datecommande
+        from  users, commande 
+        where users.iduser = commande.iduser 
+        AND 2 = 0 
+        group by idcommande, users.iduser, statut, totalHT, totalTTC, datecommande;
+
+
+
+/************* VUE *************/ 
 create  or replace view vue_intervention_and_users as(
     select intervention.* , users.nom as 'nomClient', technicien.nom as 'nomTech' 
     from intervention 
@@ -196,6 +209,13 @@ delimiter ;
 /*insert into panier (idpanier, iduser, idproduit, quantiteproduit, statut, dateCommande, montantHT, tvaCommande, montantTTC) values (1, 1, 1, 1, 'en cours', curdate(), '12', '20%', '21'); */
 
 /* AJOUT USERS */ 
+
+/*
+drop trigger if exists archi_client;
+delimiter // 
+create trigger archi_client
+before 
+*/
 
 drop trigger if exists ajout_particulier;
 delimiter // 
@@ -353,7 +373,7 @@ delimiter ;
 drop trigger if exists supprimer_user; 
 delimiter // 
 create trigger supprimer_user 
-before   delete on users 
+before delete on users 
 for each row 
 begin 
     delete from client where email = old.email; 
@@ -379,6 +399,31 @@ begin
 end // 
 delimiter ;
 
+
+/************AJOUT INTERVENTION *****/
+
+drop trigger if exists ajout_intervention;
+delimiter // 
+create trigger ajout_intervention
+before insert on intervention
+for each row
+begin 
+declare controle_date int ; 
+declare clientType int; 
+select count(*)  into controle_date from intervention where iduser = new.iduser and dateintervention = new.dateintervention;
+if controle_date = 0 then
+    select count(*) into clientType from client, users where users.email = client.email AND 
+    users.iduser = new.iduser and typeclient = 'professionnel'; 
+    if clientType = 0 then 
+    set new.prixTTC = new.prixHT * 1.20; 
+    else set new.prixTTC = Null; 
+    end if; 
+else 
+    signal sqlstate '45000'
+    set message_text = 'Impossible de réserver deux intervention le même jour.';
+end if; 
+end // 
+delimiter ;
 
 
 
@@ -418,10 +463,14 @@ INSERT INTO technicien (email, mdp, roles, nom) VALUES ('George@gmail.com', 'pas
 INSERT INTO particulier (email, mdp, roles, nom) VALUES ('Isabelle@gmail.com', 'password4', 'client', 'Isabelle');
 INSERT INTO technicien (email, mdp, roles, nom) VALUES ('Jack@gmail.com', 'password5', 'technicien', 'Jack');
 
+INSERT INTO professionnel (email, mdp, roles, nom, adresse, ville, cp, telephone, numeroSiret) VALUES ('professionnel1@gmail.com', 'password1', 'admin', 'Nom1', 'Adresse1', 'Ville1', 'CP1', '0123456789', '123456789');
+INSERT INTO professionnel (email, mdp, roles, nom, adresse, ville, cp, telephone, numeroSiret) VALUES ('professionnel2@gmail.com', 'password2', 'technicien', 'Nom2', 'Adresse2', 'Ville2', 'CP2', '0123456780', '123456780');
+INSERT INTO professionnel (email, mdp, roles, nom, adresse, ville, cp, telephone, numeroSiret) VALUES ('professionnel3@gmail.com', 'password3', 'client', 'Nom3', 'Adresse3', 'Ville3', 'CP3', '0123456781', '123456781');
+INSERT INTO professionnel (email, mdp, roles, nom, adresse, ville, cp, telephone, numeroSiret) VALUES ('professionnel4@gmail.com', 'password4', 'admin', 'Nom4', 'Adresse4', 'Ville4', 'CP4', '0123456782', '123456782');
+INSERT INTO professionnel (email, mdp, roles, nom, adresse, ville, cp, telephone, numeroSiret) VALUES ('professionnel5@gmail.com', 'password5', 'technicien', 'Nom5', 'Adresse5', 'Ville5', 'CP5', '0123456783', '123456783');
 
 
-
-/*** PANIER ******/
+/*** COMMANDES ******/
 INSERT INTO commande (idcommande, iduser, idproduit, quantiteproduit, statut, dateCommande, tvaCommande ) 
 VALUES (1, 1, 1, 2, 'en cours', '2022-01-01', '19.6');
 INSERT INTO commande (idcommande, iduser, idproduit, quantiteproduit, statut, dateCommande, tvaCommande ) 
@@ -435,6 +484,6 @@ VALUES (2, 2, 2, 1, 'validée', '2022-02-01', '19.6');
 INSERT INTO commande (idcommande, iduser, idproduit, quantiteproduit, statut, dateCommande, tvaCommande) 
 VALUES (3, 3, 3, 3, 'annulée', '2022-03-01', '19.6');
 
-insert into intervention (libelle, dateintervention, iduser) values ('reparation', curdate(), 1);
+insert into intervention (libelle, dateintervention, iduser) values ('reparation', curdate(), 2);
 
 

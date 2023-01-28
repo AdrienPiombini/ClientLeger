@@ -105,6 +105,8 @@
 
 
 /***************************************VUE INTERVENTION******************************************/
+$unControleur->setTable('users');
+$les_users = $unControleur->selectAll();
 $unControleur->setTable('technicien');
 $lesTechniciens = $unControleur->selectAll();
 $unControleur->setTable('vue_intervention_and_users');
@@ -126,9 +128,17 @@ $one_intervention = null;
 			echo "</br></br>Probleme à la saisie. Aucune intervention n'a été ajouté ";
 		}else{
 		$unControleur->setTable('intervention');
-		$tab = array("libelle"=>htmlspecialchars($_POST['libelle']),"dateintervention"=>htmlspecialchars($_POST['dateintervention']), "statut"=>'En attente', "iduser"=>$_POST['iduser'], "idtechnicien" =>$_POST['idtechnicien']);
+		$libelle = $_POST['libelle'];
+		$prixHT = 0.0;
+		switch ($libelle){
+			case 'diagnostic': $prixHT = 39.59; break;
+			case 'vidange': $prixHT = 59; break; 
+			case 'controle' : $prixHT = 78; break;
+			default: $prixHT= 0; 
+		}
+		$tab = array("libelle"=>htmlspecialchars($_POST['libelle']),"dateintervention"=>htmlspecialchars($_POST['dateintervention']), "statut"=>'En attente', "prixHT"=>$prixHT, "prixTTC"=>NUll, "iduser"=>$_POST['iduser'], "idtechnicien" =>$_POST['idtechnicien'], "reglement"=>"en attente de paiement");
 		$unControleur->insert($tab); 
-		echo "<br/>L'intervention à été ajouté  : ";
+		echo "<br/>L'intervention de ".$_POST['libelle']." a été enregistré. Consultez votre espace membre. ";
 		}
 	}
 

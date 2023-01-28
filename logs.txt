@@ -1,3 +1,13 @@
+
+create table archive_intervention as
+    select users.*, idintervention, sum(idintervention) as "nbIntervention", statut , totalHT, totalTTC, datecommande
+        from  users, commande 
+        where users.iduser = commande.iduser 
+        AND 2 = 0 
+        group by idterventin, users.iduser, statut, totalHT, totalTTC, datecommande;
+
+		
+
 create or replace view clientAll as (
 select client.*, particulier.prenom as prenom , professionnel.numeroSiret as Siret from client left join particulier on client.email = particulier.email left join professionnel on client.email = professionnel.email);
 

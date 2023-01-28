@@ -12,7 +12,7 @@
     <div class="label">
 			<p>
                 <label>
-                    <select name="iduser" required style="width: 175px;">
+                    <select name="iduser" required style="width: 225px;">
                         <?php 
                             if (isset($_SESSION) && $_SESSION['roles']==='admin'){
                         ?><option value="<?= ($one_intervention!= null) ? $one_intervention['iduser'] : 'Choisir un utilisateur'?>"><?= ($one_intervention!= null) ? $one_intervention['nomClient'] : 'Choisir un utilisateur'?></option><?php
@@ -27,15 +27,18 @@
             </p>
 			<p>
                 <label>
-                    <select name="idtechnicien" style="width: 175px;">
+                    <select name="idtechnicien" style="width: 225px;">
                         <option value="<?= ($one_intervention!= null) ? $one_intervention['iduser'] : 'Choisir un techicien'?>"><?= ($one_intervention!= null) ? $one_intervention['nomTech'] : 'Choisir un technicien'?></option><?php
                                 foreach($lesTechniciens as $unTechnicien){echo '<option value="'.$unTechnicien['iduser'].'">'.$unTechnicien['nom'].'</option>'; }?>
                     </select>
                 </label>
-            </p>            
-			<p>
-                <label><input type="text" name="libelle" placeholder="Libellé" value="<?= ($one_intervention!= null) ? $one_intervention['libelle']:''?>" ></label>
-            </p>
+            </p>  
+            <select name="libelle" style="width: 225px;">
+                        <option value="<?= ($one_intervention!= null) ? $one_intervention['libelle'] : 'Choisir une intervention'?>"><?= ($one_intervention!= null) ? $one_intervention['libelle'] : "Choisir une intervention"?></option>
+                        <option value="diagnostic">Diagnostic à partir de 39.99</option>
+                        <option value="vidange">Vidange à partir de 59.99</option>
+                        <option value="controle">Controle Technique 78€</option>
+                    </select>
 	
            <p>
                 <label> <input type="date" name='dateintervention'  min="<?php echo date('Y-m-d'); ?>" value="<?= ($one_intervention!= null) ? $one_intervention['dateintervention']:''?>" ></label>
