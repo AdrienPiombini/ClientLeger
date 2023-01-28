@@ -75,44 +75,103 @@
             <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Nom technicien</td>
             <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Statut</td>
             <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Action</td>
-
         </tr>
         <?php  
-        foreach($les_interventions as $une_intervention){
+        foreach($les_interventions_enCours as $une_intervention_enCours){
             echo"<form method='post'><tr>";
-            echo"<td>".$une_intervention['idintervention']."</td>";
-            echo"<td>".$une_intervention['iduser']."</td>";
-            echo"<td>".$une_intervention['nomClient']."</td>";
-            echo"<td>".$une_intervention['libelle']."</td>";
-            echo"<td>".$une_intervention['dateintervention']."</td>";
-            echo"<td>".$une_intervention['nomTech']."</td>";
-            echo"<td>".$une_intervention['statut']."</td>";
-            echo '<input type="hidden" name="idintervention" value="'.$une_intervention['idintervention'].'">';
-            echo"<td><input type='submit' name='delete_intervention' value='Supprimer'>
-            <input type='submit' name='edit_intervention' value='Modifier'></td>";
+            echo"<td>".$une_intervention_enCours['idintervention']."</td>";
+            echo"<td>".$une_intervention_enCours['iduser']."</td>";
+            echo"<td>".$une_intervention_enCours['nomClient']."</td>";
+            echo"<td>".$une_intervention_enCours['libelle']."</td>";
+            echo"<td>".$une_intervention_enCours['dateintervention']."</td>";
+            echo"<td>".$une_intervention_enCours['nomTech']."</td>";
+            echo"<td>".$une_intervention_enCours['statut']."</td>";
+            echo '<input type="hidden" name="idintervention" value="'.$une_intervention_enCours['idintervention'].'">';
+            echo"<td><input type='submit' name='valider_intervention' value='Valider'>
+            <input type='submit' name='annule_intervention' value='Annuler'>
+            <input type='submit' name='archive_intervention' value='Archiver'></td>";
             echo "<tr></form>";
         }
+
+        ?>
+    </table>
+    </div>
+<br>
+    <h3>historique des interventions</h3>
+
+    <table border="3">
+    <tr>
+            <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Idinternvention</td>
+            <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Iduser</td>
+            <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Nom client </td>                    
+            <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Libelle</td>
+            <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Date intervention</td>
+            <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Nom technicien</td>
+            <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Statut</td>
+        </tr>
+        <?php
+        foreach($les_interventions_archive as $une_intervention_archive){
+            echo"<form method='post'><tr>";
+            echo"<td>".$une_intervention_archive['idintervention']."</td>";
+            echo"<td>".$une_intervention_archive['iduser']."</td>";
+            echo"<td>".$une_intervention_archive['nomClient']."</td>";
+            echo"<td>".$une_intervention_archive['libelle']."</td>";
+            echo"<td>".$une_intervention_archive['dateintervention']."</td>";
+            echo"<td>".$une_intervention_archive['nomTech']."</td>";
+            echo"<td>".$une_intervention_archive['statut']."</td>";
+            echo '<input type="hidden" name="idintervention" value="'.$une_intervention_archive['idintervention'].'">';
+            echo "<tr></form>";
+        }
+
     }else{
         ?>
         <tr>
             <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Email user</td>                    
             <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Libelle</td>
             <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Date intervention</td>
-            <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Action</td>
+            <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Statut</td>
+            <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Annuler l'intervention</td>
+
         </tr> 
           <?php 
-        foreach($mes_interventions as $une_intervention){
+        foreach($mes_interventions_enCours as $une_intervention_enCours){
             echo"<form method='post'><tr>";
-            echo"<td>".$une_intervention['email']."</td>";
-            echo"<td>".$une_intervention['libelle']."</td>";
-            echo"<td>".$une_intervention['dateintervention']."</td>";
-            echo '<input type="hidden" name="idintervention" value="'.$une_intervention['idintervention'].'">';
-            echo"<td><input type='submit' name='delete_intervention' value='Supprimer'>
-            <input type='submit' name='edit_intervention' value='Modifier'></td>";
+            echo"<td>".$une_intervention_enCours['email']."</td>";
+            echo"<td>".$une_intervention_enCours['libelle']."</td>";
+            echo"<td>".$une_intervention_enCours['dateintervention']."</td>";
+            echo"<td>".$une_intervention_enCours['statut']."</td>";
+            echo '<input type="hidden" name="idintervention" value="'.$une_intervention_enCours['idintervention'].'">';
+            echo"<td><input type='submit' name='annule_intervention' value='Annuler'></td>";
             echo "<tr></form>";
     }
+
+    ?>
+    </table>
+    </div>
+<br>
+    <h3>historique des interventions</h3>
+
+    <table border="3">
+    <tr>
+            <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Email user</td>                    
+            <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Libelle</td>
+            <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Date intervention</td>
+            <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Statut</td>
+        </tr> 
+        <?php
+        foreach($mes_interventions_archive as $une_intervention_archive){
+            echo"<form method='post'><tr>";
+            echo"<td>".$une_intervention_archive['email']."</td>";
+            echo"<td>".$une_intervention_archive['libelle']."</td>";
+            echo"<td>".$une_intervention_archive['dateintervention']."</td>";
+            echo"<td>".$une_intervention_archive['statut']."</td>";
+            echo '<input type="hidden" name="idintervention" value="'.$une_intervention_archive['idintervention'].'">';
+            echo "<tr></form>";
+    }
+
 }
     ?>
+    
     </table>
 </div>
 

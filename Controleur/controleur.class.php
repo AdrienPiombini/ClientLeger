@@ -162,6 +162,21 @@ public function updateStock($qteCommande, $idproduit){
     $this->unModele->updateStock($qteCommande, $idproduit);
 }
 
+/************   INTERVENTION  ******** */
+public function annule_intervention($idintervention){
+    $this->unModele->annule_intervention($idintervention);
+}
+
+public function valider_intervention($intervention){
+    $this->unModele->valider_intervention($intervention);
+}
+
+public function archive_intervention($intervention){
+    $this->unModele->archive_intervention($intervention);
+}
+
+
+/************   MDP  ******** */
 public function updateMDP($mdp, $email){    
     $this->unModele->updateMDP($mdp, $email);
 }

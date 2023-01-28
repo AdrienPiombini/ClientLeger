@@ -35,7 +35,7 @@ class Modele {
 
     public function select_mes_interventions(){
         if($this->unPDO != null && isset($_SESSION['iduser']) != null){
-            $requete = "select i.*, u.email from intervention i inner join users u on i.iduser = u.iduser where i.iduser = :iduser;";
+            $requete = "select i.*, u.email from ".$this->table." i inner join users u on i.iduser = u.iduser where i.iduser = :iduser;";
             $donnees =  array(":iduser"=>$_SESSION['iduser']); 
             $select = $this->unPDO->prepare($requete);
             $select->execute($donnees);
@@ -48,7 +48,7 @@ class Modele {
 
     public function select_like_mine_intervention($mot){
         if($this->unPDO != null){
-            $requete = "select i.*, u.email from intervention i inner join users u on i.iduser=u.iduser where (libelle like :mot or dateintervention like :mot or email like :mot) and i.iduser = :iduser ;";
+            $requete = "select i.*, u.email from ".$this->table." i inner join users u on i.iduser=u.iduser where (libelle like :mot or dateintervention like :mot or email like :mot) and i.iduser = :iduser ;";
             $donnees = array(":mot"=>"%".$mot."%",":iduser"=>$_SESSION['iduser'] );
             $select = $this->unPDO->prepare($requete);
             $select->execute($donnees);
@@ -318,6 +318,37 @@ class Modele {
             $donnees =  array("qteCommande"=>$qteCommande, ":idproduit"=>$idproduit); 
             $select = $this->unPDO->prepare($requete);
             $select->execute($donnees);
+		}
+	}
+
+
+
+	/******************INTERVENTION********** */
+
+	public function annule_intervention($idintervention){
+		if($this->unPDO != null){
+			$requete = "update intervention set statut ='Annulée' where idintervention =:".$idintervention.";";
+			$donnees = array(":".$idintervention=>$idintervention);
+			$update = $this->unPDO->prepare($requete);
+			$update->execute($donnees);
+		}
+	}
+	
+	public function valider_intervention($idintervention){
+		if($this->unPDO != null){
+			$requete = "update intervention set statut ='Validée' where idintervention =:".$idintervention.";";
+			$donnees = array(":".$idintervention=>$idintervention);
+			$update = $this->unPDO->prepare($requete);
+			$update->execute($donnees);
+		}
+	}
+
+	public function archive_intervention($idintervention){
+		if($this->unPDO != null){
+			$requete = "update intervention set statut ='Archivée' where idintervention =:".$idintervention.";";
+			$donnees = array(":".$idintervention=>$idintervention);
+			$update = $this->unPDO->prepare($requete);
+			$update->execute($donnees);
 		}
 	}
 

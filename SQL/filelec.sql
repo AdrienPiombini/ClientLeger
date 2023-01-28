@@ -118,7 +118,7 @@ create table intervention (
 idintervention int(3) not null auto_increment,
 libelle varchar(50),
 dateintervention date,
-statut enum('En attente', 'En cours', 'Finalisée') default 'En attente',
+statut enum('En attente', 'Validée','Annulée', 'Archivée') default 'En attente',
 prixHT float,
 prixTTC float,
 iduser int(3),
@@ -156,12 +156,22 @@ create table archive_commande as
 
 
 /************* VUE *************/ 
-create  or replace view vue_intervention_and_users as(
+create  or replace view vue_intervention_and_users_enCours as(
     select intervention.* , users.nom as 'nomClient', technicien.nom as 'nomTech' 
     from intervention 
     inner join users on intervention.iduser = users.iduser 
     left join technicien on intervention.idtechnicien = technicien.iduser
+    where statut in ("En attente", "Validée")
 );
+
+create  or replace view vue_intervention_and_users_archive as(
+    select intervention.* , users.nom as 'nomClient', technicien.nom as 'nomTech' 
+    from intervention 
+    inner join users on intervention.iduser = users.iduser 
+    left join technicien on intervention.idtechnicien = technicien.iduser
+    where statut in ("Annulée", "Archivée")
+);
+
 
 create or replace view  vue_commande_en_cours as (
     select idcommande, iduser, sum(quantiteproduit) as "nbArticle", statut, totalHT, totalTTC, datecommande

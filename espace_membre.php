@@ -109,18 +109,23 @@ $unControleur->setTable('users');
 $les_users = $unControleur->selectAll();
 $unControleur->setTable('technicien');
 $lesTechniciens = $unControleur->selectAll();
-$unControleur->setTable('vue_intervention_and_users');
+
+$unControleur->setTable('vue_intervention_and_users_archive');
+$les_interventions_archive = $unControleur->selectAll();
+$mes_interventions_archive = $unControleur->select_mes_interventions ();
+
+$unControleur->setTable('vue_intervention_and_users_enCours');
 $one_intervention = null;
 	if (isset($_POST['rechercher_intervention']))
 	{
 		$mot = $_POST['mot']; 
 		$tab = array("idintervention", "libelle", "dateintervention","iduser", "nomClient", "nomTech", "statut");
-		$les_interventions = $unControleur->selectLikeAll($mot, $tab); 
-		$mes_interventions = $unControleur->select_like_mine_intervention($mot); 
+		$les_interventions_enCours = $unControleur->selectLikeAll($mot, $tab); 
+		$mes_interventions_enCours = $unControleur->select_like_mine_intervention($mot); 
 		 require_once("vue/espace_membre/vue_interventions.php");
 	}else{
-		$les_interventions = $unControleur->selectAll();
-		$mes_interventions = $unControleur->select_mes_interventions ();
+		$les_interventions_enCours = $unControleur->selectAll();
+		$mes_interventions_enCours = $unControleur->select_mes_interventions ();
 	}
 
 	if (isset($_POST['ajouter_intervention'])){
@@ -168,6 +173,23 @@ $one_intervention = null;
 		}
 	}
  
+	if (isset($_POST['annule_intervention'])){
+		$idintervention = $_POST['idintervention']; 
+		$unControleur->annule_intervention($idintervention);
+		echo "<br/>Commande mis à jour !"; 
+	}
+
+	if (isset($_POST['valider_intervention'])){
+		$idintervention = $_POST['idintervention']; 
+		$unControleur->valider_intervention($idintervention);
+		echo "<br/>Intervention mis à jour !"; 	
+	}
+
+	if (isset($_POST['archive_intervention'])){
+		$idintervention = $_POST['idintervention']; 
+		$unControleur->archive_intervention($idintervention);
+		echo "<br/>Intervention mis à jour !"; 
+	}
 
 /***************************************VUE GESTION COMPTE******************************************/
 	
