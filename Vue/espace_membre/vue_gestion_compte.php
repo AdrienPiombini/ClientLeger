@@ -7,7 +7,7 @@
 <form method="post">
     <br>
     <?php
-    if(($one_user != null)  && ($one_user['roles']=='admin') || $one_user['roles']=='technicien'){
+    if(($one_user != null)  && (($one_user['roles']=='admin') || $one_user['roles']=='technicien')){
     ?> 
             <div class="label">
             <p><label>

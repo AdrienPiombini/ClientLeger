@@ -291,7 +291,9 @@ for each row
 begin 
     declare grain varchar(100);
     select salt into grain from grainSel;
+    if new.mdp != old.mdp then
     set new.mdp = sha1(concat(new.mdp, grain));
+    end if;
     update users set email = new.email, nom = new.nom, mdp = new.mdp, datemdp = new.datemdp where email = old.email;
     update client set email = new.email, nom = new.nom, mdp = new.mdp, adresse = new.adresse, ville = new.ville, cp = new.cp, telephone = new.telephone, datemdp = new.datemdp  where email = old.email;
 end // 
@@ -306,7 +308,9 @@ FOR EACH ROW
 BEGIN
     declare grain varchar(100);
     select salt into grain from grainSel;
+    if new.mdp != old.mdp then
     set new.mdp = sha1(concat(new.mdp, grain));
+    end if;
     UPDATE users SET email = new.email, nom = NEW.nom, mdp = NEW.mdp, datemdp = new.datemdp WHERE email = OLD.email;
     UPDATE client SET email = NEW.email, nom = NEW.nom, mdp = NEW.mdp, adresse = NEW.adresse, ville = NEW.ville, cp = NEW.cp, telephone = NEW.telephone, datemdp = new.datemdp WHERE email = OLD.email;
 END //
@@ -321,7 +325,9 @@ for each row
 begin 
     declare grain varchar(100);
     select salt into grain from grainSel;
+    if new.mdp != old.mdp then
     set new.mdp = sha1(concat(new.mdp, grain));
+    end if;
     UPDATE users SET email = new.email, nom = NEW.nom, mdp = NEW.mdp, datemdp = new.datemdp WHERE email = OLD.email;
 end // 
 delimiter ;
@@ -334,7 +340,9 @@ for each row
 begin
     declare grain varchar(100);
     select salt into grain from grainSel;
-    set new.mdp = sha1(concat(new.mdp, grain)); 
+    if new.mdp != old.mdp then
+    set new.mdp = sha1(concat(new.mdp, grain));
+    end if;
     UPDATE users SET email = new.email, nom = NEW.nom, mdp = NEW.mdp, datemdp = new.datemdp WHERE email = OLD.email;
 end // 
 delimiter ;
