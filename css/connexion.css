@@ -1,4 +1,4 @@
-
+/* 
 body{
     background: url('../img/ecran.jpg') no-repeat center center/cover;
 }
@@ -23,7 +23,7 @@ body{
     border-bottom: 4px solid  rgba(255, 227, 51, 0.5);
     margin: 50px;
 }
-/* INPUT */
+/* INPUT 
 
 .box{
     padding: 12px;
@@ -38,7 +38,7 @@ body{
     font-size: 1rem;
 }
 
-/*ICONS*/
+/*ICONS
 #email{
     background: url("../img/user.png") no-repeat  ;
     background-position: 98% 50%;
@@ -51,7 +51,7 @@ body{
 
 
 
-/* LOGIN BUTTON */
+/* LOGIN BUTTON 
 
 #submit {
     padding : 10px 20px;
@@ -67,7 +67,7 @@ body{
 
 #submit:hover{
     cursor: pointer;
-    /*background-color: rgba(255, 227, 51, 0.3);*/
+    /*background-color: rgba(255, 227, 51, 0.3);
     border:thick double rgba(255, 227, 51, 0.5);
     
     transition-duration: 0.5s;
@@ -79,7 +79,7 @@ body{
 
 }
 
-/*PASSWORD FORGET ET LIEN D'INSCRIPTION*/
+/*PASSWORD FORGET ET LIEN D'INSCRIPTION
 .form a{
     color:  rgba(255, 227, 51, 0.5);
     font-size: 13px;
@@ -95,4 +95,4 @@ body{
 .form a:visited{
     color: none;
 }
-
+ */

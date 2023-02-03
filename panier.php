@@ -17,15 +17,9 @@ if (isset($_POST['valider_panier']))
     unset($_SESSION['panier']);
     echo '<script language="Javascript">
     <!--
-    document.location.replace("index.php?page=3");
+    document.location.replace("index.php?page=7");
     // -->
     </script>';
-    }else {
-        echo '<script language="Javascript">
-        <!--
-        document.location.replace("index.php?page=2");
-        // -->
-        </script>'; 
     }
 }
 

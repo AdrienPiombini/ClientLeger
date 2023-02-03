@@ -10,21 +10,22 @@ Toutes les commandes sont disponible sous 48H, une fois validé elle seront disp
 	<input type="submit" name="rechercher_commande_en_cours" value="Rechercher">
 </form>
 <br>
-
-<div class="table-box">
-    <table border="3">
-    <?php if(isset($_SESSION['roles']) && $_SESSION['roles']=='admin'){ ?>
-        <tr>
-            <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Reference du panier</td>
-            <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Reference User </td>
-            <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Statut de la commande</td>
-            <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Quantite d'article</td>
-            <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Prix  HT</td>
-            <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Prix  TTC</td>
-            <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Date  Commande</td>
-            <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Action</td>
-        </tr>
-        <?php
+<table class="table table-hover">
+  <thead>
+  <?php if(isset($_SESSION['roles']) && $_SESSION['roles']=='admin'){?>
+    <tr>
+      <th scope="col">Reference du panier</th>
+      <th scope="col">Reference user</th>
+      <th scope="col">Statut de la commande</th>
+      <th scope="col">Quantite d'article</th>
+      <th scope="col">Prix HT</th>
+      <th scope="col">Prix TTC </th>
+      <th scope="col">Date de la commande</th>
+      <th scope="col">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+  <?php
         foreach($les_commandes_en_cours as $une_commande_en_cours){
             echo"<form method='post'><tr>";
             echo"<td>".$une_commande_en_cours['idcommande']."</td>";
@@ -38,28 +39,26 @@ Toutes les commandes sont disponible sous 48H, une fois validé elle seront disp
             echo"<td><input type='submit' name='valider_commande' value='Valider'>
                         <input type='submit' name='annule_commande' value='Annuler'>
                         <input type='submit' name='archive_commande' value='Archiver'></td>";
-
             echo "<tr></form>";
         }
         ?>
-    </table>
-<br>
-    <h3>historique des commandes</h3>
-
-    <table border="3">
-        <tr>
-            <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Reference commande</td>
-            <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Reference User </td>
-            <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Statut de la commande</td>
-            <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Quantite d'article</td>
-            <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Prix  HT</td>
-            <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Prix  TTC</td>
-            <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Date  Commande</td>
-            
-            
-        </tr>
-
-        <?php
+  </tbody>
+</table>
+<h3>historique des commandes</h3>
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th scope="col">Référence commandes</th>
+      <th scope="col">Référence user</th>
+      <th scope="col">Statut</th>
+      <th scope="col">Quantité article</th>
+      <th scope="col">Prix HT</th>
+      <th scope="col">Prix TTC </th>
+      <th scope="col">Date Commande</th>
+    </tr>
+  </thead>
+  <tbody>
+  <?php
         foreach($les_commandes_archives as $une_commande_archive){
             echo"<form method='post'><tr>";
             echo"<td>".$une_commande_archive['idcommande']."</td>";
@@ -72,17 +71,23 @@ Toutes les commandes sont disponible sous 48H, une fois validé elle seront disp
             echo '<input type="hidden" name="iduser" value="'.$une_commande_archive['idcommande'].'">';
             echo "<tr></form>";
         }
-
 }else{  ?>
+</tbody>
+</table>
+
+<table class="table table-hover">
+  <thead>
     <tr>
-    <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">References commandes</td>
-    <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Reference User </td>
-    <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Statut commande</td>
-    <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Quantite d'article</td>
-    <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Prix  HT</td>
-    <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Prix  TTC</td>
-    <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Date  Commande</td>
-</tr>
+      <th scope="col">Reference du panier</th>
+      <th scope="col">Reference user</th>
+      <th scope="col">Statut de la commande</th>
+      <th scope="col">Quantite d'article</th>
+      <th scope="col">Prix HT</th>
+      <th scope="col">Prix TTC </th>
+      <th scope="col">Date de la commande</th>
+    </tr>
+  </thead>
+  <tbody>
 <?php
 foreach($mes_commandes_en_cours as $mes_commande_en_cours){
     echo"<form method='post'><tr>";
@@ -97,23 +102,23 @@ foreach($mes_commandes_en_cours as $mes_commande_en_cours){
     echo "<tr></form>";
 }
 ?>
+  </tbody>
 </table>
 <br>
 <h3>historique des commandes</h3>
-
-<table border="3">
-<tr>
-    <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">References commandes</td>
-    <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Reference User </td>
-    <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Statut de la commande</td>
-    <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Quantite d'article</td>
-    <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Prix  HT</td>
-    <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Prix  TTC</td>
-    <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Date  Commande</td>
-    
-    
-</tr>
-
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th scope="col">Référence commandes</th>
+      <th scope="col">Référence user</th>
+      <th scope="col">Statut</th>
+      <th scope="col">Quantité article</th>
+      <th scope="col">Prix HT</th>
+      <th scope="col">Prix TTC </th>
+      <th scope="col">Date Commande</th>
+    </tr>
+  </thead>
+  <tbody>
 <?php
 foreach($mes_commandes_archives as $mes_commande_archive){
     echo"<form method='post'><tr>";
@@ -128,6 +133,6 @@ foreach($mes_commandes_archives as $mes_commande_archive){
     echo "<tr></form>";
 }
 }
-        ?>
+ ?>
     </table>
     </div>

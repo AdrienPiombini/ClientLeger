@@ -6,7 +6,11 @@
 }
 
 
-
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
 /* 
 .logo position absolut / article, aside, figcaption, figure, footer, header, hgroup, main, nav, section {
   display: block;

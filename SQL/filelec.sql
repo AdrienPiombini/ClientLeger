@@ -3,7 +3,6 @@ CREATE DATABASE dsa;
 use dsa;
 
 /* UTILISATEURS */ 
-
 create table users (
 iduser int(3) not null  auto_increment,
 email varchar (150) unique,

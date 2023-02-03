@@ -2,6 +2,7 @@
 <link rel="stylesheet" href="css/tableau.css">
 <link rel="stylesheet" href="css/form_insert.css">
 
+
 <br><br>
 <h3> Ajout d'une intervention</h3>
 <br>
@@ -60,22 +61,23 @@
 	<input type="submit" name="rechercher_intervention" value="Rechercher">
 </form>
 <br>
-    <div class="table-box">
-    <table cellpadding="10">
-
+<div>
+<table class="table table-hover">
+  <thead>
     <?php
-    if(isset($_SESSION['roles']) && $_SESSION['roles']=='admin'){
-           ?> 
-        <tr>
-            <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Idinternvention</td>
-            <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Iduser</td>
-            <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Nom client </td>                    
-            <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Libelle</td>
-            <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Date intervention</td>
-            <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Nom technicien</td>
-            <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Statut</td>
-            <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Action</td>
-        </tr>
+    if(isset($_SESSION['roles']) && $_SESSION['roles']=='admin'){?> 
+    <tr>
+      <th scope="col">Idintervention</th>
+      <th scope="col">Iduser</th>
+      <th scope="col"> Nom Client</th>
+      <th scope="col"> Libelle</th>
+      <th scope="col">Date intervention</th>
+      <th scope="col">Nom technicien</th>
+      <th scope="col">Statut</th>
+      <th scope="col">Action</th>
+    </tr>
+  </thead>
+  <tbody>
         <?php  
         foreach($les_interventions_enCours as $une_intervention_enCours){
             echo"<form method='post'><tr>";
@@ -93,23 +95,24 @@
             <input type='submit' name='archive_intervention' value='Archiver'></td>";
             echo "<tr></form>";
         }
-
         ?>
     </table>
     </div>
 <br>
     <h3>historique des interventions</h3>
-
-    <table border="3">
+    <table class="table table-hover">
+  <thead>
     <tr>
-            <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Idinternvention</td>
-            <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Iduser</td>
-            <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Nom client </td>                    
-            <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Libelle</td>
-            <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Date intervention</td>
-            <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Nom technicien</td>
-            <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Statut</td>
-        </tr>
+      <th scope="col">Idintervention</th>
+      <th scope="col">Iduser</th>
+      <th scope="col">Nom client</th>
+      <th scope="col"> Libelle</th>
+      <th scope="col">Date intervention</th>
+      <th scope="col">Nom technicien</th>
+      <th scope="col">Statut</th>
+    </tr>
+  </thead>
+  <tbody>
         <?php
         foreach($les_interventions_archive as $une_intervention_archive){
             echo"<form method='post'><tr>";
@@ -123,17 +126,19 @@
             echo '<input type="hidden" name="idintervention" value="'.$une_intervention_archive['idintervention'].'">';
             echo "<tr></form>";
         }
-
     }else{
         ?>
-        <tr>
-            <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Email user</td>                    
-            <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Libelle</td>
-            <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Date intervention</td>
-            <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Statut</td>
-            <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Annuler l'intervention</td>
-
-        </tr> 
+    <table class="table table-hover">
+  <thead>
+    <tr>
+      <th scope="col">Email user </th>
+      <th scope="col"> Libelle</th>
+      <th scope="col">Date intervention</th>
+      <th scope="col"> Statut</th>
+      <th scope="col">Annuler l'intervention</th>
+    </tr>
+  </thead>
+  <tbody>
           <?php 
         foreach($mes_interventions_enCours as $une_intervention_enCours){
             echo"<form method='post'><tr>";
@@ -145,20 +150,22 @@
             echo"<td><input type='submit' name='annule_intervention' value='Annuler'></td>";
             echo "<tr></form>";
     }
-
     ?>
+  </tbody>
     </table>
     </div>
 <br>
     <h3>historique des interventions</h3>
-
-    <table border="3">
+    <table class="table table-hover">
+  <thead>
     <tr>
-            <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Email user</td>                    
-            <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Libelle</td>
-            <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Date intervention</td>
-            <td style="background: #00bcd4; color: #fff; box-sizing: border-box;">Statut</td>
-        </tr> 
+      <th scope="col">Email user </th>
+      <th scope="col"> Libelle</th>
+      <th scope="col">Date intervention</th>
+      <th scope="col"> Statut</th>
+    </tr>
+  </thead>
+  <tbody>
         <?php
         foreach($mes_interventions_archive as $une_intervention_archive){
             echo"<form method='post'><tr>";
@@ -172,7 +179,6 @@
 
 }
     ?>
-    
     </table>
 </div>
 

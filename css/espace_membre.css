@@ -1,3 +1,4 @@
+/*
 * {
     padding: 0px;
     margin: 0px;
@@ -5,16 +6,16 @@
 }
 
 .container {
-    /* display: flex; */
+    /* display: flex; 
     flex-direction: row;
     justify-content: space-evenly;
     /* align-items: center;
-    text-align: center; */
-    /* min-height: 100vh; */
+    text-align: center; 
+    /* min-height: 100vh; 
 }
 /* .container button {
     letter-spacing: 2px;
-} */
+} 
 
 .btn-1 {
     width: 200px;
@@ -75,3 +76,4 @@
     z-index: -1;
 }
 
+*/

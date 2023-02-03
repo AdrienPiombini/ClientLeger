@@ -2,7 +2,9 @@
 <h3>STATISTIQUES DE L'ENTREPRISE</h3>
 <br>
 <H3> LES UTILISATEURS </H3>
-<table border="1" style="
+<table 
+ class="table table-striped"
+border="1" style="
     background: #fff;
     box-shadow: 0 10px 100px rgba(0, 0, 0, 0.5);
 ">
@@ -24,7 +26,9 @@
 </table>
 <br><br>
 <H3> LES INTERVENTIONS </H3>
-<table border="1" style="
+<table 
+class="table table-striped"
+border="1" style="
     background: #fff;
     box-shadow: 0 10px 100px rgba(0, 0, 0, 0.5);
 ">
@@ -47,7 +51,9 @@
 
 <br><br>
 <H3> LES COMMANDES </H3>
-<table border="1" style="
+<table
+class="table table-striped"
+border="1" style="
     background: #fff;
     box-shadow: 0 10px 100px rgba(0, 0, 0, 0.5);
 ">
