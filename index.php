@@ -81,7 +81,6 @@ echo'
             switch ($page){
                 case 0 : require_once("accueil.php"); break;
                 case 1 : require_once("produit.php"); break;
-                case 2 : require_once("espace_membre.php"); break;
                 case 3  : require_once("panier.php"); break;
                 case 4 : require_once("mdpOublie.php"); break; 
                 case 5 : require_once("aPropos.php"); break; 

@@ -14,7 +14,7 @@ if(isset($_POST['signin'])){
     $mdp = sha1($mdp);
     $unUser= $unControleur->verif_connexion ($email, $mdp);
         if($unUser == null){
-            ?><br> <center style="color: red; font-weight: bolder; position:absolute; bottom:150px; left:30%;"><?='Les informations renseignées ne permettent pas de vous authentifier'; ?></center><?php
+            echo "<script> alert('Les données renseignées ne sont pas valide !'); </script>";
         }else{
             $today = date ("Y-m-d");
             $dtmdp = $unUser['datemdp'];
