@@ -14,7 +14,9 @@
 
 
 body {
-    background-color: var(--bodyBack);
+   /* background-color: var(--bodyBack);*/
+    background-color: #1f2029;
+
     /* min-height: 100vh; */
     display: grid;
     place-items: center;
