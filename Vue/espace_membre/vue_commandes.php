@@ -10,6 +10,7 @@ Toutes les commandes sont disponible sous 48H, une fois validé elle seront disp
 	<input type="submit" name="rechercher_commande_en_cours" value="Rechercher">
 </form>
 <br>
+<div id="printableArea">
 <table class="table table-hover">
   <thead>
   <?php if(isset($_SESSION['roles']) && $_SESSION['roles']=='admin'){?>
@@ -136,3 +137,18 @@ foreach($mes_commandes_archives as $mes_commande_archive){
  ?>
     </table>
     </div>
+</div>
+<td colspan="2"><input class="btn btn-success btn-lg" type="button" onclick="printDiv('printableArea')" value="Imprimer les  commandes" /></td>
+
+<script type="text/javascript">
+window.printDiv = function(divName) {
+     var printContents = document.getElementById(divName).innerHTML;
+     var originalContents = document.body.innerHTML;
+
+     document.body.innerHTML = printContents;
+
+     window.print();
+
+     document.body.innerHTML = originalContents;
+}
+</script>

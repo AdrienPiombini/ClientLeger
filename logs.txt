@@ -1,4 +1,12 @@
 
+        <td colspan="2"><input class="btn btn-success btn-lg" id='impression' name='impression' type='button' onclick='imprimer_page()' value='Imprimer ma candidature' /></td>
+
+<script type="text/javascript">
+function imprimer_page(){
+window.print();
+}
+</script>
+
 <?php 
 
 	if ( !isset($_SESSION['email'])){
