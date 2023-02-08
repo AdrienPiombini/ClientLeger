@@ -61,6 +61,7 @@
 	<input type="submit" name="rechercher_intervention" value="Rechercher">
 </form>
 <br>
+<div id="printableArea">
 <div>
 <table class="table table-hover">
   <thead>
@@ -181,4 +182,18 @@
     ?>
     </table>
 </div>
+</div>
+<td colspan="2"><input class="btn btn-success btn-lg" type="button" onclick="printDiv('printableArea')" value="Imprimer les  commandes" /></td>
 
+<script type="text/javascript">
+window.printDiv = function(divName) {
+     var printContents = document.getElementById(divName).innerHTML;
+     var originalContents = document.body.innerHTML;
+
+     document.body.innerHTML = printContents;
+
+     window.print();
+
+     document.body.innerHTML = originalContents;
+}
+</script>

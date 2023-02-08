@@ -29,6 +29,7 @@
 			$tab = array("email"=>$_POST['email'],"nom"=>$_POST['nom'], "prenom"=>$_POST['prenom']);
 			$unControleur->update($tab, "iduser", $_POST['iduser']);
 			echo "<br/>L'utilisateur ".$_POST['email']." à été modifié"; 
+			header("Location: index.php?page=9");
 			}
 		}
 	}elseif(isset($_SESSION['roles']) AND $_SESSION['roles']== 'client'){
@@ -45,6 +46,7 @@
 			$tab = array("email"=>$_POST['email'],"nom"=>$_POST['nom'],"adresse"=>$_POST['adresse'],"ville"=>$_POST['ville'], "cp"=>$_POST['cp'], "telephone"=>$_POST['telephone'], "prenom"=>$_POST['prenom']);
 			$unControleur->update($tab, "iduser", $_POST['iduser']);
 			echo "<br/>L'utilisateur ".$_POST['email']." à été modifié"; 
+			header("Location: index.php?page=9");
 		}
 	}
 	}else{
@@ -57,6 +59,7 @@
 		$tab = array("email"=>$_POST['email'],"nom"=>$_POST['nom'],"adresse"=>$_POST['adresse'],"ville"=>$_POST['ville'], "cp"=>$_POST['cp'], "telephone"=>$_POST['telephone'], "numeroSiret"=>$_POST['siret']);
 		$unControleur->update($tab, "iduser", $_POST['iduser']);
 		echo "<br/>L'utilisateur ".$_POST['email']." à été modifié"; 
+        header("Location: index.php?page=9");
 		}
 	}
 	}

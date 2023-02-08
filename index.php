@@ -67,7 +67,9 @@ echo'
     ?>
 </div>
 </header>         
-<body style="padding:0; margin:0; font-family: 'Sono', sans-serif; display: flex; flex-direction:column;min-height: 100vh;">
+<body style="padding:0; margin:0; font-family: 'Sono', sans-serif; display: flex; flex-direction:column;min-height: 100vh;
+<?php
+?>">
     <div>
         <center>
 
