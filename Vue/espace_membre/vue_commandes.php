@@ -1,4 +1,3 @@
-<div class = "Test" >
 <p></p>
 <br>
 
@@ -88,6 +87,7 @@ Toutes les commandes sont disponible sous 48H, une fois validé elle seront disp
       <th scope="col">Prix HT</th>
       <th scope="col">Prix TTC </th>
       <th scope="col">Date de la commande</th>
+      <th scope="col">Annuler la commande</th>
     </tr>
   </thead>
   <tbody>
@@ -101,7 +101,8 @@ foreach($mes_commandes_en_cours as $mes_commande_en_cours){
     echo"<td>".$mes_commande_en_cours["totalHT"]."</td>";
     echo"<td>".$mes_commande_en_cours["totalTTC"]."</td>";
     echo"<td>".$mes_commande_en_cours["datecommande"]."</td>";
-    echo '<input type="hidden" name="iduser" value="'.$mes_commande_en_cours['idcommande'].'">';
+    echo '<input type="hidden" name="idpanier" value="'.$mes_commande_en_cours['idcommande'].'">';
+    echo"<td><input type='submit' name='annule_commande' value='Annuler'></td>";
     echo "</tr></form>"; 
 }
 ?>
@@ -141,10 +142,9 @@ foreach($mes_commandes_archives as $mes_commande_archive){
 }
  ?>
     </table>
-    </div>
+</div>
 
-</div>
-</div>
+
 <td colspan="2"><input class="btn btn-success btn-lg" type="button" onclick="printDiv('printableArea')" value="Imprimer les  commandes" /></td>
 
 <script type="text/javascript">
@@ -161,7 +161,4 @@ window.printDiv = function(divName) {
 </script>
 
 
-<style>
-
-  </style>
 

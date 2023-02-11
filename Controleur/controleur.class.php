@@ -29,7 +29,10 @@ class Controleur {
         return $mes_interventions;
     }
 
-
+    public function intervention_technicien(){
+    $intervention_technicien = $this->unModele->intervention_technicien();
+        return $intervention_technicien;
+    }
 
     public function select_like_mine_intervention($mot){
         $mes_interventions =  $this->unModele->select_like_mine_intervention($mot);
@@ -184,6 +187,8 @@ public function archive_intervention($intervention){
 public function updateMDP($mdp, $email){    
     $this->unModele->updateMDP($mdp, $email);
 }
+
+
 
 }
 ?>

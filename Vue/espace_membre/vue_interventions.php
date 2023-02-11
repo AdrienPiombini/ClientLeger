@@ -19,7 +19,7 @@
                         ?><option value="<?= ($one_intervention!= null) ? $one_intervention['iduser'] : 'Choisir un utilisateur'?>"><?= ($one_intervention!= null) ? $one_intervention['nomClient'] : 'Choisir un utilisateur'?></option><?php
                                 foreach($les_users as $un_user){echo '<option value="'.$un_user['iduser'].'">'.$un_user['email'].'</option>'; }
 
-                            }elseif (isset($_SESSION) && $_SESSION['roles']==='client'){
+                            }elseif (isset($_SESSION) && $_SESSION['roles']==='client' || $_SESSION['roles'] ==='technicien'){
                                 echo '<option value="'.$_SESSION['iduser'].'">'.$_SESSION['email'].'</option>';
                             }
                         ?>
@@ -66,6 +66,8 @@
 <table class="table table-hover">
   <thead>
     <?php
+        /**************************ADMIN********************** */
+
     if(isset($_SESSION['roles']) && $_SESSION['roles']=='admin'){?> 
     <tr>
       <th scope="col">Idintervention</th>
@@ -127,7 +129,87 @@
             echo '<input type="hidden" name="idintervention" value="'.$une_intervention_archive['idintervention'].'">';
             echo "<tr></form>";
         }
-    }else{
+
+        /**************************TECHNICIENS********************** */
+    
+      }else if(isset($_SESSION['roles']) && $_SESSION['roles']=='technicien'){?>
+            <table class="table table-hover">
+  <thead>
+    <tr>
+      <th scope="col">Email user </th>
+      <th scope="col"> Libelle</th>
+      <th scope="col">Date intervention</th>
+      <th scope="col"> Statut</th>
+      <th scope="col">Annuler l'intervention</th>
+    </tr>
+  </thead>
+  <tbody>
+          <?php 
+        foreach($mes_interventions_enCours as $une_intervention_enCours){
+            echo"<form method='post'><tr>";
+            echo"<td>".$une_intervention_enCours['email']."</td>";
+            echo"<td>".$une_intervention_enCours['libelle']."</td>";
+            echo"<td>".$une_intervention_enCours['dateintervention']."</td>";
+            echo"<td>".$une_intervention_enCours['statut']."</td>";
+            echo '<input type="hidden" name="idintervention" value="'.$une_intervention_enCours['idintervention'].'">';
+            echo"<td><input type='submit' name='annule_intervention' value='Annuler'></td>";
+            echo "<tr></form>";
+    }
+    ?>
+  </tbody>
+    </table>
+    </div>
+<br>
+    <h3>historique des interventions</h3>
+    <table class="table table-hover">
+  <thead>
+    <tr>
+      <th scope="col">Email user </th>
+      <th scope="col"> Libelle</th>
+      <th scope="col">Date intervention</th>
+      <th scope="col"> Statut</th>
+    </tr>
+  </thead>
+  <tbody>
+        <?php
+        foreach($mes_interventions_archive as $une_intervention_archive){
+            echo"<form method='post'><tr>";
+            echo"<td>".$une_intervention_archive['email']."</td>";
+            echo"<td>".$une_intervention_archive['libelle']."</td>";
+            echo"<td>".$une_intervention_archive['dateintervention']."</td>";
+            echo"<td>".$une_intervention_archive['statut']."</td>";
+            echo '<input type="hidden" name="idintervention" value="'.$une_intervention_archive['idintervention'].'">';
+            echo "<tr></form>";
+    }?>
+</table>
+    <br>
+<h1> LES INTERVENTIONS REALISEES</h1>
+
+    <table class="table table-hover">
+    <thead>
+      <tr>
+        <th scope="col"> Libelle</th>
+        <th scope="col">Date intervention</th>
+        <th scope="col"> Statut</th>
+      </tr>
+    </thead>
+    <tbody>
+            <?php 
+          foreach($intervention_technicien as $une_intervention_technicien){
+              echo"<form method='post'><tr>";
+              echo"<td>".$une_intervention_technicien['libelle']."</td>";
+              echo"<td>".$une_intervention_technicien['dateintervention']."</td>";
+              echo"<td>".$une_intervention_technicien['statut']."</td>";
+              echo '<input type="hidden" name="idintervention" value="'.$une_intervention_technicien['idintervention'].'">';
+              echo "<tr></form>";
+      }
+      ?>
+    </tbody>
+      </table>
+  
+<?php
+        /**************************CLIENTS********************** */
+      }else{ 
         ?>
     <table class="table table-hover">
   <thead>

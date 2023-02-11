@@ -142,9 +142,6 @@ email varchar(100) not null,
 constraint pk_idmdpoublie primary key (idmdpoublie)
 );
 
-alter table intervention 
-add reglement enum ("en attente de paiement", "payé partiellement", "payé") default "en attente de paiement";
-
 create table archive_commande as
     select users.*, idcommande, sum(quantiteproduit) as "nbArticle", statut , totalHT, totalTTC, datecommande
         from  users, commande 
@@ -247,12 +244,35 @@ end ;
 //
 delimiter ;
 
+/********************************* EVENTS *************************************/
+SET GLOBAL event_scheduler = ON;
+
+DROP EVENT IF EXISTS maj_commande;
+CREATE EVENT maj_commande
+ON SCHEDULE EVERY 1 MINUTE DO
+    UPDATE COMMANDE SET STATUT = 'validée' where STATUT = 'en cours';
+
+DROP EVENT IF EXISTS maj_commande2;
+CREATE EVENT maj_commande2
+ON SCHEDULE EVERY 1 MINUTE DO
+    UPDATE COMMANDE SET STATUT = 'annulée' where STATUT = 'validée' and datediff(curdate(), dateintervention) > 31;
+
+
+
+DROP EVENT IF EXISTS maj_intervention;
+CREATE EVENT maj_intervention
+ON SCHEDULE EVERY 10 MINUTE DO
+    UPDATE INTERVENTION SET STATUT = 'Validée' where STATUT = 'En attente';
+
+DROP EVENT IF EXISTS maj_intervention2;
+CREATE EVENT maj_intervention2
+ON SCHEDULE EVERY 10 MINUTE DO
+    UPDATE INTERVENTION SET STATUT = 'Annulée' where STATUT = 'Validée' and datediff(curdate(), dateintervention) > 31;
+
+
 /*-------------------------TRIGGERS --------------  */
 
 /*insert into panier (idpanier, iduser, idproduit, quantiteproduit, statut, dateCommande, montantHT, tvaCommande, montantTTC) values (1, 1, 1, 1, 'en cours', curdate(), '12', '20%', '21'); */
-
-/* AJOUT USERS */ 
-
 /*
 drop trigger if exists archi_client;
 delimiter // 
@@ -260,6 +280,8 @@ create trigger archi_client
 before 
 */
 
+
+/* AJOUT USERS */ 
 drop trigger if exists ajout_particulier;
 delimiter // 
 create trigger ajout_particulier

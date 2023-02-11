@@ -59,6 +59,20 @@ class Modele {
         }
     }
 
+	public function intervention_technicien (){
+		if($this->unPDO != null && isset($_SESSION['email']) != null){
+            $requete = "select i.* from ".$this->table." i inner join technicien t on i.idtechnicien = t.iduser inner join users u on t.email = u.email where u.iduser =:iduser;";
+            $donnees =  array(":iduser"=>$_SESSION['iduser']); 
+            $select = $this->unPDO->prepare($requete);
+            $select->execute($donnees);
+            $intervention_technicien = $select->fetchAll();
+            return $intervention_technicien;
+        }else{
+            return null;
+        }
+	}
+
+
 
 
     public function setTable($uneTable){
@@ -364,6 +378,7 @@ class Modele {
 		}
 	}
 
+	
 	public function updateMDP($mdp, $email){
 		if($this->unPDO != null){
 			$requete = "update particulier set mdp = :mdp where email = :email;";

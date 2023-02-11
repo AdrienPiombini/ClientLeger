@@ -50,13 +50,8 @@ if (isset($_POST['archive_commande'])){
     header("Location: index.php?page=7");
 }
 
-if(isset($_POST['details'])){
-	$unControleur->setTable('details_commande');
-	$idcommande = $_POST['idpanier'];
-	$uneCommande = $unControleur->selectWhereAll('idcommande', 3); 
-}else {
-	$unControleur->setTable('details_commande');
-}
+
+
 
 
 	if (!isset($_SESSION['email'])){
