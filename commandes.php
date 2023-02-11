@@ -34,7 +34,6 @@ if (isset($_POST['valider_commande'])){
     header("Location: index.php?page=7");
 
 
-
 }
 if (isset($_POST['annule_commande'])){
 	$idpanier = $_POST['idpanier']; 
@@ -49,9 +48,16 @@ if (isset($_POST['archive_commande'])){
 	$unControleur->archive_commande($idpanier);
 	echo "<br/>Commande mis à jour !"; 
     header("Location: index.php?page=7");
-
-
 }
+
+if(isset($_POST['details'])){
+	$unControleur->setTable('details_commande');
+	$idcommande = $_POST['idpanier'];
+	$uneCommande = $unControleur->selectWhereAll('idcommande', 3); 
+}else {
+	$unControleur->setTable('details_commande');
+}
+
 
 	if (!isset($_SESSION['email'])){
 		//require_once("vue/connexion_inscription.php");

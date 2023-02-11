@@ -138,6 +138,18 @@ class Modele {
 			}
 		}
 
+		public function selectWhereAll($id, $valeur)
+		{
+			if($this->unPDO != null){
+				$requete ="select * from ".$this->table." where ".$id." =:".$id.";";
+				$donnees = array(":".$id=>$valeur);
+			$select = $this->unPDO->prepare($requete);
+			$select->execute($donnees);
+			$unResultat = $select->fetchAll();
+			return $unResultat;
+			}
+		}
+
 
 	public function update($tab, $id, $valeurId)
 		{

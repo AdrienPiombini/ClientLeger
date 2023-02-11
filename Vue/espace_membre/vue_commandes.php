@@ -1,5 +1,7 @@
+<div class = "Test" >
 <p></p>
 <br>
+
 <h4>
 Toutes les commandes sont disponible sous 48H, une fois validé elle seront disposnible en magasin et ce pendant 30 jours. Passé ce délais la commande sera considéré comme étant annulée
 </h4>
@@ -99,12 +101,15 @@ foreach($mes_commandes_en_cours as $mes_commande_en_cours){
     echo"<td>".$mes_commande_en_cours["totalHT"]."</td>";
     echo"<td>".$mes_commande_en_cours["totalTTC"]."</td>";
     echo"<td>".$mes_commande_en_cours["datecommande"]."</td>";
-    echo '<input type="hidden" name="idpanier" value="'.$mes_commande_en_cours['idcommande'].'">';
-    echo "<tr></form>";
+    echo '<input type="hidden" name="iduser" value="'.$mes_commande_en_cours['idcommande'].'">';
+    echo "</tr></form>"; 
 }
 ?>
+
   </tbody>
 </table>
+
+
 <br>
 <h3>historique des commandes</h3>
 <table class="table table-hover">
@@ -137,6 +142,8 @@ foreach($mes_commandes_archives as $mes_commande_archive){
  ?>
     </table>
     </div>
+
+</div>
 </div>
 <td colspan="2"><input class="btn btn-success btn-lg" type="button" onclick="printDiv('printableArea')" value="Imprimer les  commandes" /></td>
 
@@ -152,3 +159,9 @@ window.printDiv = function(divName) {
      document.body.innerHTML = originalContents;
 }
 </script>
+
+
+<style>
+
+  </style>
+

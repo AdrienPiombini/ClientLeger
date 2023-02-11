@@ -171,6 +171,10 @@ create  or replace view vue_intervention_and_users_archive as(
     where statut in ("Annulée", "Archivée")
 );
 
+create or replace view details_commande as(
+    select idcommande, nomProduit, prixProduit,  quantiteproduit, totalHT, totalTTC from commande inner join produit on commande.idproduit = produit.idproduit 
+);
+
 create or replace view vue_intervention_archive as (
     select * from intervention where statut = "Archivée"
 );

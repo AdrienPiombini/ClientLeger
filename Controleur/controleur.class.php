@@ -66,6 +66,10 @@ public function selectWhere($id, $valeur){
     return $this->unModele->selectWhere($id, $valeur);
 }
 
+public function selectWhereAll($id, $valeur){
+    return $this->unModele->selectWhere($id, $valeur);
+}
+
 public function update($tab, $id, $valeur){
     $this->unModele->update($tab, $id, $valeur);
 }
