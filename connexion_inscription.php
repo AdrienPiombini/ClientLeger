@@ -2,7 +2,7 @@
 if(isset($_SESSION['email'])){
     header("Location: index.php?page=1");
 }else{
-    require_once("vue/vue_connexion_inscription.php");
+    require_once("Vue/vue_connexion_inscription.php");
 }
 if(isset($_POST['signin'])){
     $email = htmlspecialchars($_POST['email']);

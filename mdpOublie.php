@@ -1,5 +1,5 @@
 <?php 
-require_once('vue/vue_mdpOublie.php');
+require_once('Vue/vue_mdpOublie.php');
 if(isset($_POST['mdpOublie'])){
 		$unControleur->setTable('mdpOublie');
 		$email = $_POST['email'];

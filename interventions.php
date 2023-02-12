@@ -111,5 +111,5 @@ if (!isset($_SESSION['email'])){
 		//require_once("vue/connexion_inscription.php");
         header("Location: index.php?page=6");
 	}else{
-    require_once("vue/espace_membre/vue_interventions.php");
+    require_once("Vue/espace_membre/vue_interventions.php");
     }

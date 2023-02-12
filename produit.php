@@ -10,6 +10,6 @@ if (isset($_POST['filtrer_produit'])){
     $produits = $unControleur->selectAll(); 
     }
 
-require_once("vue/produit/vue_produit.php");
+require_once("Vue/produit/vue_produit.php");
 
 ?>

@@ -6,8 +6,6 @@
 <br><br>
 <h3> Ajout d'une intervention</h3>
 <br>
-<div class="box-insert">
-
 <form method="post">
 	<br>
     <div class="label">
@@ -49,10 +47,10 @@
                 <br><input type="hidden" name="idintervention"  value="<?= ($one_intervention != null) ? $one_intervention['idintervention']:''?>"> 
                 <input type="submit" <?=($one_intervention!= null) ? 'name="modifier_intervention" value="Modifier"'  : 'name="ajouter_intervention" value="Ajouter"'?>>
             </p>
-    </div>
+
 </form>
 <br>
-</div>
+
 <br>    
 
 <h3>Liste des interventions</h3>
@@ -62,7 +60,6 @@
 </form>
 <br>
 <div id="printableArea">
-<div>
 <table class="table table-hover">
   <thead>
     <?php
@@ -100,7 +97,6 @@
         }
         ?>
     </table>
-    </div>
 <br>
     <h3>historique des interventions</h3>
     <table class="table table-hover">
@@ -158,7 +154,6 @@
     ?>
   </tbody>
     </table>
-    </div>
 <br>
     <h3>historique des interventions</h3>
     <table class="table table-hover">
@@ -236,7 +231,6 @@
     ?>
   </tbody>
     </table>
-    </div>
 <br>
     <h3>historique des interventions</h3>
     <table class="table table-hover">
@@ -264,8 +258,8 @@
     ?>
     </table>
 </div>
-</div>
-<td colspan="2"><input class="btn btn-success btn-lg" type="button" onclick="printDiv('printableArea')" value="Imprimer les  commandes" /></td>
+
+<td colspan="2"><input class="btn btn-success btn-lg" type="button" onclick="printDiv('printableArea')" value="Imprimer les  interventions" /></td>
 
 <script type="text/javascript">
 window.printDiv = function(divName) {

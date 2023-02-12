@@ -254,7 +254,7 @@ ON SCHEDULE EVERY 1 MINUTE DO
 
 DROP EVENT IF EXISTS maj_commande2;
 CREATE EVENT maj_commande2
-ON SCHEDULE EVERY 1 MINUTE DO
+ON SCHEDULE EVERY 1 DAY DO
     UPDATE COMMANDE SET STATUT = 'annulée' where STATUT = 'validée' and datediff(curdate(), dateintervention) > 31;
 
 
@@ -266,7 +266,7 @@ ON SCHEDULE EVERY 10 MINUTE DO
 
 DROP EVENT IF EXISTS maj_intervention2;
 CREATE EVENT maj_intervention2
-ON SCHEDULE EVERY 10 MINUTE DO
+ON SCHEDULE EVERY 1 DAY DO
     UPDATE INTERVENTION SET STATUT = 'Annulée' where STATUT = 'Validée' and datediff(curdate(), dateintervention) > 31;
 
 
