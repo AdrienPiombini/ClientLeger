@@ -27,7 +27,7 @@ $one_intervention = null;
 		$tab = array("idintervention", "libelle", "dateintervention","iduser", "nomClient", "nomTech", "statut");
 		$les_interventions_enCours = $unControleur->selectLikeAll($mot, $tab); 
 		$mes_interventions_enCours = $unControleur->select_like_mine_intervention($mot); 
-		 require_once("vue/espace_membre/vue_interventions.php");
+		 require_once("Vue/espace_membre/vue_interventions.php");
 	}else{
 		$les_interventions_enCours = $unControleur->selectAll();
 		$mes_interventions_enCours = $unControleur->select_mes_interventions ();
@@ -66,7 +66,7 @@ $one_intervention = null;
 	if (isset($_POST['edit_intervention'])){
 		$idintervention = $_POST['idintervention']; 
         $one_intervention = $unControleur->selectWhere('idintervention', $idintervention); 
-		require_once("vue/espace_membre/vue_interventions.php");
+		require_once("Vue/espace_membre/vue_interventions.php");
 	}
 
 	if (isset($_POST['modifier_intervention'])){

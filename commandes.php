@@ -20,7 +20,7 @@
 	 $tab = array("idcommande", "iduser", "nbArticle", "statut");
 	 $les_commandes_en_cours = $unControleur->selectLikeAll($mot, $tab); 
 	 $mes_commandes_en_cours = $unControleur->select_like_mine_commande($mot); 
-	 require_once("vue/espace_membre/vue_commandes.php");
+	 require_once("Vue/espace_membre/vue_commandes.php");
  }else{
 	 $les_commandes_en_cours = $unControleur->selectAll(); 
 	 $mes_commandes_en_cours = $unControleur->select_mine_commandes_en_cours($iduser); 
