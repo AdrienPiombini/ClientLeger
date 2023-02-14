@@ -1,5 +1,5 @@
 <?php 
-require_once("vue/vue_panier.php");
+require_once("Vue/vue_panier.php");
 
 if (isset($_POST['valider_panier']))
 {

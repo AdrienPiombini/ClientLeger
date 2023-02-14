@@ -11,7 +11,7 @@ Toutes les commandes sont disponible sous 48H, une fois validé elle seront disp
 	<input type="submit" name="rechercher_commande_en_cours" value="Rechercher">
 </form>
 <br>
-<div id="printableArea">
+<div >
 <table class="table table-hover">
   <thead>
   <?php if(isset($_SESSION['roles']) && $_SESSION['roles']=='admin'){?>
@@ -147,7 +147,6 @@ foreach($mes_commandes_archives as $mes_commande_archive){
 </div>
 
 
-<td colspan="2"><input class="btn btn-success btn-lg" type="button" onclick="printDiv('printableArea')" value="Imprimer les  commandes" /></td>
 
 <script type="text/javascript">
 window.printDiv = function(divName) {
@@ -169,7 +168,7 @@ function getIdCommande(id) {
       document.getElementById("modal-body").innerHTML = this.responseText;
     }
   };
-  xmlhttp.open("GET", "test.php?id=" + id, true);
+  xmlhttp.open("GET", "details_commandes.php?id=" + id, true);
   xmlhttp.send();
 }
 
@@ -180,17 +179,18 @@ function getIdCommande(id) {
 
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title fs-5" id="exampleModalLabel">Details de la commandes</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body" id="modal-body">
+      <div id="printableArea">
+      <div class="modal-body" id="modal-body"></div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+        <input class="btn btn-success btn-lg" type="button" onclick="printDiv('printableArea')" value="Imprimer les  commandes" />
       </div>
     </div>
   </div>
