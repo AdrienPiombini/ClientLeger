@@ -88,6 +88,7 @@ Toutes les commandes sont disponible sous 48H, une fois validé elle seront disp
       <th scope="col">Prix TTC </th>
       <th scope="col">Date de la commande</th>
       <th scope="col">Annuler la commande</th>
+      <th>Action</th>
     </tr>
   </thead>
   <tbody>
@@ -103,6 +104,7 @@ foreach($mes_commandes_en_cours as $mes_commande_en_cours){
     echo"<td>".$mes_commande_en_cours["datecommande"]."</td>";
     echo '<input type="hidden" name="idpanier" value="'.$mes_commande_en_cours['idcommande'].'">';
     echo"<td><input type='submit' name='annule_commande' value='Annuler'></td>";
+    echo '<td><input type="button" onclick="getIdCommande(\''.$mes_commande_en_cours['idcommande'].'\')" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" value="detail"></td>';
     echo "</tr></form>"; 
 }
 ?>
@@ -158,7 +160,38 @@ window.printDiv = function(divName) {
 
      document.body.innerHTML = originalContents;
 }
+
+
+function getIdCommande(id) {
+  var xmlhttp = new XMLHttpRequest();
+  xmlhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      document.getElementById("modal-body").innerHTML = this.responseText;
+    }
+  };
+  xmlhttp.open("GET", "test.php?id=" + id, true);
+  xmlhttp.send();
+}
+
+
 </script>
 
 
 
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Details de la commandes</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="modal-body">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
