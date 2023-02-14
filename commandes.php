@@ -1,6 +1,5 @@
 <?php
 
-
  /************************  VUE COMMANDES *******************************************/
 
  
@@ -52,11 +51,10 @@ if (isset($_POST['archive_commande'])){
 
 
 
-
-
 	if (!isset($_SESSION['email'])){
 		//require_once("vue/connexion_inscription.php");
         header("Location: index.php?page=6");
 	}else{
     require_once("Vue/espace_membre/vue_commandes.php");
     }
+

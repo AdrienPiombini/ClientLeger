@@ -70,7 +70,7 @@ public function selectWhere($id, $valeur){
 }
 
 public function selectWhereAll($id, $valeur){
-    return $this->unModele->selectWhere($id, $valeur);
+    return $this->unModele->selectWhereAll($id, $valeur);
 }
 
 public function update($tab, $id, $valeur){
