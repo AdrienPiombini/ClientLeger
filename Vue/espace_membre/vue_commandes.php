@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="css/tableau.css">
 <p></p>
 <br>
 
@@ -88,11 +89,14 @@ Toutes les commandes sont disponible sous 48H, une fois validé elle seront disp
       <th scope="col">Prix TTC </th>
       <th scope="col">Date de la commande</th>
       <th scope="col">Annuler la commande</th>
-      <th>Action</th>
+      <th></th>
     </tr>
   </thead>
   <tbody>
 <?php
+
+//if(isset($btnAfficherCommande))
+
 foreach($mes_commandes_en_cours as $mes_commande_en_cours){
     echo"<form method='post'><tr>";
     echo"<td>".$mes_commande_en_cours['idcommande']."</td>";
@@ -104,7 +108,9 @@ foreach($mes_commandes_en_cours as $mes_commande_en_cours){
     echo"<td>".$mes_commande_en_cours["datecommande"]."</td>";
     echo '<input type="hidden" name="idpanier" value="'.$mes_commande_en_cours['idcommande'].'">';
     echo"<td><input type='submit' name='annule_commande' value='Annuler'></td>";
-    echo '<td><input type="button" onclick="getIdCommande(\''.$mes_commande_en_cours['idcommande'].'\')" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" value="detail"></td>';
+    echo '<td><a href="index.php?page=7&id='.$mes_commande_en_cours['idcommande'].'&openModal=true"> Details</a></td> ';
+    //echo '<td><input type="button" value='.$mes_commande_en_cours['idcommande'].' class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" name="btnAfficherCommande"></td>';
+    //echo '<td><input type="button" onclick="getIdCommande(\''.$mes_commande_en_cours['idcommande'].'\')" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" value="detail"></td>';
     echo "</tr></form>"; 
 }
 ?>
@@ -148,20 +154,102 @@ foreach($mes_commandes_archives as $mes_commande_archive){
 
 
 
+<div class='modal' id='modalFilelec'>
+<h1>Details de la commande</h1>
+<button type="button" onclick="document.getElementById('modalFilelec').style.display = 'none';">X</button>
+  <div id="printableArea">
+  <?php
+  echo $_SESSION['nom'];
+  $unControleur->setTable('details_commande');
+      echo' <table class="table table-hover">
+      <thead>
+        <tr>
+          <th scope="col">Référence commandes</th>
+          <th scope="col">Nom du produit</th>
+          <th scope="col">Prix du produit</th>
+          <th scope="col">Quantité article</th>
+          <th scope="col">Prix HT</th>
+          <th scope="col">Prix TTC </th>
+        </tr>
+      </thead>
+      <tbody>
+          ';
+      foreach($une_commande as $unArticle){
+          echo "<tr>";
+          echo"<td>".$unArticle['idcommande']."</td>";
+          echo"<td>".$unArticle['nomProduit']."</td>";
+          echo"<td>".$unArticle['prixProduit']."</td>";
+          echo"<td>".$unArticle["quantiteproduit"]."</td>";
+          echo"<td>".$unArticle["totalHT"]."</td>";
+          echo"<td>".$unArticle["totalTTC"]."</td>";
+      }
+      echo "<tr></table>";
+
+  ?>
+  <div class='modalFooter'>
+        <input class="btn btn-success btn-lg" type="button" onclick="printDiv('printableArea')" value="Imprimer les  commandes" />
+</div>
+<style>
+  .modal{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 1200px;
+    height: 600px;
+    background-color: grey;
+    transform: translate(-50%, -50%);
+    display: none;
+    border-radius: 10px;
+  }
+
+  .modalFooter{
+    width: 100%;
+    bottom: 0;
+    position: absolute;
+    bottom: 10px;
+  }
+</style>
+
 <script type="text/javascript">
 window.printDiv = function(divName) {
      var printContents = document.getElementById(divName).innerHTML;
      var originalContents = document.body.innerHTML;
-
      document.body.innerHTML = printContents;
-
      window.print();
-
      document.body.innerHTML = originalContents;
 }
 
+const urlParams = new URLSearchParams(window.location.search); 
+const openModal = urlParams.get('openModal'); 
+if (openModal == "true") { 
+  document.getElementById('modalFilelec').style.display = "block";
+ }else{
+  document.getElementById('modalFilelec').style.display = "none";
+ }
+</script>
 
-function getIdCommande(id) {
+
+<!-- Modal 
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Details de la commandes</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div id="">
+      <div class="modal-body" id="modal-body">
+      </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <input class="btn btn-success btn-lg" type="button" onclick="printDiv('printableArea')" value="Imprimer les  commandes" />
+      </div>
+    </div>
+  </div>
+
+
+/*function getIdCommande(id) {
   var xmlhttp = new XMLHttpRequest();
   xmlhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
@@ -171,27 +259,5 @@ function getIdCommande(id) {
   xmlhttp.open("GET", "details_commandes.php?id=" + id, true);
   xmlhttp.send();
 }
-
-
-</script>
-
-
-
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Details de la commandes</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div id="printableArea">
-      <div class="modal-body" id="modal-body"></div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <input class="btn btn-success btn-lg" type="button" onclick="printDiv('printableArea')" value="Imprimer les  commandes" />
-      </div>
-    </div>
-  </div>
-</div>
+*/
+</div>-->

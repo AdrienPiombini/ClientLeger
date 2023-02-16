@@ -59,7 +59,10 @@
 	<input type="submit" name="rechercher_intervention" value="Rechercher">
 </form>
 <br>
+
 <div id="printableArea">
+<div class="container tbl-container">
+<div class="row tbl-fixed">
 <table class="table table-hover">
   <thead>
     <?php
@@ -97,6 +100,8 @@
         }
         ?>
     </table>
+</div>
+</div>
 <br>
     <h3>historique des interventions</h3>
     <table class="table table-hover">
@@ -127,7 +132,11 @@
         }
 
         /**************************TECHNICIENS********************** */
-    
+        ?>
+        <div class="container tbl-container">
+        <div class="row tbl-fixed">
+            <table class="table table-hover table-striped table-condensed">
+              <?php
       }else if(isset($_SESSION['roles']) && $_SESSION['roles']=='technicien'){?>
             <table class="table table-hover">
   <thead>
@@ -154,6 +163,8 @@
     ?>
   </tbody>
     </table>
+    </div>
+  </div>
 <br>
     <h3>historique des interventions</h3>
     <table class="table table-hover">
@@ -206,7 +217,9 @@
         /**************************CLIENTS********************** */
       }else{ 
         ?>
-    <table class="table table-hover">
+<div class="container tbl-container">
+<div class="row tbl-fixed">
+    <table class="table table-hover table-striped table-condensed">
   <thead>
     <tr>
       <th scope="col">Email user </th>
@@ -231,8 +244,12 @@
     ?>
   </tbody>
     </table>
+</div>
+</div>
 <br>
     <h3>historique des interventions</h3>
+    <div class="container tbl-container">
+    <div class="row tbl-fixed">
     <table class="table table-hover">
   <thead>
     <tr>
@@ -257,9 +274,11 @@
 }
     ?>
     </table>
+    </div>
+</div>
+<td colspan="2"><input class="btn btn-success btn-lg" type="button" onclick="printDiv('printableArea')" value="Imprimer les  interventions" /></td>
 </div>
 
-<td colspan="2"><input class="btn btn-success btn-lg" type="button" onclick="printDiv('printableArea')" value="Imprimer les  interventions" /></td>
 
 <script type="text/javascript">
 window.printDiv = function(divName) {

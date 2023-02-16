@@ -1,0 +1,27 @@
+.tbl-container {
+    max-width: fit-content;
+    max-height: fit-content;
+}
+.tbl-fixed {
+    overflow-x: scroll;
+    overflow-y: scroll;
+    height: fit-content;
+    max-height: 300px;
+}
+table {
+    min-width: max-content;
+}
+table th  {
+    position: sticky;
+    top: 0px;
+    background: #E8D468 !important; 
+    text-align: center;
+    color: #FFF;
+    border: 1px solid #ccc;
+    font-size: 16px;
+}
+table td {
+    background: #FFF;
+    text-align: center;
+    border: 1px solid #ccc;
+}

@@ -49,7 +49,11 @@ if (isset($_POST['archive_commande'])){
     header("Location: index.php?page=7");
 }
 
-
+if(isset($_GET['id'])){
+	$id = $_GET['id'];
+$unControleur->setTable('details_commande');
+	$une_commande = $unControleur->selectWhereAll('idcommande', $id);
+}	
 
 	if (!isset($_SESSION['email'])){
 		//require_once("vue/connexion_inscription.php");

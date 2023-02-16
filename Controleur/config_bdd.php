@@ -1,6 +1,6 @@
 <?php 
-	$serveur = "localhost:3306";
+	$serveur = "localhost:8889";
 	$bdd = "dsa";
-	$user = "adrien";
-	$mdp = "adrien";
+	$user = "root";
+	$mdp = "root";
 ?>
