@@ -1,4 +1,6 @@
 <br><br>
+<link rel="stylesheet" href="css/compte.css">
+
 <h3>STATISTIQUES DE L'ENTREPRISE</h3>
 <br>
 <H3> LES UTILISATEURS </H3>
@@ -51,12 +53,7 @@ border="1" style="
 
 <br><br>
 <H3> LES COMMANDES </H3>
-<table
-class="table table-striped"
-border="1" style="
-    background: #fff;
-    box-shadow: 0 10px 100px rgba(0, 0, 0, 0.5);
-">
+<table class="table table-striped" border="1" style="background: #fff; box-shadow: 0 10px 100px rgba(0, 0, 0, 0.5);">
     <tr>
         <td>Nombre total de commande total</td>   
         <td>Nombre total de commande archivée</td>      
@@ -65,7 +62,7 @@ border="1" style="
         <td>Nombre total de commande en cours</td>      
     </tr>
     <tr>
-        <td><?=$unControleur->count("intervention")['nb'];?></td>
+        <td><?=$unControleur->count("commandeResume")['nb'];?></td>
         <td><?=$unControleur->count("vue_commande_archivee")['nb'];?></td>
         <td><?=$unControleur->count("vue_commande_annulee")['nb'];?></td>
         <td><?=$unControleur->count("vue_commande_validee")['nb'];?></td>

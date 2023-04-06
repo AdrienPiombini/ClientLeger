@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="css/form_insert.css">
+<link rel="stylesheet" href="css/compte.css">
 <br>
 <h3> Modifier ses informations</h3>
 <br>

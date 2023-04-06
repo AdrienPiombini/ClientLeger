@@ -25,3 +25,10 @@ table td {
     text-align: center;
     border: 1px solid #ccc;
 }
+
+.vue_commande {
+    margin-right:10%;
+    text-align: right;
+    margin-left: 75%;
+    font-size: 15px;
+}

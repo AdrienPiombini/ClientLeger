@@ -1,4 +1,5 @@
 <br><br>
+<link rel="stylesheet" href="css/compte.css">
 <h3>PRODUIT EN STOCK</h3>
 <br>
 

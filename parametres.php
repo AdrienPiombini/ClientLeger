@@ -17,6 +17,7 @@
 			$tab = array("email"=>$_POST['email'],"nom"=>$_POST['nom'], "prenom"=>$_POST['prenom']);
 			$unControleur->update($tab, "iduser", $_POST['iduser']);
 			echo "<br/>L'utilisateur ".$_POST['email']." à été modifié"; 
+			header("Location: index.php?page=9");
 			}
 		}
 	}elseif(isset($_SESSION['roles']) AND $_SESSION['roles']== 'technicien'){

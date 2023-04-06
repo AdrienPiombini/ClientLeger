@@ -32,7 +32,10 @@ class Modele {
 
     /******************************************************************************** */
 
-
+    public function setTable($uneTable){
+        $this->table = $uneTable;
+    }
+	
     public function select_mes_interventions(){
         if($this->unPDO != null && isset($_SESSION['iduser']) != null){
             $requete = "select i.*, u.email from ".$this->table." i inner join users u on i.iduser = u.iduser where i.iduser = :iduser;";
@@ -72,12 +75,6 @@ class Modele {
         }
 	}
 
-
-
-
-    public function setTable($uneTable){
-        $this->table = $uneTable;
-    }
 
     public function selectAll ()
 		{

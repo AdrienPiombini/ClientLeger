@@ -1,10 +1,10 @@
 <link rel="stylesheet" href="css/tableau.css">
+<link rel="stylesheet" href="css/compte.css">
+
 <p></p>
 <br>
 
-<h4>
-Toutes les commandes sont disponible sous 48H, une fois validé elle seront disposnible en magasin et ce pendant 30 jours. Passé ce délais la commande sera considéré comme étant annulée
-</h4>
+
 <br>
 <h3>Liste des Commandes</h3>
 <form method="post">
@@ -13,8 +13,11 @@ Toutes les commandes sont disponible sous 48H, une fois validé elle seront disp
 </form>
 <br>
 <div >
+<div class="container tbl-container">
+<div class="row tbl-fixed">
 <table class="table table-hover">
   <thead>
+   <!-- /**********************ADMIN****************************** */  -->
   <?php if(isset($_SESSION['roles']) && $_SESSION['roles']=='admin'){?>
     <tr>
       <th scope="col">Reference du panier</th>
@@ -24,6 +27,7 @@ Toutes les commandes sont disponible sous 48H, une fois validé elle seront disp
       <th scope="col">Prix HT</th>
       <th scope="col">Prix TTC </th>
       <th scope="col">Date de la commande</th>
+      <th scope="col">Details</th>
       <th scope="col">Action</th>
     </tr>
   </thead>
@@ -38,6 +42,7 @@ Toutes les commandes sont disponible sous 48H, une fois validé elle seront disp
             echo"<td>".$une_commande_en_cours["totalHT"]."</td>";
             echo"<td>".$une_commande_en_cours["totalTTC"]."</td>";
             echo"<td>".$une_commande_en_cours["datecommande"]."</td>";
+            echo '<td><a href="index.php?page=7&id='.$une_commande_en_cours['idcommande'].'&openModal=true"> Details</a></td> ';
             echo '<input type="hidden" name="idpanier" value="'.$une_commande_en_cours['idcommande'].'">';
             echo"<td><input type='submit' name='valider_commande' value='Valider'>
                         <input type='submit' name='annule_commande' value='Annuler'>
@@ -47,7 +52,16 @@ Toutes les commandes sont disponible sous 48H, une fois validé elle seront disp
         ?>
   </tbody>
 </table>
+</div>
+</div>
+
+<h4 class="vue_commande">
+Toutes les commandes sont disponible sous 48H, une fois validé elle seront disposnible en magasin et ce pendant 30 jours. Passé ce délais la commande sera considéré comme étant annulée.
+</h4>
+
 <h3>historique des commandes</h3>
+<div class="container tbl-container">
+<div class="row tbl-fixed">
 <table class="table table-hover">
   <thead>
     <tr>
@@ -74,10 +88,16 @@ Toutes les commandes sont disponible sous 48H, une fois validé elle seront disp
             echo '<input type="hidden" name="iduser" value="'.$une_commande_archive['idcommande'].'">';
             echo "<tr></form>";
         }
+    /**********************CLIENT TECHNICIEN****************************** */
 }else{  ?>
+
 </tbody>
 </table>
+</div>
+</div>
 
+<div class="container tbl-container">
+<div class="row tbl-fixed">
 <table class="table table-hover">
   <thead>
     <tr>
@@ -117,10 +137,16 @@ foreach($mes_commandes_en_cours as $mes_commande_en_cours){
 
   </tbody>
 </table>
-
+</div>
+</div>
+<h4 class="vue_commande">
+Toutes les commandes sont disponible sous 48H, une fois validé elle seront disposnible en magasin et ce pendant 30 jours. Passé ce délais la commande sera considéré comme étant annulée.
+</h4>
 
 <br>
 <h3>historique des commandes</h3>
+<div class="container tbl-container">
+<div class="row tbl-fixed">
 <table class="table table-hover">
   <thead>
     <tr>
@@ -150,6 +176,8 @@ foreach($mes_commandes_archives as $mes_commande_archive){
 }
  ?>
     </table>
+</div>
+</div>
 </div>
 
 

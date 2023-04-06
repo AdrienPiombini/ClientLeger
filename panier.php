@@ -20,6 +20,12 @@ if (isset($_POST['valider_panier']))
     document.location.replace("index.php?page=7");
     // -->
     </script>';
+    }else{
+        echo '<script language="Javascript">
+    <!--
+    document.location.replace("index.php?page=6");
+    // -->
+    </script>';
     }
 }
 

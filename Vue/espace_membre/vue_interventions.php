@@ -1,6 +1,8 @@
 <!-- <h1>Gestion des interventions</h1> -->
 <link rel="stylesheet" href="css/tableau.css">
 <link rel="stylesheet" href="css/form_insert.css">
+<link rel="stylesheet" href="css/compte.css">
+
 
 
 <br><br>
@@ -11,7 +13,7 @@
     <div class="label">
 			<p>
                 <label>
-                    <select name="iduser" required style="width: 225px;">
+                    <select name="iduser" required style="width: 300px;">
                         <?php 
                             if (isset($_SESSION) && $_SESSION['roles']==='admin'){
                         ?><option value="<?= ($one_intervention!= null) ? $one_intervention['iduser'] : 'Choisir un utilisateur'?>"><?= ($one_intervention!= null) ? $one_intervention['nomClient'] : 'Choisir un utilisateur'?></option><?php
@@ -26,22 +28,23 @@
             </p>
 			<p>
                 <label>
-                    <select name="idtechnicien" style="width: 225px;">
+                    <select name="idtechnicien" style="width: 300px;">
                         <option value="<?= ($one_intervention!= null) ? $one_intervention['iduser'] : 'Choisir un techicien'?>"><?= ($one_intervention!= null) ? $one_intervention['nomTech'] : 'Choisir un technicien'?></option><?php
                                 foreach($lesTechniciens as $unTechnicien){echo '<option value="'.$unTechnicien['iduser'].'">'.$unTechnicien['nom'].'</option>'; }?>
                     </select>
                 </label>
             </p>  
-            <select name="libelle" style="width: 225px;">
+            <select name="libelle" style="width: 300px;">
                         <option value="<?= ($one_intervention!= null) ? $one_intervention['libelle'] : 'Choisir une intervention'?>"><?= ($one_intervention!= null) ? $one_intervention['libelle'] : "Choisir une intervention"?></option>
                         <option value="diagnostic">Diagnostic à partir de 39.99</option>
                         <option value="vidange">Vidange à partir de 59.99</option>
                         <option value="controle">Controle Technique 78€</option>
-                    </select>
+            </select>
 	
-           <p>
+          <p>
+            <br>
                 <label> <input type="date" name='dateintervention'  min="<?php echo date('Y-m-d'); ?>" value="<?= ($one_intervention!= null) ? $one_intervention['dateintervention']:''?>" ></label>
-            </p>
+          </p>
             
             <p>
                 <br><input type="hidden" name="idintervention"  value="<?= ($one_intervention != null) ? $one_intervention['idintervention']:''?>"> 
@@ -53,7 +56,7 @@
 
 <br>    
 
-<h3>Liste des interventions</h3>
+<h3>LISTE DES INTERVENTIONS </h3>
 <form method="post">
 	<input type="text" name="mot">
 	<input type="submit" name="rechercher_intervention" value="Rechercher">
@@ -100,10 +103,12 @@
         }
         ?>
     </table>
+
 </div>
 </div>
-<br>
-    <h3>historique des interventions</h3>
+<h3>HISTORIQUE DES INTERVENTIONS</h3>
+<div class="container tbl-container">
+<div class="row tbl-fixed">
     <table class="table table-hover">
   <thead>
     <tr>
@@ -166,7 +171,9 @@
     </div>
   </div>
 <br>
-    <h3>historique des interventions</h3>
+<h3>HISTORIQUE DES INTERVENTIONS</h3>
+<div class="container tbl-container">
+<div class="row tbl-fixed">
     <table class="table table-hover">
   <thead>
     <tr>
@@ -188,9 +195,13 @@
             echo "<tr></form>";
     }?>
 </table>
+</div>
+</div>
+
     <br>
 <h1> LES INTERVENTIONS REALISEES</h1>
-
+<div class="container tbl-container">
+<div class="row tbl-fixed">
     <table class="table table-hover">
     <thead>
       <tr>
@@ -212,6 +223,8 @@
       ?>
     </tbody>
       </table>
+</div>
+</div>
   
 <?php
         /**************************CLIENTS********************** */
@@ -247,7 +260,7 @@
 </div>
 </div>
 <br>
-    <h3>historique des interventions</h3>
+    <h3>HISTORIQUE DES INTERVENTIONS</h3>
     <div class="container tbl-container">
     <div class="row tbl-fixed">
     <table class="table table-hover">
@@ -276,19 +289,6 @@
     </table>
     </div>
 </div>
-<td colspan="2"><input class="btn btn-success btn-lg" type="button" onclick="printDiv('printableArea')" value="Imprimer les  interventions" /></td>
+
 </div>
 
-
-<script type="text/javascript">
-window.printDiv = function(divName) {
-     var printContents = document.getElementById(divName).innerHTML;
-     var originalContents = document.body.innerHTML;
-
-     document.body.innerHTML = printContents;
-
-     window.print();
-
-     document.body.innerHTML = originalContents;
-}
-</script>
