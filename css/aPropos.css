@@ -1,0 +1,15 @@
+
+.text {
+/*     position: absolute;
+    top: 50%;
+    right: 50%; */
+   /*  transform: translate(50%,-50%); */
+    text-transform: uppercase;
+    font-size: 50px;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+body{
+    background-color: #1f2029;
+}

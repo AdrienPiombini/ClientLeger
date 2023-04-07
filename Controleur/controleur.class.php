@@ -29,7 +29,10 @@ class Controleur {
         return $mes_interventions;
     }
 
-
+    public function intervention_technicien(){
+    $intervention_technicien = $this->unModele->intervention_technicien();
+        return $intervention_technicien;
+    }
 
     public function select_like_mine_intervention($mot){
         $mes_interventions =  $this->unModele->select_like_mine_intervention($mot);
@@ -64,6 +67,10 @@ public function delete($id, $valeur){
 
 public function selectWhere($id, $valeur){
     return $this->unModele->selectWhere($id, $valeur);
+}
+
+public function selectWhereAll($id, $valeur){
+    return $this->unModele->selectWhereAll($id, $valeur);
 }
 
 public function update($tab, $id, $valeur){
@@ -110,8 +117,8 @@ public function total(){
     return $total;
 }
 
-public function verif_produit($id, $valeur){
-    return $this->unModele->verif_produit($id, $valeur);
+public function verif_produit($valeur){
+    return $this->unModele->verif_produit($valeur);
 }
 
 public function selectAllProduit($tab){
@@ -157,6 +164,31 @@ public function select_mine_commandes_archive(){
     $mes_commandes = $this->unModele->select_mine_commandes_archive();
     return $mes_commandes;
 }
+
+public function updateStock($qteCommande, $idproduit){
+    $this->unModele->updateStock($qteCommande, $idproduit);
+}
+
+/************   INTERVENTION  ******** */
+public function annule_intervention($idintervention){
+    $this->unModele->annule_intervention($idintervention);
+}
+
+public function valider_intervention($intervention){
+    $this->unModele->valider_intervention($intervention);
+}
+
+public function archive_intervention($intervention){
+    $this->unModele->archive_intervention($intervention);
+}
+
+
+/************   MDP  ******** */
+public function updateMDP($mdp, $email){    
+    $this->unModele->updateMDP($mdp, $email);
+}
+
+
 
 }
 ?>

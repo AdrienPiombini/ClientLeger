@@ -1,0 +1,27 @@
+.modal{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 1200px;
+    height: 600px;
+    background-color: grey;
+    transform: translate(-50%, -50%);
+    display: none;
+    border-radius: 10px;
+  }
+
+  .modalFooter{
+    width: 100%;
+    bottom: 0;
+    position: absolute;
+    bottom: 10px;
+  }
+
+
+  .modal button{
+          position: relative;
+          bottom: 2rem;
+          left: 35rem;
+
+          
+  }

@@ -19,20 +19,20 @@ th {
     text-align: left;
     padding: 5px;
     color: #fff;
-    background: #42FBF2;
+    background: #696969;
     font-weight: normal;
 }
 
 td {
     padding: 10px 5px;
 }
-
-/* td img {
+/*
+td img {
     width: 80px;
     height: 80px;
     margin-right: 10px;
-} */
-
+} 
+*/
 .total-price {
     width: 80%;
     display: flex;
@@ -40,7 +40,7 @@ td {
 }
 
 .total-price table {
-    border-top: 3px solid #42FBF2 ;
+    border-top: 3px solid #696969;
     width: 100%;
     max-width: 400px;
 }
@@ -52,4 +52,4 @@ td:last-child {
 th:last-child {
     text-align: right;
 }
-
+ 

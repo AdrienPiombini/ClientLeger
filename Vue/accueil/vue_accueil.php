@@ -11,8 +11,18 @@
         </div>
     </div>
 </div>
+<video class="vi" autoplay="autoplay" muted="" loop="infinite" src="./img/filelect_fond_anime.mp4" width="100%"></video>
+
 </body> -->
 
-<link rel="stylesheet" href="css/acceuil.css">
+<link rel="stylesheet" href="css/accueil.css">
 
-<video class="vi" autoplay="autoplay" muted="" loop="infinite" src="./img/filelect_fond_anime.mp4" width="100%"></video>
+
+<title>Page d'accueil</title>
+</head>
+<body>
+    <div class="containerAcc"> <p>
+         <span>            BIENVENUE SUR</span>
+            </p><p>
+        <span>            FILELEC.
+        </span>    </p></div></body></html>

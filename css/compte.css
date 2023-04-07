@@ -1,0 +1,14 @@
+body{
+    background-color: #1f2029;
+    color: white;
+}
+
+h3{
+    color: white;
+}
+
+
+td{
+        color: black;
+        background-color: white ! important;
+}

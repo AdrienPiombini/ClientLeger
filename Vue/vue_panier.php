@@ -7,7 +7,7 @@
       <th></th>
       <th>Produit</th>
       <th>Quantité</th>
-      <th>Prix TTC</th>
+      <th>Prix HT</th>
       <th></th>
     </tr>
     <tr>

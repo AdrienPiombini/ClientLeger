@@ -1,10 +1,10 @@
 <?php 
-require_once("vue/vue_panier.php");
+require_once("Vue/vue_panier.php");
 
 if (isset($_POST['valider_panier']))
 {
     if (isset($_SESSION['email'])){
-    $unControleur->setTable('panier');
+    $unControleur->setTable('commande');
     $idpanier = $unControleur->idpanier();
     if ($idpanier[0] == NULL){
         $idpanier[0] = 1 ;
@@ -17,15 +17,15 @@ if (isset($_POST['valider_panier']))
     unset($_SESSION['panier']);
     echo '<script language="Javascript">
     <!--
-    document.location.replace("index.php?page=3");
+    document.location.replace("index.php?page=7");
     // -->
     </script>';
-    }else {
+    }else{
         echo '<script language="Javascript">
-        <!--
-        document.location.replace("index.php?page=2");
-        // -->
-        </script>'; 
+    <!--
+    document.location.replace("index.php?page=6");
+    // -->
+    </script>';
     }
 }
 
