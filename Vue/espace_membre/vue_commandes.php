@@ -1,5 +1,6 @@
 <link rel="stylesheet" href="css/tableau.css">
 <link rel="stylesheet" href="css/compte.css">
+<link rel="stylesheet" href="css/modal.css">
 
 <p></p>
 <br>
@@ -189,7 +190,10 @@ foreach($mes_commandes_archives as $mes_commande_archive){
   <?php
   echo $_SESSION['nom'];
   $unControleur->setTable('details_commande');
-      echo' <table class="table table-hover">
+      echo' 
+      <div class="container tbl-container">
+      <div class="row tbl-fixed">
+      <table class="table table-hover">
       <thead>
         <tr>
           <th scope="col">Référence commandes</th>
@@ -211,32 +215,13 @@ foreach($mes_commandes_archives as $mes_commande_archive){
           echo"<td>".$unArticle["totalHT"]."</td>";
           echo"<td>".$unArticle["totalTTC"]."</td>";
       }
-      echo "<tr></table>";
+      echo "<tr></table></div></div>";
 
   ?>
   <div class='modalFooter'>
-        <input class="btn btn-success btn-lg" type="button" onclick="printDiv('printableArea')" value="Imprimer les  commandes" />
+        <input class="btn btn-success btn-lg" type="button" onclick="printDiv('printableArea')" value="Imprimer la commande" />
 </div>
-<style>
-  .modal{
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 1200px;
-    height: 600px;
-    background-color: grey;
-    transform: translate(-50%, -50%);
-    display: none;
-    border-radius: 10px;
-  }
 
-  .modalFooter{
-    width: 100%;
-    bottom: 0;
-    position: absolute;
-    bottom: 10px;
-  }
-</style>
 
 <script type="text/javascript">
 window.printDiv = function(divName) {

@@ -279,6 +279,7 @@ ON SCHEDULE EVERY 1 DAY DO
     UPDATE INTERVENTION SET STATUT = 'Annulée' where STATUT = 'Validée' and datediff(curdate(), dateintervention) > 31;
 
 
+
 /*-------------------------TRIGGERS --------------  */
 
 /*insert into panier (idpanier, iduser, idproduit, quantiteproduit, statut, dateCommande, montantHT, tvaCommande, montantTTC) values (1, 1, 1, 1, 'en cours', curdate(), '12', '20%', '21'); */
