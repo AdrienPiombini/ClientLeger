@@ -16,7 +16,7 @@
             </div>
             <div class="namePrice">
                 <h3><?= $produit['nomProduit'];?></h3>
-                <span><?= $produit['prixProduit'];?>€</span>
+                <span><?= $produit['prixProduit'];?>€ HT</span>
             </div>
             <p><?= $produit['description'];?></p>
             <div class="bay">

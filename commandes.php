@@ -31,17 +31,15 @@ if (isset($_POST['valider_commande'])){
 	$unControleur->valider_commande($idpanier);
 	echo "<br/>Commande mis à jour !"; 
     header("Location: index.php?page=7");
-
-
 }
+
 if (isset($_POST['annule_commande'])){
 	$idpanier = $_POST['idpanier']; 
 	$unControleur->annule_commande($idpanier);
 	echo "<br/>Commande mis à jour !"; 
     header("Location: index.php?page=7");
-
-
 }
+
 if (isset($_POST['archive_commande'])){
 	$idpanier = $_POST['idpanier']; 
 	$unControleur->archive_commande($idpanier);

@@ -17,8 +17,8 @@ if(isset($_POST['mdpOublie'])){
 				echo "<script> alert('Les valeurs renseigné ne sont pas correcte !'); </script>";
 			}
 		}
-		catch (PDOException ){
-			echo "<script> alert('Renseigner des valeurs exactes !'); </script>";
+		catch (PDOException $erreur){
+			echo "<script> alert('une erreur est survenue !'); </script>";
 		}
 	}
 	?> 

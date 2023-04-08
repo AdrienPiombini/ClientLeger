@@ -16,7 +16,6 @@ class Modele {
     }
     
 
-
     public function verif_connexion($email, $mdp){
         if($this->unPDO !=null){
             $requete = "select * from users where email =:email and mdp =:mdp;";
@@ -30,54 +29,13 @@ class Modele {
         }
     }
 
-    /******************************************************************************** */
+    /********************************MODELE GENERIQUE ************************************************ */
 
     public function setTable($uneTable){
         $this->table = $uneTable;
     }
 	
-    public function select_mes_interventions(){
-        if($this->unPDO != null && isset($_SESSION['iduser']) != null){
-            $requete = "select i.*, u.email from ".$this->table." i inner join users u on i.iduser = u.iduser where i.iduser = :iduser;";
-            $donnees =  array(":iduser"=>$_SESSION['iduser']); 
-            $select = $this->unPDO->prepare($requete);
-            $select->execute($donnees);
-            $mes_interventions = $select->fetchAll();
-            return $mes_interventions;
-        }else{
-            return null;
-        }
-    }
-
-    public function select_like_mine_intervention($mot){
-        if($this->unPDO != null){
-            $requete = "select i.*, u.email from ".$this->table." i inner join users u on i.iduser=u.iduser where (libelle like :mot or dateintervention like :mot or email like :mot) and i.iduser = :iduser ;";
-            $donnees = array(":mot"=>"%".$mot."%",":iduser"=>$_SESSION['iduser'] );
-            $select = $this->unPDO->prepare($requete);
-            $select->execute($donnees);
-            $les_interventions = $select->fetchAll();
-            return $les_interventions;
-        }else{
-            return null; 
-        }
-    }
-
-	public function intervention_technicien (){
-		if($this->unPDO != null && isset($_SESSION['email']) != null){
-            $requete = "select i.* from ".$this->table." i inner join technicien t on i.idtechnicien = t.iduser inner join users u on t.email = u.email where u.iduser =:iduser;";
-            $donnees =  array(":iduser"=>$_SESSION['iduser']); 
-            $select = $this->unPDO->prepare($requete);
-            $select->execute($donnees);
-            $intervention_technicien = $select->fetchAll();
-            return $intervention_technicien;
-        }else{
-            return null;
-        }
-	}
-
-
-    public function selectAll ()
-		{
+    public function selectAll (){
 			if($this->unPDO != null){
 				$requete = "select * from ".$this->table.";";
 				$select = $this->unPDO->prepare($requete);
@@ -92,7 +50,6 @@ class Modele {
     public function insert($tab)
 		{
 			if($this->unPDO != null){
-
 				$tabChamps = array();
 				$donnees = array();
 				foreach($tab as $cle => $valeur){
@@ -192,6 +149,9 @@ class Modele {
 				return null;
 			}
 		}
+
+
+
     /*************************************PANIER******************************************* */
              /************************ COMMANDES *******************************************/
      
@@ -202,8 +162,6 @@ class Modele {
             return $req->fetchAll(PDO::FETCH_OBJ);
         }
 */
-
-
 		public function verif_produit($valeur)
 		{
 			if($this->unPDO != null){
@@ -373,6 +331,46 @@ class Modele {
 			$update = $this->unPDO->prepare($requete);
 			$update->execute($donnees);
 		}
+	}
+
+
+	public function select_mes_interventions(){
+        if($this->unPDO != null && isset($_SESSION['iduser']) != null){
+            $requete = "select i.*, u.email from ".$this->table." i inner join users u on i.iduser = u.iduser where i.iduser = :iduser;";
+            $donnees =  array(":iduser"=>$_SESSION['iduser']); 
+            $select = $this->unPDO->prepare($requete);
+            $select->execute($donnees);
+            $mes_interventions = $select->fetchAll();
+            return $mes_interventions;
+        }else{
+            return null;
+        }
+    }
+
+    public function select_like_mine_intervention($mot){
+        if($this->unPDO != null){
+            $requete = "select i.*, u.email from ".$this->table." i inner join users u on i.iduser=u.iduser where (libelle like :mot or dateintervention like :mot or email like :mot) and i.iduser = :iduser ;";
+            $donnees = array(":mot"=>"%".$mot."%",":iduser"=>$_SESSION['iduser'] );
+            $select = $this->unPDO->prepare($requete);
+            $select->execute($donnees);
+            $les_interventions = $select->fetchAll();
+            return $les_interventions;
+        }else{
+            return null; 
+        }
+    }
+
+	public function intervention_technicien (){
+		if($this->unPDO != null && isset($_SESSION['email']) != null){
+            $requete = "select i.* from ".$this->table." i inner join technicien t on i.idtechnicien = t.iduser inner join users u on t.email = u.email where u.iduser =:iduser;";
+            $donnees =  array(":iduser"=>$_SESSION['iduser']); 
+            $select = $this->unPDO->prepare($requete);
+            $select->execute($donnees);
+            $intervention_technicien = $select->fetchAll();
+            return $intervention_technicien;
+        }else{
+            return null;
+        }
 	}
 
 	

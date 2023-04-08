@@ -2,7 +2,7 @@ DROP DATABASE IF EXISTS dsa;
 CREATE DATABASE dsa;
 use dsa;
 
-/* UTILISATEURS */ 
+/*  UTILISATEURS */ 
 create table users (
 iduser int(3) not null  auto_increment,
 email varchar (150) unique,
@@ -13,7 +13,7 @@ datemdp DATE,
 constraint pk_user primary key (iduser)
 );
 
-
+/*   HERITAGE   */
 create table admin(
     iduser int(3) not null  auto_increment ,
     email varchar (150),
@@ -87,6 +87,7 @@ numeroSiret int,
 constraint pk_user primary key (iduser)
 );
 
+/*  PRODUIT / COMMANDE / INTERVENTION   */
 create table produit (
 idProduit int auto_increment not null,
 nomProduit varchar(25) not null,
@@ -104,7 +105,7 @@ idproduit int not null,
 quantiteproduit int, 
 statut enum('en cours', 'validée', 'annulée', 'archivée' ),
 dateCommande date ,
-tvaCommande varchar(4) ,
+tvaCommande float(9,2),
 totalHT float (9,2),
 totalTTC float (9,2),
 constraint pk_panier primary key (idcommande, iduser, idproduit),
@@ -127,7 +128,7 @@ foreign key (iduser) references users(iduser),
 foreign key (idtechnicien) references technicien(iduser)
 );
 
-
+/* MOT DE PASSE AVEC GRAIN DE SEL ET MDP OUBLIE */
 create table grainSel(
 salt varchar(100) not null,
 constraint pk_salt primary key (salt)
@@ -142,6 +143,7 @@ email varchar(100) not null,
 constraint pk_idmdpoublie primary key (idmdpoublie)
 );
 
+/*********ARCHIVAGE *********/
 create table archive_commande as
     select users.*, idcommande, sum(quantiteproduit) as "nbArticle", statut , totalHT, totalTTC, datecommande
         from  users, commande 
@@ -149,6 +151,13 @@ create table archive_commande as
         AND 2 = 0 
         group by idcommande, users.iduser, statut, totalHT, totalTTC, datecommande;
 
+
+create table archive_intervention as
+    select users.*, idintervention, statut , prixHT, prixTTC, dateintervention
+        from  users, intervention 
+        where users.iduser = intervention.iduser 
+        AND 2 = 0
+        group by idintervention, users.iduser, statut, prixHT, prixTTC, dateintervention;
 
 
 /************* VUE *************/ 
@@ -173,9 +182,6 @@ create or replace view commandeResume as(
     FROM commande INNER JOIN users ON commande.iduser = users.iduser
     GROUP BY idcommande, users.nom, statut, dateCommande, tvaCommande, totalHT, totalTTC
 );
-
-/*  
-*/
 
 create or replace view details_commande as(
     select idcommande, nomProduit, prixProduit,  quantiteproduit, totalHT, totalTTC from commande inner join produit on commande.idproduit = produit.idproduit 
@@ -236,7 +242,7 @@ begin
     declare prixprod float; 
     declare HT float;
     declare  TTC float; 
-    insert into commande (idcommande, iduser, idproduit, quantiteproduit, statut, dateCommande, tvaCommande) values (idpan, idu, idprod, qtprod, 'en cours', curdate(), '20%');
+    insert into commande (idcommande, iduser, idproduit, quantiteproduit, statut, dateCommande, tvaCommande) values (idpan, idu, idprod, qtprod, 'en cours', curdate(), 1.2);
     select prixProduit from produit where idproduit = idprod  into prixprod ;
     select  totalHT, totalTTC from commande where idcommande = idpan limit 1  into HT, TTC;
     if HT is null then 
@@ -451,6 +457,21 @@ create trigger supprimer_user
 before delete on users 
 for each row 
 begin 
+
+    insert into archive_commande 
+        select users.*, idcommande, sum(quantiteproduit) as "nbArticle", statut , totalHT, totalTTC, datecommande
+        from  users, commande 
+        where users.iduser = commande.iduser 
+        AND email = old.email
+        group by idcommande, users.iduser, statut, totalHT, totalTTC, datecommande;
+
+    insert into archive_intervention 
+        select users.*, idintervention, statut , prixHT, prixTTC, dateintervention
+        from  users, intervention 
+        where users.iduser = intervention.iduser 
+        AND email = old.email
+        group by idintervention, users.iduser, statut, prixHT, prixTTC, dateintervention;
+
     delete from client where email = old.email; 
     delete from particulier where email = old.email; 
     delete from professionnel where email = old.email; 
@@ -495,7 +516,7 @@ if controle_date = 0 then
     end if; 
 else 
     signal sqlstate '45000'
-    set message_text = 'Impossible de réserver deux intervention le même jour.';
+    set message_text = 'Impossible de réserver deux interventions le même jour.';
 end if; 
 end // 
 delimiter ;
@@ -538,27 +559,57 @@ INSERT INTO technicien (email, mdp, roles, nom) VALUES ('George@gmail.com', 'pas
 INSERT INTO particulier (email, mdp, roles, nom) VALUES ('Isabelle@gmail.com', 'password4', 'client', 'Isabelle');
 INSERT INTO technicien (email, mdp, roles, nom) VALUES ('Jack@gmail.com', 'password5', 'technicien', 'Jack');
 
-INSERT INTO professionnel (email, mdp, roles, nom, adresse, ville, cp, telephone, numeroSiret) VALUES ('professionnel1@gmail.com', 'password1', 'admin', 'Nom1', 'Adresse1', 'Ville1', 'CP1', '0123456789', '123456789');
-INSERT INTO professionnel (email, mdp, roles, nom, adresse, ville, cp, telephone, numeroSiret) VALUES ('professionnel2@gmail.com', 'password2', 'technicien', 'Nom2', 'Adresse2', 'Ville2', 'CP2', '0123456780', '123456780');
+INSERT INTO professionnel (email, mdp, roles, nom, adresse, ville, cp, telephone, numeroSiret) VALUES ('professionnel1@gmail.com', 'password1', 'client', 'Nom1', 'Adresse1', 'Ville1', 'CP1', '0123456789', '123456789');
+INSERT INTO professionnel (email, mdp, roles, nom, adresse, ville, cp, telephone, numeroSiret) VALUES ('professionnel2@gmail.com', 'password2', 'client', 'Nom2', 'Adresse2', 'Ville2', 'CP2', '0123456780', '123456780');
 INSERT INTO professionnel (email, mdp, roles, nom, adresse, ville, cp, telephone, numeroSiret) VALUES ('professionnel3@gmail.com', 'password3', 'client', 'Nom3', 'Adresse3', 'Ville3', 'CP3', '0123456781', '123456781');
-INSERT INTO professionnel (email, mdp, roles, nom, adresse, ville, cp, telephone, numeroSiret) VALUES ('professionnel4@gmail.com', 'password4', 'admin', 'Nom4', 'Adresse4', 'Ville4', 'CP4', '0123456782', '123456782');
-INSERT INTO professionnel (email, mdp, roles, nom, adresse, ville, cp, telephone, numeroSiret) VALUES ('professionnel5@gmail.com', 'password5', 'technicien', 'Nom5', 'Adresse5', 'Ville5', 'CP5', '0123456783', '123456783');
+INSERT INTO professionnel (email, mdp, roles, nom, adresse, ville, cp, telephone, numeroSiret) VALUES ('professionnel4@gmail.com', 'password4', 'client', 'Nom4', 'Adresse4', 'Ville4', 'CP4', '0123456782', '123456782');
+INSERT INTO professionnel (email, mdp, roles, nom, adresse, ville, cp, telephone, numeroSiret) VALUES ('professionnel5@gmail.com', 'password5', 'client', 'Nom5', 'Adresse5', 'Ville5', 'CP5', '0123456783', '123456783');
 
 
 /*** COMMANDES ******/
-INSERT INTO commande (idcommande, iduser, idproduit, quantiteproduit, statut, dateCommande, tvaCommande ) 
-VALUES (1, 1, 1, 2, 'en cours', '2022-01-01', '19.6');
-INSERT INTO commande (idcommande, iduser, idproduit, quantiteproduit, statut, dateCommande, tvaCommande ) 
-VALUES (1, 1, 2, 4, 'en cours', '2022-01-01', '19.6');
-INSERT INTO commande (idcommande, iduser, idproduit, quantiteproduit, statut, dateCommande, tvaCommande ) 
-VALUES (1, 1, 3, 1, 'en cours', '2022-01-01', '19.6');
-INSERT INTO commande (idcommande, iduser, idproduit, quantiteproduit, statut, dateCommande, tvaCommande ) 
-VALUES (1, 1, 4, 5, 'en cours', '2022-01-01', '19.6');
-INSERT INTO commande (idcommande, iduser, idproduit, quantiteproduit, statut, dateCommande, tvaCommande ) 
-VALUES (2, 2, 2, 1, 'validée', '2022-02-01', '19.6');
-INSERT INTO commande (idcommande, iduser, idproduit, quantiteproduit, statut, dateCommande, tvaCommande) 
-VALUES (3, 3, 3, 3, 'annulée', '2022-03-01', '19.6');
+INSERT INTO commande 
+VALUES (1, 1, 1, 2, 'en cours', '2022-01-01', 1.2, 150, 200);
+INSERT INTO commande  
+VALUES (1, 1, 2, 4, 'en cours', '2022-01-01', 1.2, 150, 200);
+INSERT INTO commande 
+VALUES (1, 1, 3, 1, 'en cours', '2022-01-01', 1.2, 150, 200);
+INSERT INTO commande 
+VALUES (1, 1, 4, 5, 'en cours', '2022-01-01', 1.2, 150, 200);
+INSERT INTO commande 
+VALUES (2, 2, 2, 1, 'validée', '2022-02-01', 1.2, 150, 200);
+INSERT INTO commande 
+VALUES (3, 3, 3, 3, 'annulée', '2022-03-01', 1.2, 150, 200);
 
-insert into intervention (libelle, dateintervention, iduser) values ('reparation', curdate(), 2);
+INSERT INTO commande 
+VALUES (4, 7, 1, 2, 'en cours', '2022-01-01', 1.2, 150, 200);
+INSERT INTO commande  
+VALUES (4, 7, 2, 4, 'en cours', '2022-01-01', 1.2, 150, 200);
+INSERT INTO commande 
+VALUES (4, 7, 3, 1, 'en cours', '2022-01-01', 1.2, 150, 200);
+INSERT INTO commande 
+VALUES (4, 7, 4, 5, 'en cours', '2022-01-01', 1.2, 150, 200);
+INSERT INTO commande 
+VALUES (5, 6, 2, 1, 'validée', '2022-02-01', 1.2, 150, 200);
+INSERT INTO commande 
+VALUES (6, 5, 3, 3, 'annulée', '2022-03-01', 1.2, 150, 200);
+
+/*** INTERVENTION ******/
+
+insert into intervention values (null, 'reparation', curdate(), 'En attente', 45, 70, 2, 3);
+insert into intervention values (null, 'diagnostique', curdate()+1, 'En attente', 45, 70, 2, 3);
+insert into intervention values (null, 'vidange', curdate()+2, 'En attente', 45, 70, 2, 3);
+insert into intervention values (null, 'reparation', curdate()+3, 'En attente', 45, 70, 2, 3);
+insert into intervention values (null, 'reparation', curdate()+4, 'En attente', 45, 70, 2, 3);
+insert into intervention values (null, 'vidange', curdate()+5, 'En attente', 45, 70, 2, 3);
+
+
+insert into intervention values (null, 'reparation', curdate(), 'En attente', 45, 70, 7, 5);
+insert into intervention values (null, 'diagnostique', curdate()+1, 'En attente', 45, 70, 7, 5);
+insert into intervention values (null, 'vidange', curdate()+2, 'En attente', 45, 70, 7, 5);
+insert into intervention values (null, 'reparation', curdate()+3, 'En attente', 45, 70, 7, 5);
+insert into intervention values (null, 'reparation', curdate()+4, 'En attente', 45, 70, 7, 5);
+insert into intervention values (null, 'vidange', curdate()+5, 'En attente', 45, 70, 7, 5);
+
+
 
 

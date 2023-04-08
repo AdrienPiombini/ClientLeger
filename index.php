@@ -1,5 +1,5 @@
 <?php 
-session_start();
+//session_start();
 require_once("Controleur/config_bdd.php");
 require_once("Controleur/controleur.class.php");
 $unControleur = new Controleur($serveur, $bdd, $user, $mdp);
@@ -49,7 +49,6 @@ $unControleur = new Controleur($serveur, $bdd, $user, $mdp);
     </ul>
 </nav>
 <div class="icon">
-<!--<a href="index.php?page=2"><img src="img/compte.png" width="30px"></a>-->
 <form method="POST">
 <a href="index.php?page=3"><img src="img/panier.png" width="30px"></a>
 <?php 
@@ -67,12 +66,9 @@ echo'
     ?>
 </div>
 </header>         
-<body style="padding:0; margin:0; font-family: 'Sono', sans-serif; display: flex; flex-direction:column;min-height: 100vh;
-<?php
-?>">
+<body style="padding:0; margin:0; font-family: 'Sono', sans-serif; display: flex; flex-direction:column;min-height: 100vh;">
     <div>
         <center>
-
             <?php       
             if (isset($_GET['page'])){
                 $page = $_GET['page'];

@@ -14,29 +14,10 @@ class Controleur {
         if(!isset($_SESSION['panier'])){
             $_SESSION['panier']= array();
         }
-    /***********************PANIER **********************/
     }
 
     public function verif_connexion($email, $mdp){
         return $this->unModele->verif_connexion($email, $mdp);
-    }
-
-
-    /***********************CONNEXION A LA BASE DE DONNE **********************/
-
-    public function select_mes_interventions(){
-        $mes_interventions = $this->unModele->select_mes_interventions();
-        return $mes_interventions;
-    }
-
-    public function intervention_technicien(){
-    $intervention_technicien = $this->unModele->intervention_technicien();
-        return $intervention_technicien;
-    }
-
-    public function select_like_mine_intervention($mot){
-        $mes_interventions =  $this->unModele->select_like_mine_intervention($mot);
-        return $mes_interventions;
     }
 
 
@@ -81,7 +62,10 @@ public function count ($table){
     return $this->unModele->count($table);
 }
 
-
+/************   MDP  ******** */
+public function updateMDP($mdp, $email){    
+    $this->unModele->updateMDP($mdp, $email);
+}
 
 
  /************************ PANIER  *******************************************/ /************************ PANIER  *******************************************/
@@ -135,6 +119,9 @@ public function insert_panier($idpanier, $iduser, $idproduit, $quantiteproduit){
     $this->unModele->insert_panier($idpanier, $iduser, $idproduit, $quantiteproduit);
 }
 
+/************   COMMANDES  ******** */
+
+
 public function valider_commande($idpanier){
     $this->unModele->valider_commande($idpanier);
 }
@@ -159,11 +146,13 @@ public function select_like_mine_commande($mot){
 }
 
 
-
 public function select_mine_commandes_archive(){
     $mes_commandes = $this->unModele->select_mine_commandes_archive();
     return $mes_commandes;
 }
+
+
+/************   PRODUIT  ******** */
 
 public function updateStock($qteCommande, $idproduit){
     $this->unModele->updateStock($qteCommande, $idproduit);
@@ -183,12 +172,20 @@ public function archive_intervention($intervention){
 }
 
 
-/************   MDP  ******** */
-public function updateMDP($mdp, $email){    
-    $this->unModele->updateMDP($mdp, $email);
+public function select_mes_interventions(){
+    $mes_interventions = $this->unModele->select_mes_interventions();
+    return $mes_interventions;
 }
 
+public function intervention_technicien(){
+$intervention_technicien = $this->unModele->intervention_technicien();
+    return $intervention_technicien;
+}
 
+public function select_like_mine_intervention($mot){
+    $mes_interventions =  $this->unModele->select_like_mine_intervention($mot);
+    return $mes_interventions;
+}
 
 }
 ?>

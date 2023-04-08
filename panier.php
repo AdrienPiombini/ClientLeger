@@ -1,8 +1,7 @@
 <?php 
 require_once("Vue/vue_panier.php");
 
-if (isset($_POST['valider_panier']))
-{
+if (isset($_POST['valider_panier'])){
     if (isset($_SESSION['email'])){
     $unControleur->setTable('commande');
     $idpanier = $unControleur->idpanier();

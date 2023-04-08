@@ -61,7 +61,9 @@
     <?php
         }elseif($one_user['typeclient']=='professionnel'){
         ?>
-        <p><label>
+        <p>
+        <label>
+            <p>Numero de Siret</p>
         <input type="text" name="siret" placeholder="Numero Siret" value="<?= ($one_user != null) ? $one_user['numeroSiret']:''?>">
         </label></p>
         <p><br>

@@ -85,6 +85,14 @@
 			echo "<br/>Le mot de passe a bien été changé !"; 
 		}
 	}
+	if(isset($_POST['delete_user'])){
+		$unControleur->setTable('users');
+		$unControleur->delete('email', $_SESSION['email']);
+		session_destroy();
+		unset($_SESSION['email']);
+		header("Location: index.php?page=1");
+	}
+	
 
 	if (!isset($_SESSION['email'])){
 		//require_once("vue/connexion_inscription.php");
@@ -92,5 +100,4 @@
 	}else{
     require_once("Vue/espace_membre/vue_gestion_compte.php");
     }
-
 

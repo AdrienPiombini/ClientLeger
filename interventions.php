@@ -14,7 +14,6 @@ if(isset($_SESSION) && $_SESSION['roles'] === 'technicien'){
 	$intervention_technicien = "";
 }
 
-
 $unControleur->setTable('vue_intervention_and_users_archive');
 $les_interventions_archive = $unControleur->selectAll();
 $mes_interventions_archive = $unControleur->select_mes_interventions ();
@@ -62,7 +61,6 @@ $one_intervention = null;
 
     }
 
-
 	if (isset($_POST['edit_intervention'])){
 		$idintervention = $_POST['idintervention']; 
         $one_intervention = $unControleur->selectWhere('idintervention', $idintervention); 
@@ -78,7 +76,6 @@ $one_intervention = null;
 		$unControleur->update($tab, "idintervention", $_POST['idintervention']);
 		echo "<br/>L'intervention ".$_POST['idintervention']." à été modifié"; 
         header("Location: index.php?page=11");
-
 		}
 	}
  
@@ -104,8 +101,6 @@ $one_intervention = null;
         header("Location: index.php?page=11");
 
 	}
-
-
 
 	if (!isset($_SESSION['email'])){
 		//require_once("vue/connexion_inscription.php");

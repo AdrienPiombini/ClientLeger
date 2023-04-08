@@ -56,7 +56,7 @@ if(isset($_POST['signin'])){
 					$tab = array("email"=>$_POST['email'],"mdp"=>$_POST['mdp'],"nom"=>$_POST['nom'],"roles"=>"client","datemdp"=>date("Y-m-d"), "typeclient"=>$_POST['type'], "adresse"=>$_POST['adresse'],"ville"=>$_POST['ville'], "cp"=>$_POST['codepostal'], "telephone"=>$_POST['telephone'],  "prenom"=>"");
 				}
 					try{
-						$unControleur->insert($tab); //$une_inscription =
+						$unControleur->insert($tab); 
 						$unControleur->setTable('mdpOublie');
 						$tab = array("question"=>$_POST['question'], "reponse"=>$_POST['reponse'], "email"=>$_POST['email']);
 						$unControleur->insert($tab);
