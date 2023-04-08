@@ -396,6 +396,8 @@ class Modele {
             $select->execute($donnees);
 		}
 	}
+
 }
+
 
 ?>

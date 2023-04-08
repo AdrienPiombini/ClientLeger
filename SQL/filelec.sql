@@ -125,7 +125,7 @@ idtechnicien int(3),
 primary key (idintervention),
 foreign key (iduser) references users(iduser),
 foreign key (idtechnicien) references technicien(iduser)
-) ENGINE=INNODB;
+);
 
 
 create table grainSel(
