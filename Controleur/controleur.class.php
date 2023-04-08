@@ -105,7 +105,7 @@ public function ajouter_panier($idproduit){
 
 public function del($idproduit){
     if(($_SESSION['panier'][$idproduit])>1){
-        $_SESSION['panier'][$idproduit];
+       $_SESSION['panier'][$idproduit]--;
     }else{
         unset($_SESSION['panier'][$idproduit]);
     }
