@@ -45,7 +45,7 @@ $one_intervention = null;
 			case 'controle' : $prixHT = 78; break;
 			default: $prixHT= 0; 
 		}
-		$tab = array("libelle"=>htmlspecialchars($_POST['libelle']),"dateintervention"=>htmlspecialchars($_POST['dateintervention']), "statut"=>'En attente', "prixHT"=>$prixHT, "prixTTC"=>NUll, "iduser"=>$_POST['iduser'], "idtechnicien" =>$_POST['idtechnicien']);
+		$tab = array("libelle"=>htmlspecialchars($_POST['libelle']),"dateintervention"=>htmlspecialchars($_POST['dateintervention']), "statut"=>'En attente', "prixHT"=>$prixHT, "prixTTC"=>NULL, "iduser"=>$_POST['iduser'], "idtechnicien" =>$_POST['idtechnicien']);
 		$unControleur->insert($tab); 
         header("Location: index.php?page=11");
 		}

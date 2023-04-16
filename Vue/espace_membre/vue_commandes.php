@@ -188,8 +188,11 @@ foreach($mes_commandes_archives as $mes_commande_archive){
 <button type="button" onclick="document.getElementById('modalFilelec').style.display = 'none';">X</button>
   <div id="printableArea">
   <?php
-  echo $_SESSION['nom'];
   $unControleur->setTable('details_commande');
+
+  echo "Nom du client : ".$_SESSION['nom']. "<br>";
+  echo "Numero de la commande :"  .$une_commande[0]['idcommande']. "<br>";
+
       echo' 
       <div class="container tbl-container">
       <div class="row tbl-fixed">
@@ -218,6 +221,7 @@ foreach($mes_commandes_archives as $mes_commande_archive){
       echo "<tr></table></div></div>";
 
   ?>
+  </div>
   <div class='modalFooter'>
         <input class="btn btn-success btn-lg" type="button" onclick="printDiv('printableArea')" value="Imprimer la commande" />
 </div>
@@ -242,35 +246,3 @@ if (openModal == "true") {
 </script>
 
 
-<!-- Modal 
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Details de la commandes</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div id="">
-      <div class="modal-body" id="modal-body">
-      </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <input class="btn btn-success btn-lg" type="button" onclick="printDiv('printableArea')" value="Imprimer les  commandes" />
-      </div>
-    </div>
-  </div>
-
-
-/*function getIdCommande(id) {
-  var xmlhttp = new XMLHttpRequest();
-  xmlhttp.onreadystatechange = function() {
-    if (this.readyState == 4 && this.status == 200) {
-      document.getElementById("modal-body").innerHTML = this.responseText;
-    }
-  };
-  xmlhttp.open("GET", "details_commandes.php?id=" + id, true);
-  xmlhttp.send();
-}
-*/
-</div>-->

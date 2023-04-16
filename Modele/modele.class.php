@@ -362,7 +362,7 @@ class Modele {
 
 	public function intervention_technicien (){
 		if($this->unPDO != null && isset($_SESSION['email']) != null){
-            $requete = "select i.* from ".$this->table." i inner join technicien t on i.idtechnicien = t.iduser inner join users u on t.email = u.email where u.iduser =:iduser;";
+            $requete = "select i.* from  ".$this->table."  i inner join users on i.idtechnicien = users.iduser where users.iduser =:iduser;";
             $donnees =  array(":iduser"=>$_SESSION['iduser']); 
             $select = $this->unPDO->prepare($requete);
             $select->execute($donnees);

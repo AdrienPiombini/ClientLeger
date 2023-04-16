@@ -47,7 +47,6 @@ border="1" style="
         <td><?=$unControleur->count("vue_intervention_annulee")['nb'];?></td>
         <td><?=$unControleur->count("vue_intervention_validee")['nb'];?></td>
         <td><?=$unControleur->count("vue_intervention_enAttente")['nb'];?></td>
-
     </tr>
 </table>
 
@@ -67,7 +66,6 @@ border="1" style="
         <td><?=$unControleur->count("vue_commande_annulee")['nb'];?></td>
         <td><?=$unControleur->count("vue_commande_validee")['nb'];?></td>
         <td><?=$unControleur->count("vue_commande_enCours")['nb'];?></td>
-
     </tr>
 </table>
 
